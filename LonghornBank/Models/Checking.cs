@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using LonghornBank.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace LonghornBank.Models
 {
