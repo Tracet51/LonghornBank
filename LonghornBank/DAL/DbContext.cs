@@ -11,7 +11,11 @@ namespace LonghornBank.Dal
     {
         public AppDbContext() : base("MyDBConnection") { }
 
+        // Create Checking Account to Access
         public DbSet<Checking> CheckingAccount { get; set; }
+
+        // create Savings Account to Access
+        public DbSet<Saving> SavingsAccount { get; set; }
 
 
     }
