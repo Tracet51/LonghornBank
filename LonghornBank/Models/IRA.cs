@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
-using System.ComponentModel.DataAnnotations;
-using LonghornBank.Models;
-using System.ComponentModel.DataAnnotations;
+using LonghornBank.Dal;
 
 namespace LonghornBank.Models
 {

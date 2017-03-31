@@ -17,6 +17,12 @@ namespace LonghornBank.Dal
         // create Savings Account to Access
         public DbSet<Saving> SavingsAccount { get; set; }
 
+        // Create Cusomter Account to access
+        public DbSet<Customer> CustomerAccount { get; set; }
+
+        // Create Transaction access
+        public DbSet<BankingTransaction> BankingTransaction { get; set; }
+
 
     }
 }
