@@ -123,20 +123,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Account.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\Manager.cs" />
     <Compile Include="Models\Payee.cs" />
-    <Compile Include="Models\Person.cs" />
     <Compile Include="Models\IRA.cs" />
     <Compile Include="Models\Saving.cs" />
     <Compile Include="Models\StockAccount.cs" />
     <Compile Include="Models\StockMarket.cs" />
     <Compile Include="Models\Trade.cs" />
-    <Compile Include="Models\Transaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
