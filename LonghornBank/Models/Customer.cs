@@ -49,6 +49,9 @@ namespace LonghornBank.Models
         [DataType(DataType.PhoneNumber)]
         public String PhoneNumber { get; set; }
 
+        
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Required(ErrorMessage = "DOB is Required")]
         [Display(Name = "Birthdate")]
         public DateTime DOB { get; set; }
@@ -57,5 +60,11 @@ namespace LonghornBank.Models
         [Display(Name = "Active Status")]
         [Required(ErrorMessage = "An Active Status is Required")]
         public Boolean ActiveStatus { get; set; }
+
+        public virtual List<Checking> CheckingAccounts { get; set; }
+
+        public virtual List<Saving> SavingAccounts { get; set; }
+
+        public virtual List<IRA> IRAAccounts { get; set; }
     }
 }

@@ -134,6 +134,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BankingTransactionsController.cs" />
     <Compile Include="Controllers\CheckingsController.cs" />
+    <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="DAL\DbContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -145,6 +146,10 @@
     <Compile Include="Migrations\201703311942371_Changed Models.cs" />
     <Compile Include="Migrations\201703311942371_Changed Models.Designer.cs">
       <DependentUpon>201703311942371_Changed Models.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703312133270_Scaffold Customer.cs" />
+    <Compile Include="Migrations\201703312133270_Scaffold Customer.Designer.cs">
+      <DependentUpon>201703312133270_Scaffold Customer.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
@@ -176,6 +181,11 @@
     <Content Include="Views\BankingTransactions\Details.cshtml" />
     <Content Include="Views\BankingTransactions\Edit.cshtml" />
     <Content Include="Views\BankingTransactions\Index.cshtml" />
+    <Content Include="Views\Customers\Create.cshtml" />
+    <Content Include="Views\Customers\Delete.cshtml" />
+    <Content Include="Views\Customers\Details.cshtml" />
+    <Content Include="Views\Customers\Edit.cshtml" />
+    <Content Include="Views\Customers\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -192,6 +202,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703311942371_Changed Models.resx">
       <DependentUpon>201703311942371_Changed Models.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703312133270_Scaffold Customer.resx">
+      <DependentUpon>201703312133270_Scaffold Customer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
