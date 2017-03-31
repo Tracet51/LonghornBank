@@ -26,5 +26,9 @@ namespace LonghornBank.Models
         [Display(Name = "Pending Balance")]
         [Required(ErrorMessage = "Pending Balance is Required")]
         public Decimal PendingBalance { get; set; }
+
+        public virtual Customer Customer { get; set; }
+
+        public virtual List<BankingTransaction> BankingTransactions { get; set; }
     }
 }

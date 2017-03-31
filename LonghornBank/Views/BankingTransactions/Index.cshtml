@@ -1,0 +1,75 @@
+﻿@model IEnumerable<LonghornBank.Models.BankingTransaction>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TransactionDispute)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TransactionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DisputeMessage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerOpinion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CorrectedAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BankingTransactionType)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransactionDispute)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransactionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DisputeMessage)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerOpinion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CorrectedAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BankingTransactionType)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.BankingTransactionID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.BankingTransactionID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.BankingTransactionID })
+        </td>
+    </tr>
+}
+
+</table>

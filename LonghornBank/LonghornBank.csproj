@@ -112,6 +112,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Models\Web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -131,10 +132,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BankingTransactionsController.cs" />
+    <Compile Include="Controllers\CheckingsController.cs" />
     <Compile Include="DAL\DbContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703311746012_InitialSetup.cs" />
+    <Compile Include="Migrations\201703311746012_InitialSetup.Designer.cs">
+      <DependentUpon>201703311746012_InitialSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703311942371_Changed Models.cs" />
+    <Compile Include="Migrations\201703311942371_Changed Models.Designer.cs">
+      <DependentUpon>201703311942371_Changed Models.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -154,6 +166,16 @@
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Checkings\Delete.cshtml" />
+    <Content Include="Views\Checkings\Details.cshtml" />
+    <Content Include="Views\Checkings\Edit.cshtml" />
+    <Content Include="Views\Checkings\Index.cshtml" />
+    <Content Include="Views\BankingTransactions\Deposit.cshtml" />
+    <Content Include="Views\BankingTransactions\Create.cshtml" />
+    <Content Include="Views\BankingTransactions\Delete.cshtml" />
+    <Content Include="Views\BankingTransactions\Details.cshtml" />
+    <Content Include="Views\BankingTransactions\Edit.cshtml" />
+    <Content Include="Views\BankingTransactions\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -163,7 +185,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201703311746012_InitialSetup.resx">
+      <DependentUpon>201703311746012_InitialSetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703311942371_Changed Models.resx">
+      <DependentUpon>201703311942371_Changed Models.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
