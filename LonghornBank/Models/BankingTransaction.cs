@@ -45,6 +45,6 @@ namespace LonghornBank.Models
         [Required(ErrorMessage = "Transaction Type is Required")]
         public BankingTranactionType BankingTransactionType { get; set; }
 
-        // trace wuz hur!
+        // carson wuz hur!
     }
 }
