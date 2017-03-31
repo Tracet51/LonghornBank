@@ -99,30 +99,6 @@ namespace LonghornBank.Controllers
             return RedirectToAction("Index");
         }
 
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Deposit([Bind(Include = "BankingTransactionID,TransactionDispute,TransactionDate,Amount,Description,DisputeMessage,CustomerOpinion,CorrectedAmount,BankingTransactionType")] BankingTransaction bankingTransaction, Int32 CheckingID)
-        {
-            // Find the selected Checking Account
-            Checking SelectedChecking = db.CheckingAccount.Find(CheckingID);
-
-            // Associate the transaction with the checking account
-            bankingTransaction.CheckingAccount.Add(SelectedChecking);
-            
-            // Check to see if the model state if valid
-            if (ModelState.IsValid)
-            {
-                db.BankingTransaction.Add(bankingTransaction);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            // Repopulate the dropdown options
-            ViewBag.AllAccounts = bankingTransaction.CheckingAccount.ToList();
-            return View(bankingTransaction);
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

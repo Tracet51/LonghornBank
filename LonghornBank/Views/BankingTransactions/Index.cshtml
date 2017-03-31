@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<LonghornBank.Models.BankingTransaction>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Transactions";
 }
 
-<h2>Index</h2>
+<h2>Transactions Home</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New Transaction", "Create") |
+    @Html.ActionLink("New Deposit", "Deposit")
 </p>
 <table class="table">
     <tr>
@@ -73,3 +74,7 @@
 }
 
 </table>
+
+<div>
+    @Html.ActionLink("Back to Accounts", "Index", "Checkings")
+</div>

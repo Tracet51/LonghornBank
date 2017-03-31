@@ -79,7 +79,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "BankingTransactionID,TransactionDispute,TransactionDate,Amount,Description,BankingTransactionType")] BankingTransaction bankingTransaction)
+        public ActionResult Edit([Bind(Include = "BankingTransactionID,TransactionDispute,TransactionDate,Amount,Description, DisputeMessage, CustomerOpinion, CorrectedAmount, BankingTransactionType")] BankingTransaction bankingTransaction)
         {
             if (ModelState.IsValid)
             {
@@ -140,7 +140,7 @@ namespace LonghornBank.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Deposit([Bind(Include = "BankingTransactionID,TransactionDispute,TransactionDate,Amount,Description,BankingTransactionType")] BankingTransaction bankingTransaction, Int32 CheckingID)
+        public ActionResult Deposit([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description,BankingTransactionType")] BankingTransaction bankingTransaction, Int32 CheckingID)
         {
             // Find the selected Checking Account
             Checking SelectedChecking = db.CheckingAccount.Find(CheckingID);
