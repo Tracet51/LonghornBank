@@ -1,7 +1,10 @@
-﻿@model LonghornBank.Models.Customer
+﻿@using LonghornBank.Models
+@model LonghornBank.Models.Customer
 
 @{
     ViewBag.Title = "Index";
+    List<Checking> CheckingAccounts = ViewBag.CheckingAccounts;
+    List<Saving> SavingsAccounts = ViewBag.SavingsAccounts;
 }
 
 <h2>Portal</h2>
@@ -17,12 +20,26 @@
 
 <body>
     <p>
-        @Html.DisplayNameFor(model => model.CustomerID)
     </p>
 </body>
 
 <h3>Accounts</h3>
 <h4>Checking Account(s)</h4>
-<h4>Savings Account(s)</h4>
-<h4>IRA Account(s)</h4>
-<h4>Stock Portfolio(s)</h4>
+<table class="table">
+    @foreach (var item in CheckingAccounts)
+    {
+        @Html.DisplayNameFor(checking => item.CheckingID);
+    }
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CheckingAccounts)
+        </th>
+        <th>
+            
+        </th>
+        <th></th>
+    </tr>
+</table>
+    <h4>Savings Account(s)</h4>
+    <h4>IRA Account(s)</h4>
+    <h4>Stock Portfolio(s)</h4>
