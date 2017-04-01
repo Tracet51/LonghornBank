@@ -4,19 +4,9 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Portal</h2>
+<h2>Customers</h2>
 
-<p>
-    @Html.ActionLink("Add New Checking Account", "Create", "Checkings") | 
-    @Html.ActionLink("Add New Savings Account", "Create", "Savings") |
-    @Html.ActionLink("Add New IRA", "Create", "IRA") |
-    @Html.ActionLink("Add New Stock Account", "Create", "StockAccounts") | 
-    @Html.ActionLink("Add New Transaction", "Create", "BankingTransactions")
-
-</p>
-
-<h3>Accounts</h3>
-<h4>Checking Account(s)</h4>
+<h3>Profiles</h3>
 <table class="table">
 
 @foreach (var item in Model) {

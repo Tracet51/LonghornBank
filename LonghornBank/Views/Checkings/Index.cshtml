@@ -10,7 +10,7 @@
     @Html.ActionLink("New Transaction", "Create", "BankingTransactions") | 
     @Html.ActionLink("Transactions Page", "Index", "BankingTransactions") | 
     @Html.ActionLink("Delete Account", "Delete") | 
-    @Html.ActionLink("Edit Account", "Edit")
+    @Html.ActionLink("Edit Account", "Edit", new { id=1})
 </p>
 <table class="table">
     <tr>
@@ -47,3 +47,5 @@
 }
 
 </table>
+
+@Html.ActionLink("Back to All Accounts", "Index", "Customers")

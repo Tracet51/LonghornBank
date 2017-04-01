@@ -54,7 +54,7 @@ namespace LonghornBank.Controllers
             {
                 db.CustomerAccount.Add(customer);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Portal", "Home", new { id=customer.CustomerID});
             }
 
             return View(customer);
