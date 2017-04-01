@@ -16,6 +16,7 @@
         <h4>Checking</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(modelItem => modelItem.Customer.CustomerID)
 
         <div class="form-group">
             @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -43,9 +44,10 @@
 
         <div class="form-check">
             <label class="form=check-label">
-                @Html.RadioButton("CustomerID", CustomerID, true, new { @class = "form-check-input" }) @Html.Raw(CustomerID)
+                @Html.RadioButton("CustomerID", CustomerID, true, new { @class = "form-check-input" }) Select Your Profile
             </label>
         </div>
+      
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

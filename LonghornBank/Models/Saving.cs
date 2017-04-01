@@ -24,7 +24,7 @@ namespace LonghornBank.Models
         public String AccountNumber { get; set; } 
 
         [Display(Name = "Pending Balance")]
-        [Required(ErrorMessage = "Pending Balance is Required")]
+        //[Required(ErrorMessage = "Pending Balance is Required")]
         public Decimal PendingBalance { get; set; }
 
         public virtual Customer Customer { get; set; }

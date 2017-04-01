@@ -28,6 +28,9 @@ namespace LonghornBank.Controllers
                 return HttpNotFound();
             }
 
+            // Add the Customer to ViewBag to Access information 
+            ViewBag.CustomerAccount = customer;
+
             // Select The Checking Accounts Associated with the customer 
             var CheckingAccountQuery = from ca in db.CheckingAccount
                                        where ca.Customer.CustomerID == customer.CustomerID
@@ -73,8 +76,9 @@ namespace LonghornBank.Controllers
         // POST: Checkings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Balance, Name, AccountNumber")] Checking checking, int? CustomerID)
+        public ActionResult Create([Bind(Include = "CheckingID, Balance, Name, AccountNumber, Customer_CustomerID")] Checking checking, int? CustomerID)
         {
+            
             if (CustomerID == null)
             {
                 return HttpNotFound();
@@ -85,16 +89,16 @@ namespace LonghornBank.Controllers
             {
                 return HttpNotFound();
             }
+            
 
             if (ModelState.IsValid)
             {
                 // Pass in the Customer ID
                 checking.Customer = customer;
 
-
                 db.CheckingAccount.Add(checking);
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id = CustomerID });
+                return RedirectToAction("Portal", "Home", new { id = 1});
             }
 
             return View(checking);
@@ -120,15 +124,26 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name")] Checking checking)
+        public ActionResult Edit([Bind(Include = "CheckingID,AccountNumber,Name")] Checking checking)
         {
             if (ModelState.IsValid)
             {
+                // Find the CustomerID Associated with the Account
+                var CheckingCustomerQuery= from ca in db.CheckingAccount
+                                            where ca.CheckingID == checking.CheckingID
+                                            select ca.Customer.CustomerID;
+                                            
+
+                // Execute the Find
+                List <Int32> CustomerID = CheckingCustomerQuery.ToList();
+
+                Int32 IntCustomerID = CustomerID[0];
+
                 db.Entry(checking).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Portal", "Home", new { id = IntCustomerID});
             }
-            return View(checking);
+            return RedirectToAction("Index", "Checkings", new { id = checking.CheckingID });
         }
 
         // GET: Checkings/Delete/5
@@ -151,10 +166,20 @@ namespace LonghornBank.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            // Find the CustomerID Associated with the Account
+            var CheckingCustomerQuery = from ca in db.CheckingAccount
+                                        where ca.CheckingID == id
+                                        select ca.Customer.CustomerID;
+
+            // Execute the Find
+            List<Int32> CustomerID = CheckingCustomerQuery.ToList();
+
+            Int32 IntCustomerID = CustomerID[0];
+
             Checking checking = db.CheckingAccount.Find(id);
             db.CheckingAccount.Remove(checking);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Portal", "Home", new { id = IntCustomerID});
         }
 
         protected override void Dispose(bool disposing)

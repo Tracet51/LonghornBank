@@ -3,15 +3,14 @@
 
 @{
     ViewBag.Title = "Index";
+    Customer CustomerAccount = ViewBag.CustomerAccount;
 }
 
 <h2>Checking Account Home</h2>
-
+<h3>@Html.DisplayFor(customerAccount => CustomerAccount.FName)'s Checking Accounts</h3>
 <p>
     @Html.ActionLink("New Transaction", "Create", "BankingTransactions") | 
     @Html.ActionLink("Transactions Page", "Index", "BankingTransactions") | 
-    @Html.ActionLink("Delete Account", "Delete") | 
-    @Html.ActionLink("Edit Account", "Edit", new { id=1})
 </p>
 <table class="table">
     <tr>
@@ -44,9 +43,14 @@
         <td>
             @Html.DisplayFor(modelItem => item.AccountNumber)
         </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", "Checkings", new { id = item.CheckingID }, null) |
+            @Html.ActionLink("Details", "Details", "Checkings", new { id = item.CheckingID }, null) |
+            @Html.ActionLink("Delete", "Delete", "Checkings", new { id = item.CheckingID }, null)
+        </td>
     </tr>
 }
 
 </table>
 
-@Html.ActionLink("Back to All Accounts", "Index", "Customers")
+@Html.ActionLink("Back to Accounts Portal", "Portal", "Home", new { id = CustomerAccount.CustomerID }, null)
