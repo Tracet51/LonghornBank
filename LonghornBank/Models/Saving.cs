@@ -19,9 +19,16 @@ namespace LonghornBank.Models
         [Required(ErrorMessage = "Account Name is Required")]
         public String Name { get; set; }
 
-        [Display(Name = "Pending Balance")]
-        [Required(ErrorMessage = "Pending Balance is Required")]
+        [Display(Name="Account Number")]
+        [Required(ErrorMessage = "Account Number is Required")]
+        public String AccountNumber { get; set; } 
 
+        [Display(Name = "Pending Balance")]
+        //[Required(ErrorMessage = "Pending Balance is Required")]
         public Decimal PendingBalance { get; set; }
+
+        public virtual Customer Customer { get; set; }
+
+        public virtual List<BankingTransaction> BankingTransactions { get; set; }
     }
 }

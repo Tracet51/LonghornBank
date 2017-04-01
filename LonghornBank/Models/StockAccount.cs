@@ -8,7 +8,7 @@ namespace LonghornBank.Models
 {
     public class StockAccount
     {
-        public Int32 StockAccountID { get;  set}
+        public Int32 StockAccountID { get; set; }
 
         [Display(Name = "Cash Balance")]
         [Required(ErrorMessage = "A Cash Balance is Required")]

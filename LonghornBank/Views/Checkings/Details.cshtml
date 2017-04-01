@@ -1,0 +1,42 @@
+﻿@model LonghornBank.Models.Checking
+
+@{
+    ViewBag.Title = "Tran";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Checking</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Balance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Balance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PendingBalance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PendingBalance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CheckingID }) |
+    @Html.ActionLink("Back Checking Home", "Index", "Checkings", new { id = Model.CheckingID }, null)
+</p>
