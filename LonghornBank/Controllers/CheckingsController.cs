@@ -38,18 +38,43 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Checkings/Create
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Customer customer = db.CustomerAccount.Find(id);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.CustomerID = id;
             return View();
         }
 
         // POST: Checkings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Balance, Name, AccountNumber")] Checking checking)
+        public ActionResult Create([Bind(Include = "Balance, Name, AccountNumber")] Checking checking, int? CustomerID)
         {
+            if (CustomerID == null)
+            {
+                return View(checking);
+            }
+
+            Customer customer = db.CustomerAccount.Find(CustomerID);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+
             if (ModelState.IsValid)
             {
+                // Pass in the Customer ID
+                checking.Customer = customer;
+
+
                 db.CheckingAccount.Add(checking);
                 db.SaveChanges();
                 return RedirectToAction("Index");

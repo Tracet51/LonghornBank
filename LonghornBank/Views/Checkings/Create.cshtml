@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Create";
+    Int32 CustomerID = ViewBag.CustomerID;
 }
 
 <h2>Create</h2>
@@ -38,6 +39,12 @@
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
+        </div>
+
+        <div class="form-check">
+            <label class="form=check-label">
+                @Html.RadioButton("CustomerID", CustomerID, true, new { @class = "form-check-input" }) @Html.Raw(CustomerID)
+            </label>
         </div>
 
         <div class="form-group">

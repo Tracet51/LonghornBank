@@ -10,7 +10,7 @@
 <h2>Portal</h2>
 
 <p>
-    @Html.ActionLink("Add New Checking Account", "Create", "Checkings") | 
+    @Html.ActionLink("Add New Checking Account", "Create","Checkings", new { id = Model.CustomerID }, null) | 
     @Html.ActionLink("Add New Savings Account", "Create", "Savings") |
     @Html.ActionLink("Add New IRA", "Create", "IRA") |
     @Html.ActionLink("Add New Stock Account", "Create", "StockAccounts") | 
@@ -18,28 +18,68 @@
 
 </p>
 
-<body>
-    <p>
-    </p>
-</body>
-
 <h3>Accounts</h3>
 <h4>Checking Account(s)</h4>
 <table class="table">
-    @foreach (var item in CheckingAccounts)
+   <tr>
+       <th>
+           Checking Account Name
+       </th>
+       <th>
+           Checking Account Number
+       </th>
+       <th>
+           Checking Account Balance
+       </th>
+       <th>
+           Checking Account Pending Balance
+       </th>
+   </tr>
+
+    @foreach (var item in Model.CheckingAccounts)
     {
-        @Html.DisplayNameFor(checking => item.CheckingID);
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
+            <td>@Html.DisplayFor(modelItem => item.Balance)</td>
+            <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "Checking", new { id = item.CheckingID }, null) |
+                @Html.ActionLink("Details", "Details", "Checking", new { id = item.CheckingID }, null) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.CheckingID })
+            </td>
+        </tr>
+        
     }
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CheckingAccounts)
-        </th>
-        <th>
-            
-        </th>
-        <th></th>
-    </tr>
+
 </table>
     <h4>Savings Account(s)</h4>
+<table class="table">
+    <tr>
+        <th>
+            Savings Account Name
+        </th>
+        <th>
+            Savings Account Number
+        </th>
+        <th>
+            Savings Account Balance
+        </th>
+        <th>
+            Savings Account Pending Balance
+        </th>
+    </tr>
+
+    @foreach (var item in Model.SavingAccounts)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
+            <td>@Html.DisplayFor(modelItem => item.Balance)</td>
+            <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
+        </tr>
+    }
+
+</table>
     <h4>IRA Account(s)</h4>
     <h4>Stock Portfolio(s)</h4>
