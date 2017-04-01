@@ -20,6 +20,7 @@
 
 <h3>Accounts</h3>
 <h4>Checking Account(s)</h4>
+<p>@Html.ActionLink("Checking Accounts Home", "Index", "Checkings", new { id = Model.CustomerID }, null)</p>
 <table class="table">
    <tr>
        <th>
@@ -44,9 +45,9 @@
             <td>@Html.DisplayFor(modelItem => item.Balance)</td>
             <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
             <td>
-                @Html.ActionLink("Edit", "Edit", "Checking", new { id = item.CheckingID }, null) |
-                @Html.ActionLink("Details", "Details", "Checking", new { id = item.CheckingID }, null) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.CheckingID })
+                @Html.ActionLink("Edit", "Edit", "Checkings", new { id = item.CheckingID }, null) |
+                @Html.ActionLink("Details", "Details", "Checkings", new { id = item.CheckingID }, null) |
+                @Html.ActionLink("Delete", "Delete", "Checkings", new { id = item.CheckingID }, null)
             </td>
         </tr>
         

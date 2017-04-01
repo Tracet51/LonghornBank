@@ -16,10 +16,27 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Checkings
-        public ActionResult Index()
-        {   
-            
-            return View(db.CheckingAccount.ToList());
+        public ActionResult Index(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Customer customer = db.CustomerAccount.Find(id);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Select The Checking Accounts Associated with the customer 
+            var CheckingAccountQuery = from ca in db.CheckingAccount
+                                       where ca.Customer.CustomerID == customer.CustomerID
+                                       select ca;
+
+            // Create list and execute the query 
+            List<Checking> CustomerChecking = CheckingAccountQuery.ToList();
+
+            return View(CustomerChecking);
         }
 
         // GET: Checkings/Details/5
@@ -60,7 +77,7 @@ namespace LonghornBank.Controllers
         {
             if (CustomerID == null)
             {
-                return View(checking);
+                return HttpNotFound();
             }
 
             Customer customer = db.CustomerAccount.Find(CustomerID);
@@ -77,7 +94,7 @@ namespace LonghornBank.Controllers
 
                 db.CheckingAccount.Add(checking);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Portal", "Home", new { id = CustomerID });
             }
 
             return View(checking);
