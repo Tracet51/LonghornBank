@@ -1,7 +1,7 @@
 ﻿@model LonghornBank.Models.Checking
 
 @{
-    ViewBag.Title = "Tran";
+    ViewBag.Title = "Checking";
 }
 
 <h2>Details</h2>
@@ -38,5 +38,5 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.CheckingID }) |
-    @Html.ActionLink("Back Checking Home", "Index", "Checkings", new { id = Model.Customer.CustomerID }, null)
+    @Html.ActionLink("Back Checking Home", "Index", "Checkings", new { id = Model.CheckingID }, null)
 </p>
