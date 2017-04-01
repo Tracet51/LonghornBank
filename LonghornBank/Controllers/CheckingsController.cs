@@ -36,10 +36,25 @@ namespace LonghornBank.Controllers
             return View(checking);
         }
 
-        // GET: Checkings/CreateTransaction
+        // GET: Checkings/Create
         public ActionResult Create()
         {
-            return RedirectToAction("Create","BankingTransactions");
+            return View();
+        }
+
+        // POST: Checkings/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Balance, Name, AccountNumber")] Checking checking)
+        {
+            if (ModelState.IsValid)
+            {
+                db.CheckingAccount.Add(checking);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(checking);
         }
 
         // GET: Checkings/Edit/5
@@ -62,7 +77,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CheckingID,Balance,PendingBalance,Name")] Checking checking)
+        public ActionResult Edit([Bind(Include = "Name")] Checking checking)
         {
             if (ModelState.IsValid)
             {

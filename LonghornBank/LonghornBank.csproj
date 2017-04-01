@@ -151,6 +151,10 @@
     <Compile Include="Migrations\201703312133270_Scaffold Customer.Designer.cs">
       <DependentUpon>201703312133270_Scaffold Customer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704010051463_Change Models.cs" />
+    <Compile Include="Migrations\201704010051463_Change Models.Designer.cs">
+      <DependentUpon>201704010051463_Change Models.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
@@ -186,6 +190,7 @@
     <Content Include="Views\Customers\Details.cshtml" />
     <Content Include="Views\Customers\Edit.cshtml" />
     <Content Include="Views\Customers\Index.cshtml" />
+    <Content Include="Views\Checkings\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -205,6 +210,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703312133270_Scaffold Customer.resx">
       <DependentUpon>201703312133270_Scaffold Customer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704010051463_Change Models.resx">
+      <DependentUpon>201704010051463_Change Models.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

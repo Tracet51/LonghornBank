@@ -18,8 +18,7 @@ namespace LonghornBank.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-           
-
+            
             return View(db.CustomerAccount.ToList());
         }
 
