@@ -1,0 +1,57 @@
+﻿@model IEnumerable<LonghornBank.Models.Saving>
+@using LonghornBank.Models;
+
+@{
+    ViewBag.Title = "Index";
+    Customer CustomerAccount = ViewBag.CustomerAccount;
+}
+
+<h2>Savings Account Home</h2>
+<h3>@Html.DisplayFor(customerAccount => CustomerAccount.FName)'s Savings Accounts</h3>
+
+<p>
+    @Html.ActionLink("New Transaction", "Create", "BankingTransactions") |
+    @Html.ActionLink("Transactions Page", "Index", "BankingTransactions") | 
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Balance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PendingBalance)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Balance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PendingBalance)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.SavingID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.SavingID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.SavingID })
+        </td>
+    </tr>
+}
+
+</table>
+
+@Html.ActionLink("Back to Accounts Portal", "Portal", "Home", new { id = CustomerAccount.CustomerID }, null)

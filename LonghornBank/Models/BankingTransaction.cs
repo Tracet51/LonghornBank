@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using LonghornBank.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace LonghornBank.Models
 {
@@ -17,6 +18,8 @@ namespace LonghornBank.Models
         public DisputeStatus TransactionDispute { get; set; }
 
         [Required(ErrorMessage = "Transaction Date is Required")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}",ApplyFormatInEditMode = true)]
         [Display(Name = "Transaction Date")]
         public DateTime TransactionDate { get; set; }
 
@@ -28,16 +31,15 @@ namespace LonghornBank.Models
         [Display(Name = "Transaction Description")]
         public String Description { get; set; }
 
-        [Required(ErrorMessage = "Dispute Message is Required")]
         [Display(Name = "Dispute Message")]
         public String DisputeMessage { get; set; }
 
-        [Required(ErrorMessage = "Disputed Amount is Required")]
+        //[Required(ErrorMessage = "Disputed Amount is Required")]
         [Display(Name = "Disputed Amount")]
         public Decimal CustomerOpinion { get; set; }
 
 
-        [Required(ErrorMessage = "Corrected Transaction Amount is Required")]
+        //[Required(ErrorMessage = "Corrected Transaction Amount is Required")]
         [Display(Name = "Corrected Transaction Amount")]
         public Decimal CorrectedAmount { get; set; }
 
@@ -45,6 +47,13 @@ namespace LonghornBank.Models
         [Required(ErrorMessage = "Transaction Type is Required")]
         public BankingTranactionType BankingTransactionType { get; set; }
 
-        // jayden wuz hur!!!!
+        // Many to Many: A Transaction and Belong to Multiple Checking Accounts
+        public virtual List<Checking> CheckingAccount { get; set; }
+
+        // Many to Many: A Transaction can belong to multiple Savings Accounts
+        public virtual List<Saving> SavingsAccount { get; set; }
+
+        // Many to Many: a transaction can belong to multiple IRA accounts
+        public virtual List<IRA> IRAAccount { get; set; }
     }
 }

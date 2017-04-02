@@ -138,6 +138,7 @@
     <Compile Include="Controllers\CheckingsController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SavingsController.cs" />
     <Compile Include="DAL\DbContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -196,6 +197,11 @@
     <Content Include="Views\Checkings\Create.cshtml" />
     <Content Include="Views\Home\Portal.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Savings\Create.cshtml" />
+    <Content Include="Views\Savings\Delete.cshtml" />
+    <Content Include="Views\Savings\Details.cshtml" />
+    <Content Include="Views\Savings\Edit.cshtml" />
+    <Content Include="Views\Savings\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
