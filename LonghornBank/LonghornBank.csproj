@@ -101,6 +101,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -111,18 +112,53 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Models\Web.config" />
+    <None Include="Properties\PublishProfiles\LonghornBank - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\LonghornBank - Web Deploy.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BankingTransactionsController.cs" />
+    <Compile Include="Controllers\CheckingsController.cs" />
+    <Compile Include="Controllers\CustomersController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="DAL\DbContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703311746012_InitialSetup.cs" />
+    <Compile Include="Migrations\201703311746012_InitialSetup.Designer.cs">
+      <DependentUpon>201703311746012_InitialSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703311942371_Changed Models.cs" />
+    <Compile Include="Migrations\201703311942371_Changed Models.Designer.cs">
+      <DependentUpon>201703311942371_Changed Models.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703312133270_Scaffold Customer.cs" />
+    <Compile Include="Migrations\201703312133270_Scaffold Customer.Designer.cs">
+      <DependentUpon>201703312133270_Scaffold Customer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704010051463_Change Models.cs" />
+    <Compile Include="Migrations\201704010051463_Change Models.Designer.cs">
+      <DependentUpon>201704010051463_Change Models.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -140,6 +176,26 @@
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Checkings\Delete.cshtml" />
+    <Content Include="Views\Checkings\Details.cshtml" />
+    <Content Include="Views\Checkings\Edit.cshtml" />
+    <Content Include="Views\Checkings\Index.cshtml" />
+    <Content Include="Views\BankingTransactions\Deposit.cshtml" />
+    <Content Include="Views\BankingTransactions\Create.cshtml" />
+    <Content Include="Views\BankingTransactions\Delete.cshtml" />
+    <Content Include="Views\BankingTransactions\Details.cshtml" />
+    <Content Include="Views\BankingTransactions\Edit.cshtml" />
+    <Content Include="Views\BankingTransactions\Index.cshtml" />
+    <Content Include="Views\Customers\Create.cshtml" />
+    <Content Include="Views\Customers\Delete.cshtml" />
+    <Content Include="Views\Customers\Details.cshtml" />
+    <Content Include="Views\Customers\Edit.cshtml" />
+    <Content Include="Views\Customers\Index.cshtml" />
+    <Content Include="Views\Checkings\Create.cshtml" />
+    <Content Include="Views\Home\Portal.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -149,7 +205,20 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201703311746012_InitialSetup.resx">
+      <DependentUpon>201703311746012_InitialSetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703311942371_Changed Models.resx">
+      <DependentUpon>201703311942371_Changed Models.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703312133270_Scaffold Customer.resx">
+      <DependentUpon>201703312133270_Scaffold Customer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704010051463_Change Models.resx">
+      <DependentUpon>201704010051463_Change Models.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

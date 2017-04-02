@@ -1,0 +1,82 @@
+﻿@model LonghornBank.Models.BankingTransaction
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>BankingTransaction</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionDispute)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransactionDispute)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransactionDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DisputeMessage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DisputeMessage)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerOpinion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerOpinion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CorrectedAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CorrectedAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BankingTransactionType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankingTransactionType)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BankingTransactionID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
