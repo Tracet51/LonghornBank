@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using LonghornBank.Dal;
 using LonghornBank.Models;
+using System.Diagnostics;
 
 namespace LonghornBank.Controllers
 {
@@ -71,24 +72,63 @@ namespace LonghornBank.Controllers
             return View(bankingTransaction);
         }
 
-        // GET: BankingTransactions/Create
-        public ActionResult Create()
+        // GET: BankingTransactions/Create/?id
+        // id = CustomerID
+        public ActionResult Create(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Customer customer = db.CustomerAccount.Find(id);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Get all of the accounts
+            SelectList CheckingAccounts = GetCheckingAccounts((Int32)id);
+
+            // Add the SelectList Tuple to the ViewBag
+            ViewBag.CheckingAccounts = CheckingAccounts;
+
             return View();
         }
 
         // POST: BankingTransactions/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // CheckingID = the checking account to bind to 
+        // id = The Customer's Account ID
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description,BankingTransactionType")] BankingTransaction bankingTransaction)
+        public ActionResult Create([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description,BankingTransactionType")] BankingTransaction bankingTransaction,
+            int id, int CheckingID)
         {
             if (ModelState.IsValid)
             {
-                db.BankingTransaction.Add(bankingTransaction);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                // Find the Assoicated Account 
+                if (CheckingID == 0)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    Debug.WriteLine(CheckingID.ToString());
+
+                    // Find the Selected Checking Account
+                    Checking SelectedChecking = db.CheckingAccount.Find(CheckingID);
+
+                    // Create a list of checking accounts and add the one seleceted 
+                    List<Checking> NewCheckingAccounts = new List<Checking> { SelectedChecking };
+
+                    bankingTransaction.CheckingAccount = NewCheckingAccounts;
+
+                    // Add to database
+                    db.BankingTransaction.Add(bankingTransaction);
+                    db.SaveChanges();
+                }
+
+                
+                return RedirectToAction("Index", "BankingTransactions", new { id=id});
             }
 
             return View(bankingTransaction);
@@ -194,6 +234,32 @@ namespace LonghornBank.Controllers
             // Repopulate the dropdown options
             ViewBag.AllAccounts = bankingTransaction.CheckingAccount.ToList();
             return View(bankingTransaction);
+        }
+
+        // Get all of the customer's account 
+        // id == customer's id
+        public SelectList GetCheckingAccounts(int id)
+        {
+            // Populate a list of Accounts
+            var CheckingQuery = from ca in db.CheckingAccount
+                                where ca.Customer.CustomerID == id
+                                select ca;
+
+            // Create a list of accounts of execute
+            List<Checking> CheckingAccounts = CheckingQuery.ToList();
+
+            // Create a None Options 
+            Checking SelectNone = new Checking() { CheckingID = 0, AccountNumber = "1000000000000", Balance = 0, Name = "None" };
+            CheckingAccounts.Add(SelectNone);
+
+            // Convert the List into a select list 
+            SelectList CheckingSelectList = new SelectList(CheckingAccounts.OrderBy(a => a.CheckingID), "CheckingID", "Name");
+
+            // Add the Accounts to the Tuple of Accounts 
+            //Tuple<SelectList> Accounts = new Tuple<SelectList>(CheckingSelectList);
+
+            return CheckingSelectList;
+
         }
 
         
