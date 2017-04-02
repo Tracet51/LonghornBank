@@ -31,17 +31,29 @@ namespace LonghornBank.Controllers
             // Get a List of checking accounts associated with Customer ID
             List<Checking> CustomerChecking = customer.CheckingAccounts;
 
-            // List of Savings Accounts associated with CustomerID
-            List<Saving> CustomerSavings = customer.SavingAccounts;
+            // Create Empty List of Transactions 
+            List<BankingTransaction> CustomerTransactions = new List<BankingTransaction>();
 
-            var TransactionQuery = from bt in db.BankingTransaction
-                                   where bt.CheckingAccount == CustomerChecking
-                                   select bt;
+            foreach (Checking c in CustomerChecking)
+            {
+                // Get the Checking Accounts ID
+                Int32 inttemp = c.CheckingID;
 
+                // Select the transactions where the checking Id matches the customers checking Id
+                var query = from a in db.BankingTransaction
+                            from b in a.CheckingAccount
+                            where b.CheckingID == inttemp
+                            select a;
 
+                // Create a holding list and add to main list
+                List<BankingTransaction> TempTransaction = query.ToList();
+                CustomerTransactions.AddRange(TempTransaction);
+            }
+
+            // Add the customer to the view bag
             ViewBag.Customer = customer;
 
-            return View(db.BankingTransaction.ToList());
+            return View("Index", CustomerTransactions);
         }
 
         // GET: BankingTransactions/Details/5
