@@ -158,6 +158,10 @@
     <Compile Include="Migrations\201704010051463_Change Models.Designer.cs">
       <DependentUpon>201704010051463_Change Models.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704012232374_ModelChanges.cs" />
+    <Compile Include="Migrations\201704012232374_ModelChanges.Designer.cs">
+      <DependentUpon>201704012232374_ModelChanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
@@ -218,6 +222,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704010051463_Change Models.resx">
       <DependentUpon>201704010051463_Change Models.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704012232374_ModelChanges.resx">
+      <DependentUpon>201704012232374_ModelChanges.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

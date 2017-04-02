@@ -16,8 +16,31 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: BankingTransactions
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Customer customer = db.CustomerAccount.Find(id);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Get a List of checking accounts associated with Customer ID
+            List<Checking> CustomerChecking = customer.CheckingAccounts;
+
+            // List of Savings Accounts associated with CustomerID
+            List<Saving> CustomerSavings = customer.SavingAccounts;
+
+            var TransactionQuery = from bt in db.BankingTransaction
+                                   where bt.CheckingAccount == CustomerChecking
+                                   select bt;
+
+
+            ViewBag.Customer = customer;
+
             return View(db.BankingTransaction.ToList());
         }
 
@@ -160,6 +183,8 @@ namespace LonghornBank.Controllers
             ViewBag.AllAccounts = bankingTransaction.CheckingAccount.ToList();
             return View(bankingTransaction);
         }
+
+        
 
         protected override void Dispose(bool disposing)
         {

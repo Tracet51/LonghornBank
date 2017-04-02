@@ -43,6 +43,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Checkings/Details/5
+        // ID = checkingID
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -54,6 +55,13 @@ namespace LonghornBank.Controllers
             {
                 return HttpNotFound();
             }
+
+            // Get the List off all of the Banking Transaction For this Account 
+            List<BankingTransaction> CheckingTransactions = checking.BankingTransactions.ToList();
+
+            // Pass the List to the ViewBag
+            ViewBag.CheckingTransactions = CheckingTransactions;
+
             return View(checking);
         }
 
