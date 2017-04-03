@@ -5,10 +5,13 @@
     ViewBag.Title = "New Transaction";
 
     // Grab the Tuple from ViewBag
-    //SelectList CheckingAccounts = ViewBag.CheckingAccounts;
+    Tuple<SelectList, SelectList> AllAccounts = ViewBag.AllAccounts;
 
     // Create a SelectList for Checking Accounts
-    //SelectList CheckingAccounts = AllAccounts.Item1;
+    SelectList CheckingAccounts = AllAccounts.Item1;
+
+    // Create a SelectList for Savings Accounts 
+    SelectList SavingsAccounts = AllAccounts.Item2;
     
 
 }
@@ -96,9 +99,26 @@
             </div>
         </div>
 
-        Checking Accounts: @Html.DropDownList("CheckingID", (SelectList)ViewBag.CheckingAccounts, new { @class = "form-control"})
+        <b class="control-label col-md-2">Checking Accounts:</b> 
+        @Html.DropDownList("CheckingID", CheckingAccounts, new { @class = "form-control"})
         <br />
-        <br /> 
+        <br />
+
+        <b class="control-label col-md-2">Savings Accounts:</b>
+         @Html.DropDownList("SavingID", SavingsAccounts, new { @class = "form-control" })
+        <br />
+        <br />
+        
+        <p>If Transfering, Please Select Another Account</p>
+        <b class="control-label col-md-2">Checking Accounts:</b>
+        @Html.DropDownList("CheckingIDTrans", CheckingAccounts, new { @class = "form-control"})
+        <br />
+        <br />
+
+        <b class="control-label col-md-2">Savings Accounts:</b>
+        @Html.DropDownList("SavingIDTrans", SavingsAccounts, new { @class = "form-control" })
+        <br />
+        <br />
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

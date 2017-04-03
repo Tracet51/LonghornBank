@@ -87,10 +87,10 @@ namespace LonghornBank.Controllers
             }
 
             // Get all of the accounts
-            SelectList CheckingAccounts = GetCheckingAccounts((Int32)id);
+            Tuple<SelectList, SelectList> AllAcounts = GetAllAccounts((Int32)id);
 
             // Add the SelectList Tuple to the ViewBag
-            ViewBag.CheckingAccounts = CheckingAccounts;
+            ViewBag.AllAccounts = AllAcounts;
 
             return View();
         }
@@ -101,34 +101,215 @@ namespace LonghornBank.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description,BankingTransactionType")] BankingTransaction bankingTransaction,
-            int id, int CheckingID)
+            int id, int CheckingID, int CheckingIDTrans, int SavingID, int SavingIDTrans)
         {
             if (ModelState.IsValid)
             {
-                // Find the Assoicated Account 
-                if (CheckingID == 0)
+                
+                // Check to see if Deposit 
+                if (bankingTransaction.BankingTransactionType == BankingTranactionType.Deposit)
                 {
-                    return RedirectToAction("Index", "Home");
+                    // Check to if Checking Account
+                    if (CheckingID != 0)
+                    {
+                        // Find the Selected Checking Account
+                        Checking SelectedChecking = db.CheckingAccount.Find(CheckingID);
+
+                        // Create a list of checking accounts and add the one seleceted 
+                        List<Checking> NewCheckingAccounts = new List<Checking> { SelectedChecking };
+
+                        bankingTransaction.CheckingAccount = NewCheckingAccounts;
+
+                        // Add to database
+                        db.BankingTransaction.Add(bankingTransaction);
+                        db.SaveChanges();
+
+                        // Redirect 
+                        return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    }
+
+                    // Check to see if Savings Account
+                    if (SavingID != 0)
+                    {
+                        // Find the Selected Checking Account
+                        Saving SelectedSaving= db.SavingsAccount.Find(SavingID);
+
+                        // Create a list of checking accounts and add the one seleceted 
+                        List<Saving> NewSavingsAccounts = new List<Saving> { SelectedSaving };
+
+                        bankingTransaction.SavingsAccount = NewSavingsAccounts;
+
+                        // Add to database
+                        db.BankingTransaction.Add(bankingTransaction);
+                        db.SaveChanges();
+
+                        // Redirect 
+                        return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    }
+                   
                 }
+                
+                // Check to see if of Type Withdrawl
+                else if (bankingTransaction.BankingTransactionType == BankingTranactionType.Withdrawl)
+                {
+                    // Check to if Checking Account
+                    if (CheckingID != 0)
+                    {
+                        // Find the Selected Checking Account
+                        Checking SelectedChecking = db.CheckingAccount.Find(CheckingID);
+
+                        // Create a list of checking accounts and add the one seleceted 
+                        List<Checking> NewCheckingAccounts = new List<Checking> { SelectedChecking };
+
+                        bankingTransaction.CheckingAccount = NewCheckingAccounts;
+
+                        // Add to database
+                        db.BankingTransaction.Add(bankingTransaction);
+                        db.SaveChanges();
+
+                        // Redirect 
+                        return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    }
+
+                    // Check to see if Savings Account
+                    else if (SavingID != 0)
+                    {
+                        // Find the Selected Checking Account
+                        Saving SelectedSaving = db.SavingsAccount.Find(SavingID);
+
+                        // Create a list of checking accounts and add the one seleceted 
+                        List<Saving> NewSavingsAccounts = new List<Saving> { SelectedSaving };
+
+                        bankingTransaction.SavingsAccount = NewSavingsAccounts;
+
+                        // Add to database
+                        db.BankingTransaction.Add(bankingTransaction);
+                        db.SaveChanges();
+
+                        // Redirect 
+                        return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    }
+                }
+
+                // If it is a transfer 
                 else
                 {
-                    Debug.WriteLine(CheckingID.ToString());
+                    // Check to see if first account is checking
+                    if (CheckingID != 0)
+                    {
 
-                    // Find the Selected Checking Account
-                    Checking SelectedChecking = db.CheckingAccount.Find(CheckingID);
+                        // Find the Selected Checking Account
+                        Checking SelectedChecking = db.CheckingAccount.Find(CheckingID);
 
-                    // Create a list of checking accounts and add the one seleceted 
-                    List<Checking> NewCheckingAccounts = new List<Checking> { SelectedChecking };
+                        // Create a list of checking accounts and add the one seleceted 
+                        List<Checking> NewCheckingAccounts = new List<Checking> { SelectedChecking };
 
-                    bankingTransaction.CheckingAccount = NewCheckingAccounts;
+                        // Check to see if the Transfer is to Another Checking
+                        if (CheckingIDTrans != 0)
+                        {
+                            // Find the Selected Checking Account
+                            Checking CheckingTrans = db.CheckingAccount.Find(CheckingIDTrans);
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
+                            // Add the Transfer to the Checking List 
+                            NewCheckingAccounts.Add(CheckingTrans);
+
+                            // Create a new association of the acccounts
+                            bankingTransaction.CheckingAccount = NewCheckingAccounts;
+
+                            // Add to database
+                            db.BankingTransaction.Add(bankingTransaction);
+                            db.SaveChanges();
+
+                            // Redirect 
+                            return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                        }
+
+                        // If Transfering to Savings Account
+                        else if (SavingIDTrans !=0)
+                        {
+                            // Find the Selected Checking Account
+                            Saving SavingsTrans = db.SavingsAccount.Find(SavingIDTrans);
+
+                            // Create a list of checking accounts and add the one seleceted 
+                            List<Saving> NewSavingsAccounts = new List<Saving> { SavingsTrans };
+
+                            // Add the Savings Account
+                            bankingTransaction.SavingsAccount = NewSavingsAccounts;
+
+                            // Add the Checking Account
+                            bankingTransaction.CheckingAccount = NewCheckingAccounts;
+
+                            // Add to database
+                            db.BankingTransaction.Add(bankingTransaction);
+                            db.SaveChanges();
+
+                            // Redirect 
+                            return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                        }
+
+                        // Redirect 
+                        return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    }
+
+                    // If Transfering from a savings account 
+                    else if (SavingID !=0)
+                    {
+                        // Find the Selected Checking Account
+                        Saving SelectedSavings = db.SavingsAccount.Find(SavingID);
+
+                        // Create a list of checking accounts and add the one seleceted 
+                        List<Saving> NewSavingsAccounts = new List<Saving> { SelectedSavings };
+
+                        // If transfering to a checking account
+                        if (CheckingIDTrans != 0)
+                        {
+                            // Find the Selected Checking Account
+                            Checking CheckingTrans = db.CheckingAccount.Find(CheckingIDTrans);
+
+                            // Create a list of checking accounts and add the one seleceted 
+                            List<Checking> NewCheckingAccounts = new List<Checking> { CheckingTrans };
+
+                            // Add the Transfer to the Checking List 
+                            NewCheckingAccounts.Add(CheckingTrans);
+
+                            // Create a new association of the acccounts
+                            bankingTransaction.CheckingAccount = NewCheckingAccounts;
+
+                            // Associate with Savings Account 
+                            bankingTransaction.SavingsAccount = NewSavingsAccounts;
+
+                            // Add to database
+                            db.BankingTransaction.Add(bankingTransaction);
+                            db.SaveChanges();
+
+                            // Redirect 
+                            return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                        }
+
+                        // If Transfering to a Savings Account 
+                        else if (SavingIDTrans != 0)
+                        {
+                            // Find the Selected Checking Account
+                            Saving SavingsTrans = db.SavingsAccount.Find(SavingIDTrans);
+
+                            // Add to the Savings Account List
+                            NewSavingsAccounts.Add(SavingsTrans);
+
+                            // Associate with Savings Account 
+                            bankingTransaction.SavingsAccount = NewSavingsAccounts;
+
+                            // Add to database
+                            db.BankingTransaction.Add(bankingTransaction);
+                            db.SaveChanges();
+
+                            // Redirect 
+                            return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                        }
+
+                    }
+
                 }
 
-                
-                return RedirectToAction("Index", "BankingTransactions", new { id=id});
             }
 
             return View(bankingTransaction);
@@ -238,9 +419,9 @@ namespace LonghornBank.Controllers
 
         // Get all of the customer's account 
         // id == customer's id
-        public SelectList GetCheckingAccounts(int id)
+        public Tuple<SelectList, SelectList> GetAllAccounts(int id)
         {
-            // Populate a list of Accounts
+            // Populate a list of Checking Accounts
             var CheckingQuery = from ca in db.CheckingAccount
                                 where ca.Customer.CustomerID == id
                                 select ca;
@@ -255,10 +436,25 @@ namespace LonghornBank.Controllers
             // Convert the List into a select list 
             SelectList CheckingSelectList = new SelectList(CheckingAccounts.OrderBy(a => a.CheckingID), "CheckingID", "Name");
 
-            // Add the Accounts to the Tuple of Accounts 
-            //Tuple<SelectList> Accounts = new Tuple<SelectList>(CheckingSelectList);
+            // Populate a list of Savings Accounts
+            var SavingsQuery = from sa in db.SavingsAccount
+                                where sa.Customer.CustomerID == id
+                                select sa;
 
-            return CheckingSelectList;
+            // Create a list of accounts of execute
+            List<Saving> SavingsAccounts = SavingsQuery.ToList();
+
+            // Create a None Options 
+            Saving SelectNoneSavings = new Saving() { SavingID = 0, AccountNumber = "1000000000000", Balance = 0, Name = "None" };
+            SavingsAccounts.Add(SelectNoneSavings);
+
+            // Convert the List into a select list 
+            SelectList SavingsSelectList = new SelectList(SavingsAccounts.OrderBy(a => a.SavingID), "SavingID", "Name");
+
+            // Add the Accounts to the Tuple of Accounts 
+            Tuple<SelectList, SelectList> Accounts = new Tuple<SelectList, SelectList>(CheckingSelectList, SavingsSelectList);
+
+            return Accounts;
 
         }
 
