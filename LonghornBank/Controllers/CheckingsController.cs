@@ -101,12 +101,12 @@ namespace LonghornBank.Controllers
 
             if (ModelState.IsValid)
             {
-                // Pass in the Customer ID
+                // Associate the Customer with the checking account
                 checking.Customer = customer;
 
                 db.CheckingAccount.Add(checking);
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id = 1});
+                return RedirectToAction("Portal", "Home", new { id = customer.CustomerID});
             }
 
             return View(checking);
