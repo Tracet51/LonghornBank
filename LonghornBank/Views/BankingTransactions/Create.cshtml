@@ -1,7 +1,19 @@
-﻿@model LonghornBank.Models.BankingTransaction
+﻿@using LonghornBank.Models
+@model LonghornBank.Models.BankingTransaction
 
 @{
     ViewBag.Title = "New Transaction";
+
+    // Grab the Tuple from ViewBag
+    Tuple<SelectList, SelectList> AllAccounts = ViewBag.AllAccounts;
+
+    // Create a SelectList for Checking Accounts
+    SelectList CheckingAccounts = AllAccounts.Item1;
+
+    // Create a SelectList for Savings Accounts 
+    SelectList SavingsAccounts = AllAccounts.Item2;
+    
+
 }
 
 <h2>Create a New Transaction</h2>
@@ -33,6 +45,7 @@
                 @Html.ValidationMessageFor(model => model.TransactionDate, "", new { @class = "text-danger" })
             </div>
         </div>
+
 
         <div class="form-group">
             @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -85,6 +98,27 @@
                 @Html.ValidationMessageFor(model => model.BankingTransactionType, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        <b class="control-label col-md-2">Checking Accounts:</b> 
+        @Html.DropDownList("CheckingID", CheckingAccounts, new { @class = "form-control"})
+        <br />
+        <br />
+
+        <b class="control-label col-md-2">Savings Accounts:</b>
+         @Html.DropDownList("SavingID", SavingsAccounts, new { @class = "form-control" })
+        <br />
+        <br />
+        
+        <p>If Transfering, Please Select Another Account</p>
+        <b class="control-label col-md-2">Checking Accounts:</b>
+        @Html.DropDownList("CheckingIDTrans", CheckingAccounts, new { @class = "form-control"})
+        <br />
+        <br />
+
+        <b class="control-label col-md-2">Savings Accounts:</b>
+        @Html.DropDownList("SavingIDTrans", SavingsAccounts, new { @class = "form-control" })
+        <br />
+        <br />
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
