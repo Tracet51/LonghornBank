@@ -119,6 +119,21 @@ namespace LonghornBank.Controllers
 
                         bankingTransaction.CheckingAccount = NewCheckingAccounts;
 
+                        
+                        //Adds Money to account if under amount required for approval
+                        if (bankingTransaction.Amount <= 5000)
+                        {
+                            Decimal New_Balance = SelectedChecking.Balance + bankingTransaction.Amount;
+                            SelectedChecking.Balance = New_Balance;
+                        }
+                        //Adds money to pending balance if transaction over 5000
+                        else
+                        {
+                            SelectedChecking.PendingBalance = bankingTransaction.Amount;
+                        }
+
+                       
+
                         // Add to database
                         db.BankingTransaction.Add(bankingTransaction);
                         db.SaveChanges();
@@ -137,6 +152,21 @@ namespace LonghornBank.Controllers
                         List<Saving> NewSavingsAccounts = new List<Saving> { SelectedSaving };
 
                         bankingTransaction.SavingsAccount = NewSavingsAccounts;
+
+                        //Adds money to account if under 5000
+                        if (bankingTransaction.Amount <= 5000)
+                        {
+                            Decimal New_Balance = SelectedSaving.Balance + bankingTransaction.Amount;
+                            SelectedSaving.Balance = New_Balance;
+                        }
+
+                        //Adds to pending balance if over 5000
+                        else
+                        {
+                            SelectedSaving.PendingBalance = bankingTransaction.Amount;
+                        }
+
+
 
                         // Add to database
                         db.BankingTransaction.Add(bankingTransaction);
@@ -162,6 +192,17 @@ namespace LonghornBank.Controllers
 
                         bankingTransaction.CheckingAccount = NewCheckingAccounts;
 
+                        //Subtracts Money to account if under amount required for approval
+                        if (bankingTransaction.Amount <= SelectedChecking.Balance)
+                        {
+                            //TODO: Write error message for invalid withdrawl
+                            
+                            Decimal New_Balance = SelectedChecking.Balance - bankingTransaction.Amount;
+                            SelectedChecking.Balance = New_Balance;
+                        }
+                        
+
+
                         // Add to database
                         db.BankingTransaction.Add(bankingTransaction);
                         db.SaveChanges();
@@ -180,6 +221,18 @@ namespace LonghornBank.Controllers
                         List<Saving> NewSavingsAccounts = new List<Saving> { SelectedSaving };
 
                         bankingTransaction.SavingsAccount = NewSavingsAccounts;
+
+                        //Subtracts Money to account if under amount required for approval
+                        if (bankingTransaction.Amount <= SelectedSaving.Balance)
+                        {
+                            //TODO: Write error message for invalid withdrawl
+                            /*if (bankingTransaction.Amount > SelectedChecking.Balance)
+                            {
+                                return
+                            }*/
+                            Decimal New_Balance = SelectedSaving.Balance - bankingTransaction.Amount;
+                            SelectedSaving.Balance = New_Balance;
+                        }
 
                         // Add to database
                         db.BankingTransaction.Add(bankingTransaction);
@@ -215,6 +268,17 @@ namespace LonghornBank.Controllers
                             // Create a new association of the acccounts
                             bankingTransaction.CheckingAccount = NewCheckingAccounts;
 
+                            //Take money from checking
+                            if (bankingTransaction.Amount <= SelectedChecking.Balance)
+                            {
+                                //TODO: Write error message for invalid withdrawl
+
+                                Decimal New_Balance = SelectedChecking.Balance - bankingTransaction.Amount;
+                                SelectedChecking.Balance = New_Balance;
+                                Decimal New_Transfer_Balance = CheckingTrans.Balance + bankingTransaction.Amount;
+                                CheckingTrans.Balance = New_Transfer_Balance;
+                            }
+
                             // Add to database
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
@@ -237,6 +301,15 @@ namespace LonghornBank.Controllers
 
                             // Add the Checking Account
                             bankingTransaction.CheckingAccount = NewCheckingAccounts;
+
+                            //Adds money to account
+                            if (bankingTransaction.Amount <= SavingsTrans.Balance)
+                            {
+                                //TODO: Write error message for invalid withdrawl
+
+                                Decimal New_Balance = SavingsTrans.Balance + bankingTransaction.Amount;
+                                SavingsTrans.Balance = New_Balance;
+                            }
 
                             // Add to database
                             db.BankingTransaction.Add(bankingTransaction);
@@ -407,6 +480,11 @@ namespace LonghornBank.Controllers
             if (ModelState.IsValid)
             {
                 db.BankingTransaction.Add(bankingTransaction);
+                if (bankingTransaction.Amount<=5000)
+                {
+                    Decimal New_Balance = SelectedChecking.Balance + bankingTransaction.Amount;
+                    SelectedChecking.Balance = New_Balance;  
+                }
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

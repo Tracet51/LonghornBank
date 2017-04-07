@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 namespace LonghornBank.Models
 {
     public enum DisputeStatus { Submitted, Accepted, Rejected, Adjusted }
-    public enum BankingTranactionType { Deposit, Withdrawl, Transfer}
+    public enum BankingTranactionType { Deposit, Withdrawl, Transfer, Fee}
     public class BankingTransaction
     {
         public Int32 BankingTransactionID { get; set; }
