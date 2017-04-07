@@ -16,8 +16,8 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: BankingTransactions
-        // This will show all of the transactions 
-        // For every account the user has
+        // Index Only Displays Checking 
+        // Might Consider a Name Change 
         public ActionResult Index()
         {
             var CustomerQuery = from c in db.Users
@@ -54,6 +54,7 @@ namespace LonghornBank.Controllers
                 List<BankingTransaction> TempTransaction = query.ToList();
                 CustomerTransactions.AddRange(TempTransaction);
             }
+            /*
 
             // Get a List of Savings accounts associated with Customer ID
             List<Saving> CustomerSavings = customer.SavingAccounts;
@@ -90,6 +91,7 @@ namespace LonghornBank.Controllers
                 List<BankingTransaction> IRATransactions = IraQuery.ToList();
                 CustomerTransactions.AddRange(IRATransactions);
             }
+            */
 
 
             // Add the customer to the view bag
@@ -145,9 +147,19 @@ namespace LonghornBank.Controllers
         // id = The Customer's Account ID
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description,BankingTransactionType")] BankingTransaction bankingTransaction,
-            int id, int CheckingID, int CheckingIDTrans, int SavingID, int SavingIDTrans)
+        public ActionResult Create([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description,BankingTransactionType")] BankingTransaction bankingTransaction, int CheckingID, int CheckingIDTrans, int SavingID, int SavingIDTrans, int IraID, int IraIDTrans)
         {
+
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
+            string id = customer.Id;
+
             if (ModelState.IsValid)
             {
                 
