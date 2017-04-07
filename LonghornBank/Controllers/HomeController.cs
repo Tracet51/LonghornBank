@@ -56,7 +56,7 @@ namespace LonghornBank.Controllers
 
             // Find the IRA Accounts Associated
             var IRAQuery = from IR in db.IRAAccount
-                               where IR.Customer.CustomerID == (Int32)id
+                               where IR.Customer.Id == id
                                select IR;
 
             List<IRA> CustomerIRA = IRAQuery.ToList();

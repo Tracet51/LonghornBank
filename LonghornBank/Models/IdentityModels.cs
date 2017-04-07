@@ -59,6 +59,8 @@ namespace LonghornBank.Models
 
         public virtual List<Saving> SavingAccounts { get; set; }
 
+        public virtual List<IRA> IRAAccounts { get; set; }
+
 
         //This method allows you to create a new user
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager)
@@ -85,6 +87,8 @@ namespace LonghornBank.Models
         // Create Transaction access
         public DbSet<BankingTransaction> BankingTransaction { get; set; }
 
+        // Create IRA Access
+        public DbSet<IRA> IRAAccount { get; set; }
 
         //TODO: Make sure that your connection string name is correct here.
         public AppDbContext()
