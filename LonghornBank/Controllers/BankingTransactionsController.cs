@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using LonghornBank.Dal;
 using LonghornBank.Models;
 using System.Diagnostics;
 
@@ -23,7 +22,7 @@ namespace LonghornBank.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.CustomerAccount.Find(id);
+            AppUser customer = db.Users.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -74,20 +73,20 @@ namespace LonghornBank.Controllers
 
         // GET: BankingTransactions/Create/?id
         // id = CustomerID
-        public ActionResult Create(int? id)
+        public ActionResult Create(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.CustomerAccount.Find(id);
+            AppUser customer = db.Users.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
             }
 
             // Get all of the accounts
-            Tuple<SelectList, SelectList> AllAcounts = GetAllAccounts((Int32)id);
+            Tuple<SelectList, SelectList> AllAcounts = GetAllAccounts(id);
 
             // Add the SelectList Tuple to the ViewBag
             ViewBag.AllAccounts = AllAcounts;
@@ -419,11 +418,11 @@ namespace LonghornBank.Controllers
 
         // Get all of the customer's account 
         // id == customer's id
-        public Tuple<SelectList, SelectList> GetAllAccounts(int id)
+        public Tuple<SelectList, SelectList> GetAllAccounts(string id)
         {
             // Populate a list of Checking Accounts
             var CheckingQuery = from ca in db.CheckingAccount
-                                where ca.Customer.CustomerID == id
+                                where ca.Customer.Id == id
                                 select ca;
 
             // Create a list of accounts of execute
@@ -438,7 +437,7 @@ namespace LonghornBank.Controllers
 
             // Populate a list of Savings Accounts
             var SavingsQuery = from sa in db.SavingsAccount
-                                where sa.Customer.CustomerID == id
+                                where sa.Customer.Id == id
                                 select sa;
 
             // Create a list of accounts of execute

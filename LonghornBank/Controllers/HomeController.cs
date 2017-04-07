@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using LonghornBank.Dal;
 using LonghornBank.Models;
 
 namespace LonghornBank.Controllers
@@ -23,13 +22,13 @@ namespace LonghornBank.Controllers
 
 
         // GET: Home/Portal
-        public ActionResult Portal(int? id)
+        public ActionResult Portal(String id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.CustomerAccount.Find(id);
+            AppUser customer = db.Users.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -37,7 +36,7 @@ namespace LonghornBank.Controllers
 
             // Find the Checking Accounts Associated
             var CheckingQuery = from ca in db.CheckingAccount
-                                where ca.Customer.CustomerID == (Int32)id
+                                where ca.Customer.Id == id
                                 select ca;
 
             // Convert to a list and execute
@@ -48,7 +47,7 @@ namespace LonghornBank.Controllers
 
             // Find the Savings Accounts Associated 
             var SavingsQuery = from sa in db.SavingsAccount
-                               where sa.Customer.CustomerID == (Int32)id
+                               where sa.Customer.Id == id
                                select sa;
 
             // Convert to a list and execute 

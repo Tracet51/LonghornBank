@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using LonghornBank.Dal;
 using LonghornBank.Models;
 
 namespace LonghornBank.Controllers
@@ -22,7 +21,7 @@ namespace LonghornBank.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.CustomerAccount.Find(id);
+            AppUser customer = db.Users.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -31,10 +30,11 @@ namespace LonghornBank.Controllers
             // Add the Customer to ViewBag to Access information 
             ViewBag.CustomerAccount = customer;
 
-            // Select The Checking Accounts Associated with the customer 
+            //Select The Checking Accounts Associated with the customer 
             var CheckingAccountQuery = from ca in db.CheckingAccount
-                                       where ca.Customer.CustomerID == customer.CustomerID
+                                       where ca.Customer.Id == customer.Id
                                        select ca;
+                                        
 
             // Create list and execute the query 
             List<Checking> CustomerChecking = CheckingAccountQuery.ToList();
@@ -72,7 +72,7 @@ namespace LonghornBank.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.CustomerAccount.Find(id);
+            AppUser customer = db.Users.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -92,7 +92,7 @@ namespace LonghornBank.Controllers
                 return HttpNotFound();
             }
 
-            Customer customer = db.CustomerAccount.Find(CustomerID);
+            AppUser customer = db.Users.Find(CustomerID);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -106,7 +106,7 @@ namespace LonghornBank.Controllers
 
                 db.CheckingAccount.Add(checking);
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id = customer.CustomerID});
+                return RedirectToAction("Portal", "Home", new { id = customer.Id});
             }
 
             return View(checking);
@@ -139,13 +139,13 @@ namespace LonghornBank.Controllers
                 // Find the CustomerID Associated with the Account
                 var CheckingCustomerQuery= from ca in db.CheckingAccount
                                             where ca.CheckingID == checking.CheckingID
-                                            select ca.Customer.CustomerID;
+                                            select ca.Customer.Id;
                                             
 
                 // Execute the Find
-                List <Int32> CustomerID = CheckingCustomerQuery.ToList();
+                List <String> CustomerID = CheckingCustomerQuery.ToList();
 
-                Int32 IntCustomerID = CustomerID[0];
+                String IntCustomerID = CustomerID[0];
 
                 db.Entry(checking).State = EntityState.Modified;
                 db.SaveChanges();
@@ -177,12 +177,12 @@ namespace LonghornBank.Controllers
             // Find the CustomerID Associated with the Account
             var CheckingCustomerQuery = from ca in db.CheckingAccount
                                         where ca.CheckingID == id
-                                        select ca.Customer.CustomerID;
+                                        select ca.Customer.Id;
 
             // Execute the Find
-            List<Int32> CustomerID = CheckingCustomerQuery.ToList();
+            List<String> CustomerID = CheckingCustomerQuery.ToList();
 
-            Int32 IntCustomerID = CustomerID[0];
+            String IntCustomerID = CustomerID[0];
 
             Checking checking = db.CheckingAccount.Find(id);
             db.CheckingAccount.Remove(checking);

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using LonghornBank.Dal;
 using LonghornBank.Models;
 
 namespace LonghornBank.Controllers
@@ -19,7 +18,7 @@ namespace LonghornBank.Controllers
         public ActionResult Index()
         {
             
-            return View(db.CustomerAccount.ToList());
+            return View(db.Users.ToList());
         }
 
         // GET: Customers/Details/5
@@ -29,7 +28,7 @@ namespace LonghornBank.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.CustomerAccount.Find(id);
+            AppUser customer = db.Users.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -48,13 +47,13 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CustomerID,FName,LName,StreetAddress,City,State,Zip,EmailAddress,Password,PhoneNumber,DOB,ActiveStatus")] Customer customer)
+        public ActionResult Create([Bind(Include = "CustomerID,FName,LName,StreetAddress,City,State,Zip,EmailAddress,Password,PhoneNumber,DOB,ActiveStatus")] AppUser customer)
         {
             if (ModelState.IsValid)
             {
-                db.CustomerAccount.Add(customer);
+                db.Users.Add(customer);
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id=customer.CustomerID});
+                return RedirectToAction("Portal", "Home", new { id=customer.Id});
             }
 
             return View(customer);
@@ -67,7 +66,7 @@ namespace LonghornBank.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.CustomerAccount.Find(id);
+            AppUser customer = db.Users.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -80,7 +79,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CustomerID,FName,LName,StreetAddress,City,State,Zip,EmailAddress,Password,PhoneNumber,DOB,ActiveStatus")] Customer customer)
+        public ActionResult Edit([Bind(Include = "CustomerID,FName,LName,StreetAddress,City,State,Zip,EmailAddress,Password,PhoneNumber,DOB,ActiveStatus")] AppUser customer)
         {
             if (ModelState.IsValid)
             {
@@ -98,7 +97,7 @@ namespace LonghornBank.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.CustomerAccount.Find(id);
+            AppUser customer = db.Users.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -111,8 +110,8 @@ namespace LonghornBank.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Customer customer = db.CustomerAccount.Find(id);
-            db.CustomerAccount.Remove(customer);
+            AppUser customer = db.Users.Find(id);
+            db.Users.Remove(customer);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

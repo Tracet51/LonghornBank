@@ -27,7 +27,7 @@ namespace LonghornBank.Models
         public String Name { get; set; }
 
         // create connection to customer account 
-        public virtual Customer Customer { get; set; }
+        public virtual AppUser Customer { get; set; }
 
         // Create Many to Many Relationship w/ Transaction 
         public virtual List<BankingTransaction> BankingTransactions { get; set; }

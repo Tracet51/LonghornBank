@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using LonghornBank.Dal;
 
 namespace LonghornBank.Models
 {
@@ -28,5 +27,7 @@ namespace LonghornBank.Models
         [Required(ErrorMessage = "A Pending Balance is Required")]
         [Display(Name = "Pending Balance")]
         public Decimal PendingBalance { get; set; }
+
+
     }
 }
