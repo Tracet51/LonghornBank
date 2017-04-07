@@ -5,6 +5,7 @@
     ViewBag.Title = "Index";
     List<Checking> CheckingAccounts = ViewBag.CheckingAccounts;
     List<Saving> SavingsAccounts = ViewBag.SavingsAccounts;
+    List<IRA> IRAAccounts = ViewBag.IRAAccounts;
 }
 
 <h2>Portal</h2>
@@ -18,7 +19,7 @@
 
 </p>
 
-<h3>Accounts</h3>
+<h3> @Html.Raw(Model.FName)'s Accounts</h3>
 <h4>Checking Account(s)</h4>
 <p>@Html.ActionLink("Checking Accounts Home", "Index", "Checkings", new { id = Model.CustomerID }, null)</p>
 <table class="table">
@@ -89,4 +90,37 @@
 
 </table>
     <h4>IRA Account(s)</h4>
-    <h4>Stock Portfolio(s)</h4>
+    <p>@Html.ActionLink("IRA Accounts Home", "Index", "IRA", new { id = Model.CustomerID }, null)</p>
+    <table class="table">
+    <tr>
+        <th>
+            IRA Account Name
+        </th>
+        <th>
+            IRA Account Number
+        </th>
+        <th>
+            IRA Account Balance
+        </th>
+        <th>
+            IRA Account Pending Balance
+        </th>
+    </tr>
+
+    @foreach (var item in Model.IRAAccounts)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
+            <td>@Html.DisplayFor(modelItem => item.Balance)</td>
+            <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "IRA", new { id = item.IRAID }, null) |
+                @Html.ActionLink("Details", "Details", "IRA", new { id = item.IRAID }, null) |
+                @Html.ActionLink("Delete", "Delete", "IRA", new { id = item.IRAID }, null)
+            </td>
+        </tr>
+    }
+
+</table>
+        <h4>Stock Portfolio(s)</h4>

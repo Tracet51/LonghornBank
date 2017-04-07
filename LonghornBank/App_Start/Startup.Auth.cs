@@ -4,9 +4,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
-using IdentityTemplate.Models;
+using LonghornBank.Models;
 
-namespace IdentityTemplate
+namespace LonghornBank
 {
     public partial class Startup
     {

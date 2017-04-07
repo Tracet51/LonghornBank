@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 
 //TODO: Add this whole class
-namespace IdentityTemplate.Models
+namespace LonghornBank.Models
 {
     public class AppRole: IdentityRole
     {

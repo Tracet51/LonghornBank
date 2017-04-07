@@ -9,9 +9,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 
 //TODO: Change this reference to your project name
-using IdentityTemplate.Models;
+using LonghornBank.Models;
 
-namespace IdentityTemplate.Controllers
+namespace LonghornBank.Controllers
 {
     public class RoleAdminController : Controller
     {

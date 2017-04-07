@@ -8,9 +8,9 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using IdentityTemplate.Models;
+using LonghornBank.Models;
 
-namespace IdentityTemplate.Controllers
+namespace LonghornBank.Controllers
 {
     [Authorize]
     public class AccountController : Controller
@@ -22,7 +22,7 @@ namespace IdentityTemplate.Controllers
         {
         }
 
-        public AccountController(AppUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(AppUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +34,9 @@ namespace IdentityTemplate.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -92,7 +92,7 @@ namespace IdentityTemplate.Controllers
             }
         }
 
-       
+
         //
         // GET: /Account/Register
         [AllowAnonymous]
@@ -111,7 +111,12 @@ namespace IdentityTemplate.Controllers
             if (ModelState.IsValid)
             {
                 //TODO: Add fields to user here so they will be saved to do the database
-                var user = new AppUser { UserName = model.Email, Email = model.Email, FName = model.FName };
+                var user = new AppUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
 
                 //TODO:  Once you get roles working, you may want to add users to roles upon creation
@@ -119,11 +124,14 @@ namespace IdentityTemplate.Controllers
                 // --OR--
                 // await UserManager.AddToRoleAsync(user.Id, "Employee");
 
+                // Add ever new register as a member!
+                await UserManager.AddToRoleAsync(user.Id, "Member");
+
 
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);

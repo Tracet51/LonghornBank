@@ -1,13 +1,16 @@
-﻿@model LonghornBank.Models.Saving
+﻿@using LonghornBank.Models;
+@model LonghornBank.Models.Saving
 
 @{
-    ViewBag.Title = "Details";
+        ViewBag.Title = "Saving";
+        List<BankingTransaction> SavingTransactions = ViewBag.SavingTransactions;
 }
 
 <h2>Details</h2>
 
 <div>
-    <h4>Saving</h4>
+    <h4> @Html.DisplayFor(model => model.Name) -  Saving Account</h4>
+    @Html.ActionLink("View All Account Transactions", "Index", "BankingTransactions", new { id = Model.Customer.CustomerID }, null)
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -19,22 +22,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AccountNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AccountNumber)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.PendingBalance)
         </dt>
 
@@ -42,9 +29,49 @@
             @Html.DisplayFor(model => model.PendingBalance)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
     </dl>
 </div>
+<table class="table">
+    <tr>
+        <th>
+            Transaction ID
+        </th>
+        <th>
+            Transaction Type
+        </th>
+        <th>
+            Transaction Date
+        </th>
+        <th>
+            Amount
+        </th>
+    </tr>
+
+    @foreach (var item in SavingTransactions)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.BankingTransactionID)</td>
+            <td>@Html.DisplayFor(modelItem => item.BankingTransactionType)</td>
+            <td>@Html.DisplayFor(modelItem => item.TransactionDate)</td>
+            <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "BankingTransactions", new { id = item.BankingTransactionID }, null) |
+                @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = item.BankingTransactionID }, null) |
+                @Html.ActionLink("Delete", "Delete", "BankingTransactions", new { id = item.BankingTransactionID }, null)
+            </td>
+        </tr>
+    }
+</table>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.SavingID }) |
-    @Html.ActionLink("Back To Savings Home", "Index", "Savings", new { id = Model.SavingID }, null)
+    @Html.ActionLink("Back Saving Home", "Index", "Savings", new { id = Model.SavingID }, null)
 </p>
+

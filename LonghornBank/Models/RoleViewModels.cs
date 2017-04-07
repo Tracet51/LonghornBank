@@ -5,7 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 
 
-namespace IdentityTemplate.Models
+namespace LonghornBank.Models
 {
     public class RoleEditModel
     {

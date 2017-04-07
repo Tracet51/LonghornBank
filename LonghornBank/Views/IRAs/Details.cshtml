@@ -1,17 +1,16 @@
-﻿@using LonghornBank.Models;
-@model LonghornBank.Models.Checking
+﻿@using LonghornBank.Models
+@model LonghornBank.Models.IRA
 
 @{
-    ViewBag.Title = "Checking";
-    List < BankingTransaction > CheckingTransactions = ViewBag.CheckingTransactions;
-
+    ViewBag.Title = "Details";
+    List<BankingTransaction> IRATransactions = ViewBag.IRATransactions;
 }
 
 <h2>Details</h2>
 
 <div>
-    <h4> @Html.DisplayFor(model => model.Name) -  Checking Account</h4>
-    @Html.ActionLink("View All Account Transactions", "Index", "BankingTransactions", new { id = Model.Customer.CustomerID}, null)
+    <h4> @Html.DisplayFor(model => model.Name) -  Saving Account</h4>
+    @Html.ActionLink("View All Account Transactions", "Index", "BankingTransactions", new { id = Model.Customer.CustomerID }, null)
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -56,7 +55,7 @@
         </th>
     </tr>
 
-    @foreach (var item in CheckingTransactions)
+    @foreach (var item in IRATransactions)
     {
         <tr>
             <td>@Html.DisplayFor(modelItem => item.BankingTransactionID)</td>
@@ -71,7 +70,7 @@
         </tr>
     }
 </table>
-        <p>
-            @Html.ActionLink("Edit", "Edit", new { id = Model.CheckingID }) |
-            @Html.ActionLink("Back Checking Home", "Index", "Checkings", new { id = Model.CheckingID }, null)
-        </p>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IRAID }) |
+    @Html.ActionLink("Back To IRA Home", "Index", "IRA", new { id = Model.IRAID }, null)
+</p>
