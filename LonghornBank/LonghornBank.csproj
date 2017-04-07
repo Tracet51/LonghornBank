@@ -195,6 +195,10 @@
     <Compile Include="Migrations\201704070218430_IRAAccount.Designer.cs">
       <DependentUpon>201704070218430_IRAAccount.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704071512411_IRAEnabled.cs" />
+    <Compile Include="Migrations\201704071512411_IRAEnabled.Designer.cs">
+      <DependentUpon>201704071512411_IRAEnabled.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
@@ -271,6 +275,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704070218430_IRAAccount.resx">
       <DependentUpon>201704070218430_IRAAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704071512411_IRAEnabled.resx">
+      <DependentUpon>201704071512411_IRAEnabled.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

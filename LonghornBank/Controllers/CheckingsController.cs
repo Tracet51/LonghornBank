@@ -15,13 +15,17 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Checkings
-        public ActionResult Index(string id)
+        public ActionResult Index()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser customer = db.Users.Find(id);
+            // Query the Database for the logged in user 
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
             if (customer == null)
             {
                 return HttpNotFound();
@@ -44,7 +48,7 @@ namespace LonghornBank.Controllers
 
         // GET: Checkings/Details/5
         // ID = checkingID
-        public ActionResult Details(string id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -117,6 +121,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Checkings/Edit/5
+        // id = checkingID
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -153,9 +158,9 @@ namespace LonghornBank.Controllers
 
                 db.Entry(checking).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id = IntCustomerID});
+                return RedirectToAction("Portal", "Home");
             }
-            return RedirectToAction("Index", "Checkings", new { id = checking.CheckingID });
+            return RedirectToAction("Index", "Checkings");
         }
 
         // GET: Checkings/Delete/5
@@ -191,7 +196,7 @@ namespace LonghornBank.Controllers
             Checking checking = db.CheckingAccount.Find(id);
             db.CheckingAccount.Remove(checking);
             db.SaveChanges();
-            return RedirectToAction("Portal", "Home", new { id = IntCustomerID});
+            return RedirectToAction("Portal", "Home");
         }
 
         protected override void Dispose(bool disposing)

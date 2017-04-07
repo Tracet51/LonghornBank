@@ -16,13 +16,18 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: BankingTransactions
-        public ActionResult Index(int? id)
+        // This will show all of the transactions 
+        // For every account the user has
+        public ActionResult Index()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser customer = db.Users.Find(id);
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
             if (customer == null)
             {
                 return HttpNotFound();
@@ -50,6 +55,43 @@ namespace LonghornBank.Controllers
                 CustomerTransactions.AddRange(TempTransaction);
             }
 
+            // Get a List of Savings accounts associated with Customer ID
+            List<Saving> CustomerSavings = customer.SavingAccounts;
+
+            foreach (Saving s in CustomerSavings)
+            {
+                // Get the Savings Accounts ID
+                Int32 inttemp = s.SavingID;
+
+                // Select the transactions where the checking Id matches the customers checking Id
+                var query = from a in db.BankingTransaction
+                            from b in a.SavingsAccount
+                            where b.SavingID == inttemp
+                            select a;
+
+                // Create a holding list and add to main list
+                List<BankingTransaction> TempTransaction = query.ToList();
+                CustomerTransactions.AddRange(TempTransaction);
+            }
+
+            // Get the IRA account associated with Customer ID
+            IRA CustomerIRA = customer.IRAAccounts.FirstOrDefault();
+
+            // Check to see if null
+            if (CustomerIRA != null)
+            {
+                // Select the transactions where the checking Id matches the customers checking Id
+                var IraQuery = from a in db.BankingTransaction
+                               from b in a.IRAAccount
+                               where b.IRAID == CustomerIRA.IRAID
+                               select a;
+
+                // Create a holding list and add to main list
+                List<BankingTransaction> IRATransactions = IraQuery.ToList();
+                CustomerTransactions.AddRange(IRATransactions);
+            }
+
+
             // Add the customer to the view bag
             ViewBag.Customer = customer;
 
@@ -57,6 +99,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: BankingTransactions/Details/5
+        // id == BankingTransactionID
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -72,21 +115,24 @@ namespace LonghornBank.Controllers
         }
 
         // GET: BankingTransactions/Create/?id
-        // id = CustomerID
-        public ActionResult Create(string id)
+        public ActionResult Create()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser customer = db.Users.Find(id);
+            // Query the Database for the logged in user 
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
             if (customer == null)
             {
                 return HttpNotFound();
             }
 
             // Get all of the accounts
-            Tuple<SelectList, SelectList> AllAcounts = GetAllAccounts(id);
+            Tuple<SelectList, SelectList, SelectList> AllAcounts = GetAllAccounts(customer.Id);
 
             // Add the SelectList Tuple to the ViewBag
             ViewBag.AllAccounts = AllAcounts;
@@ -496,7 +542,7 @@ namespace LonghornBank.Controllers
 
         // Get all of the customer's account 
         // id == customer's id
-        public Tuple<SelectList, SelectList> GetAllAccounts(string id)
+        public Tuple<SelectList, SelectList, SelectList> GetAllAccounts(string id)
         {
             // Populate a list of Checking Accounts
             var CheckingQuery = from ca in db.CheckingAccount
@@ -528,8 +574,23 @@ namespace LonghornBank.Controllers
             // Convert the List into a select list 
             SelectList SavingsSelectList = new SelectList(SavingsAccounts.OrderBy(a => a.SavingID), "SavingID", "Name");
 
+            // Grab the IRA account
+            var IraQuery = from ira in db.IRAAccount
+                               where ira.Customer.Id == id
+                               select ira;
+
+            // Get the IRA account
+            List<IRA> IRAAccounts = IraQuery.ToList();
+
+            // Create a None Options 
+            IRA SelectNoIRA = new IRA() { IRAID = 0, AccountNumber = "1000000000000", Balance = 0, Name = "None" };
+            IRAAccounts.Add(SelectNoIRA);
+
+            // Convert the List into a select list 
+            SelectList IRASelectList = new SelectList(IRAAccounts.OrderBy(a => a.IRAID), "IRAID", "Name");
+
             // Add the Accounts to the Tuple of Accounts 
-            Tuple<SelectList, SelectList> Accounts = new Tuple<SelectList, SelectList>(CheckingSelectList, SavingsSelectList);
+            Tuple<SelectList, SelectList, SelectList> Accounts = new Tuple<SelectList, SelectList, SelectList>(CheckingSelectList, SavingsSelectList, IRASelectList);
 
             return Accounts;
 

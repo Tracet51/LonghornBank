@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using LonghornBank.Dal;
 using LonghornBank.Models;
 
 namespace LonghornBank.Controllers
@@ -16,13 +15,17 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: IRAs
-        public ActionResult Index(int? id)
+        public ActionResult Index()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Customer customer = db.CustomerAccount.Find(id);
+            // Query the Database for the logged in user 
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
             if (customer == null)
             {
                 return HttpNotFound();
@@ -33,7 +36,7 @@ namespace LonghornBank.Controllers
 
             // Select The Savings Accounts Associated with this customer 
             var IRAAccountQuery = from IR in db.IRAAccount
-                                  where IR.Customer.CustomerID == customer.CustomerID
+                                  where IR.Customer.Id == customer.Id
                                   select IR;
 
             // Create list and execute the query 
@@ -67,16 +70,17 @@ namespace LonghornBank.Controllers
         // GET: IRA/Create
         public ActionResult Create()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Customer customer = db.CustomerAccount.Find(id);
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
             if (customer == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CustomerID = id;
+            ViewBag.CustomerID = customer.Id;
             return View();
         }
 
@@ -85,15 +89,14 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IRAID, Balance, Name, AccountNumber, Customer_CustomerID")] IRA ira, int? CustomerID)
+        public ActionResult Create([Bind(Include = "IRAID, Balance, Name, AccountNumber")] IRA ira)
         {
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
 
-            if (CustomerID == null)
-            {
-                return HttpNotFound();
-            }
+            AppUser customer = CustomerQuery.FirstOrDefault();
 
-            Customer customer = db.CustomerAccount.Find(CustomerID);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -105,7 +108,7 @@ namespace LonghornBank.Controllers
 
                 db.IRAAccount.Add(ira);
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id = 1 });
+                return RedirectToAction("Portal", "Home", new { id = customer.Id });
             }
 
             return View(ira);
@@ -139,13 +142,13 @@ namespace LonghornBank.Controllers
                 // Find the CustomerID Associated with the Account
                 var IRACustomerQuery = from IR in db.IRAAccount
                                           where IR.IRAID == ira.IRAID
-                                          select IR.Customer.CustomerID;
+                                          select IR.Customer.Id;
 
 
                 // Execute the Find
-                List<Int32> CustomerID = IRACustomerQuery.ToList();
+                List<String> CustomerID = IRACustomerQuery.ToList();
 
-                Int32 IntCustomerID = CustomerID[0];
+                String IntCustomerID = CustomerID[0];
 
                 db.Entry(ira).State = EntityState.Modified;
                 db.SaveChanges();
@@ -177,12 +180,12 @@ namespace LonghornBank.Controllers
             // Find the CustomerID Associated with the Account
             var IRACustomerQuery = from IR in db.IRAAccount
                                       where IR.IRAID == id
-                                      select IR.Customer.CustomerID;
+                                      select IR.Customer.Id;
 
             // Execute the Find
-            List<Int32> CustomerID = IRACustomerQuery.ToList();
+            List<String> CustomerID = IRACustomerQuery.ToList();
 
-            Int32 IntCustomerID = CustomerID[0];
+            String IntCustomerID = CustomerID[0];
 
             IRA ira = db.IRAAccount.Find(id);
             db.IRAAccount.Remove(ira);

@@ -79,7 +79,7 @@ namespace LonghornBank.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CustomerID = id;
+            ViewBag.CustomerID = customer.Id;
             return View();
         }
 
