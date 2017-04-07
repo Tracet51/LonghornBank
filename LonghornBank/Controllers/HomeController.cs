@@ -20,6 +20,14 @@ namespace LonghornBank.Controllers
             return View();
         }
 
+        // GET: Home/Create 
+        // Page where the newly created user chooses what account to make
+        public ActionResult Create(string id)
+        {
+            AppUser customer = db.Users.Find(id);
+            return View(customer);
+        }
+
 
         // GET: Home/Portal
         public ActionResult Portal(String id)

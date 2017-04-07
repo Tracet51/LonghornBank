@@ -15,7 +15,7 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Checkings
-        public ActionResult Index(int? id)
+        public ActionResult Index(string id)
         {
             if (id == null)
             {
@@ -44,7 +44,7 @@ namespace LonghornBank.Controllers
 
         // GET: Checkings/Details/5
         // ID = checkingID
-        public ActionResult Details(int? id)
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
@@ -66,33 +66,37 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Checkings/Create
-        public ActionResult Create(int? id)
+        public ActionResult Create()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser customer = db.Users.Find(id);
+
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
             if (customer == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CustomerID = id;
+            ViewBag.CustomerID = customer.Id;
             return View();
         }
 
         // POST: Checkings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CheckingID, Balance, Name, AccountNumber, Customer_CustomerID")] Checking checking, int? CustomerID)
+        public ActionResult Create([Bind(Include = "CheckingID, Balance, Name, AccountNumber")] Checking checking)
         {
-            
-            if (CustomerID == null)
-            {
-                return HttpNotFound();
-            }
 
-            AppUser customer = db.Users.Find(CustomerID);
+            var CustomerQuery = from c in db.Users
+                               where c.UserName == User.Identity.Name
+                               select c;
+
+            AppUser customer = CustomerQuery.FirstOrDefault(); 
+
             if (customer == null)
             {
                 return HttpNotFound();

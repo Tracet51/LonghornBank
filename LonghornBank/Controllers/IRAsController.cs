@@ -65,7 +65,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: IRA/Create
-        public ActionResult Create(int? id)
+        public ActionResult Create()
         {
             if (id == null)
             {
