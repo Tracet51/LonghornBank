@@ -152,6 +152,11 @@ namespace LonghornBank.Controllers
             if (ModelState.IsValid)
             {
                 db.BankingTransaction.Add(bankingTransaction);
+                if (bankingTransaction.Amount<=5000)
+                {
+                    Decimal New_Balance = SelectedChecking.Balance + bankingTransaction.Amount;
+                    SelectedChecking.Balance = New_Balance;  
+                }
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
