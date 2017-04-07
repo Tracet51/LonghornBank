@@ -1,0 +1,64 @@
+﻿@model LonghornBank.Models.IRA
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this IRA Account?</h3>
+<div>
+    <h4>IRA</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Balance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Balance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RunningTotal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RunningTotal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxWithdrawl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxWithdrawl)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PendingBalance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PendingBalance)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to IRA Accounts", "Index", "IRA", new { id = Model.IRAID }, null)
+        </div>
+    }
+</div>
