@@ -6,72 +6,72 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using LonghornBank.Dal;
 using LonghornBank.Models;
 
 namespace LonghornBank.Controllers
 {
-    public class SavingsController : Controller
+    public class IRAsController : Controller
     {
         private AppDbContext db = new AppDbContext();
 
-        // GET: Savings
+        // GET: IRAs
         public ActionResult Index(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AppUser customer = db.Users.Find(id);
+            Customer customer = db.CustomerAccount.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
-
             }
 
             // Add the Customer to ViewBag to Access information 
             ViewBag.CustomerAccount = customer;
 
             // Select The Savings Accounts Associated with this customer 
-            var SavingAccountQuery = from sa in db.SavingsAccount
-                                       where sa.Customer.Id == customer.Id
-                                       select sa;
+            var IRAAccountQuery = from IR in db.IRAAccount
+                                  where IR.Customer.CustomerID == customer.CustomerID
+                                  select IR;
 
             // Create list and execute the query 
-            List<Saving> CustomerSaving = SavingAccountQuery.ToList();
+            List<IRA> CustomerIRA = IRAAccountQuery.ToList();
 
-            return View(CustomerSaving);
+            return View(CustomerIRA);
         }
 
-        // GET: Savings/Details/5
+        // GET: IRAs/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Saving saving = db.SavingsAccount.Find(id);
-            if (saving == null)
+            IRA ira = db.IRAAccount.Find(id);
+            if (ira == null)
             {
                 return HttpNotFound();
             }
 
             // Get the List off all of the Banking Transaction For this Account 
-            List<BankingTransaction> SavingTransactions = saving.BankingTransactions.ToList();
+            List<BankingTransaction> IRATransactions = ira.BankingTransactions.ToList();
 
             // Pass the List to the ViewBag
-            ViewBag.SavingTransactions = SavingTransactions;
+            ViewBag.IRATransactions = IRATransactions;
 
-            return View(saving);
+            return View(ira);
         }
 
-        // GET: Savings/Create
+        // GET: IRA/Create
         public ActionResult Create(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AppUser customer = db.Users.Find(id);
+            Customer customer = db.CustomerAccount.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -80,19 +80,20 @@ namespace LonghornBank.Controllers
             return View();
         }
 
-        // POST: Savings/Create
+        // POST: IRAs/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SavingID, Balance, Name, AccountNumber, Customer_CustomerID")] Saving saving, int? CustomerID)
+        public ActionResult Create([Bind(Include = "IRAID, Balance, Name, AccountNumber, Customer_CustomerID")] IRA ira, int? CustomerID)
         {
+
             if (CustomerID == null)
             {
                 return HttpNotFound();
             }
 
-            AppUser customer = db.Users.Find(CustomerID);
+            Customer customer = db.CustomerAccount.Find(CustomerID);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -100,90 +101,91 @@ namespace LonghornBank.Controllers
 
             if (ModelState.IsValid)
             {
-                saving.Customer = customer;
+                ira.Customer = customer;
 
-                db.SavingsAccount.Add(saving);
+                db.IRAAccount.Add(ira);
                 db.SaveChanges();
                 return RedirectToAction("Portal", "Home", new { id = 1 });
             }
 
-            return View(saving);
+            return View(ira);
+
         }
 
-        // GET: Savings/Edit/5
+        // GET: IRA/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Saving saving = db.SavingsAccount.Find(id);
-            if (saving == null)
+            IRA ira = db.IRAAccount.Find(id);
+            if (ira == null)
             {
                 return HttpNotFound();
             }
-            return View(saving);
+            return View(ira);
         }
 
-        // POST: Savings/Edit/5
+        // POST: IRAs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "SavingID, Name, AccountNumber")] Saving saving)
+        public ActionResult Edit([Bind(Include = "IRAID,Name,AccountNumber")] IRA ira)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 // Find the CustomerID Associated with the Account
-                var SavingCustomerQuery = from sa in db.SavingsAccount
-                                            where sa.SavingID == saving.SavingID
-                                            select sa.Customer.Id;
+                var IRACustomerQuery = from IR in db.IRAAccount
+                                          where IR.IRAID == ira.IRAID
+                                          select IR.Customer.CustomerID;
 
 
                 // Execute the Find
-                List<String> CustomerID = SavingCustomerQuery.ToList();
+                List<Int32> CustomerID = IRACustomerQuery.ToList();
 
-                String IntCustomerID = CustomerID[0];
+                Int32 IntCustomerID = CustomerID[0];
 
-                db.Entry(saving).State = EntityState.Modified;
+                db.Entry(ira).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Portal", "Home", new { id = IntCustomerID });
             }
-            return RedirectToAction("Index", "Checkings", new { id = saving.SavingID });
+            return RedirectToAction("Index", "Checkings", new { id = ira.IRAID });
         }
 
-        // GET: Savings/Delete/5
+        // GET: IRAs/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Saving saving = db.SavingsAccount.Find(id);
-            if (saving == null)
+            IRA ira = db.IRAAccount.Find(id);
+            if (ira == null)
             {
                 return HttpNotFound();
             }
-            return View(saving);
+            return View(ira);
         }
 
-        // POST: Savings/Delete/5
+        // POST: IRAs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             // Find the CustomerID Associated with the Account
-            var SavingCustomerQuery = from sa in db.SavingsAccount
-                                        where sa.SavingID == id
-                                        select sa.Customer.Id;
+            var IRACustomerQuery = from IR in db.IRAAccount
+                                      where IR.IRAID == id
+                                      select IR.Customer.CustomerID;
 
             // Execute the Find
-            List<String> CustomerID = SavingCustomerQuery.ToList();
+            List<Int32> CustomerID = IRACustomerQuery.ToList();
 
-            String IntCustomerID = CustomerID[0];
+            Int32 IntCustomerID = CustomerID[0];
 
-            Saving saving = db.SavingsAccount.Find(id);
-            db.SavingsAccount.Remove(saving);
+            IRA ira = db.IRAAccount.Find(id);
+            db.IRAAccount.Remove(ira);
             db.SaveChanges();
             return RedirectToAction("Portal", "Home", new { id = IntCustomerID });
         }

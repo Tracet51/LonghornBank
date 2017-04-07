@@ -37,5 +37,11 @@ namespace LonghornBank.Models
         public Decimal PendingBalance { get; set; }
 
 
+        // Navigation
+
+        // IRA can have 1 user
+        public virtual AppUser Customer { get; set; }
+
+
     }
 }

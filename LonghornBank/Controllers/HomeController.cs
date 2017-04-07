@@ -54,6 +54,14 @@ namespace LonghornBank.Controllers
             List<Saving> CustomerSavings = SavingsQuery.ToList();
             ViewBag.SavingsAccounts = CustomerSavings;
 
+            // Find the IRA Accounts Associated
+            var IRAQuery = from IR in db.IRAAccount
+                               where IR.Customer.Id == id
+                               select IR;
+
+            List<IRA> CustomerIRA = IRAQuery.ToList();
+            ViewBag.IRAAccounts = CustomerIRA;
+
             return View(customer);
         }
     }
