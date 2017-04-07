@@ -20,9 +20,10 @@ namespace LonghornBank.Dal
         // Create Cusomter Account to access
         public DbSet<Customer> CustomerAccount { get; set; }
 
+        // Create IRA Account to access
+        public DbSet<IRA> IRAAccount { get; set; }
+
         // Create Transaction access
         public DbSet<BankingTransaction> BankingTransaction { get; set; }
-
-
     }
 }

@@ -1,9 +1,9 @@
-﻿@using LonghornBank.Models;
-@model LonghornBank.Models.Saving
+﻿@using LonghornBank.Models
+@model LonghornBank.Models.IRA
 
 @{
-        ViewBag.Title = "Saving";
-        List<BankingTransaction> SavingTransactions = ViewBag.SavingTransactions;
+    ViewBag.Title = "Details";
+    List<BankingTransaction> IRATransactions = ViewBag.IRATransactions;
 }
 
 <h2>Details</h2>
@@ -55,7 +55,7 @@
         </th>
     </tr>
 
-    @foreach (var item in SavingTransactions)
+    @foreach (var item in IRATransactions)
     {
         <tr>
             <td>@Html.DisplayFor(modelItem => item.BankingTransactionID)</td>
@@ -71,7 +71,6 @@
     }
 </table>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.SavingID }) |
-    @Html.ActionLink("Back Saving Home", "Index", "Savings", new { id = Model.SavingID }, null)
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IRAID }) |
+    @Html.ActionLink("Back To IRA Home", "Index", "IRA", new { id = Model.IRAID }, null)
 </p>
-
