@@ -5,14 +5,14 @@ namespace LonghornBank.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<LonghornBank.Dal.AppDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<LonghornBank.Models.AppDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(LonghornBank.Dal.AppDbContext context)
+        protected override void Seed(LonghornBank.Models.AppDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

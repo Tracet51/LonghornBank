@@ -6,22 +6,23 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using LonghornBank.Dal;
 using LonghornBank.Models;
 
 namespace LonghornBank.Controllers
 {
-    public class CheckingsController : Controller
+    public class IRAsController : Controller
     {
         private AppDbContext db = new AppDbContext();
 
-        // GET: Checkings
+        // GET: IRAs
         public ActionResult Index(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AppUser customer = db.Users.Find(id);
+            Customer customer = db.CustomerAccount.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -30,49 +31,47 @@ namespace LonghornBank.Controllers
             // Add the Customer to ViewBag to Access information 
             ViewBag.CustomerAccount = customer;
 
-            //Select The Checking Accounts Associated with the customer 
-            var CheckingAccountQuery = from ca in db.CheckingAccount
-                                       where ca.Customer.Id == customer.Id
-                                       select ca;
-                                        
+            // Select The Savings Accounts Associated with this customer 
+            var IRAAccountQuery = from IR in db.IRAAccount
+                                  where IR.Customer.CustomerID == customer.CustomerID
+                                  select IR;
 
             // Create list and execute the query 
-            List<Checking> CustomerChecking = CheckingAccountQuery.ToList();
+            List<IRA> CustomerIRA = IRAAccountQuery.ToList();
 
-            return View(CustomerChecking);
+            return View(CustomerIRA);
         }
 
-        // GET: Checkings/Details/5
-        // ID = checkingID
+        // GET: IRAs/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Checking checking = db.CheckingAccount.Find(id);
-            if (checking == null)
+            IRA ira = db.IRAAccount.Find(id);
+            if (ira == null)
             {
                 return HttpNotFound();
             }
 
             // Get the List off all of the Banking Transaction For this Account 
-            List<BankingTransaction> CheckingTransactions = checking.BankingTransactions.ToList();
+            List<BankingTransaction> IRATransactions = ira.BankingTransactions.ToList();
 
             // Pass the List to the ViewBag
-            ViewBag.CheckingTransactions = CheckingTransactions;
+            ViewBag.IRATransactions = IRATransactions;
 
-            return View(checking);
+            return View(ira);
         }
 
-        // GET: Checkings/Create
+        // GET: IRA/Create
         public ActionResult Create(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AppUser customer = db.Users.Find(id);
+            Customer customer = db.CustomerAccount.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -81,113 +80,114 @@ namespace LonghornBank.Controllers
             return View();
         }
 
-        // POST: Checkings/Create
+        // POST: IRAs/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CheckingID, Balance, Name, AccountNumber, Customer_CustomerID")] Checking checking, int? CustomerID)
+        public ActionResult Create([Bind(Include = "IRAID, Balance, Name, AccountNumber, Customer_CustomerID")] IRA ira, int? CustomerID)
         {
-            
+
             if (CustomerID == null)
             {
                 return HttpNotFound();
             }
 
-            AppUser customer = db.Users.Find(CustomerID);
+            Customer customer = db.CustomerAccount.Find(CustomerID);
             if (customer == null)
             {
                 return HttpNotFound();
             }
-            
 
             if (ModelState.IsValid)
             {
-                // Associate the Customer with the checking account
-                checking.Customer = customer;
+                ira.Customer = customer;
 
-                db.CheckingAccount.Add(checking);
+                db.IRAAccount.Add(ira);
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id = customer.Id});
+                return RedirectToAction("Portal", "Home", new { id = 1 });
             }
 
-            return View(checking);
+            return View(ira);
+
         }
 
-        // GET: Checkings/Edit/5
+        // GET: IRA/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Checking checking = db.CheckingAccount.Find(id);
-            if (checking == null)
+            IRA ira = db.IRAAccount.Find(id);
+            if (ira == null)
             {
                 return HttpNotFound();
             }
-            return View(checking);
+            return View(ira);
         }
 
-        // POST: Checkings/Edit/5
+        // POST: IRAs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CheckingID,AccountNumber,Name")] Checking checking)
+        public ActionResult Edit([Bind(Include = "IRAID,Name,AccountNumber")] IRA ira)
         {
             if (ModelState.IsValid)
             {
                 // Find the CustomerID Associated with the Account
-                var CheckingCustomerQuery= from ca in db.CheckingAccount
-                                            where ca.CheckingID == checking.CheckingID
-                                            select ca.Customer.Id;
-                                            
+                var IRACustomerQuery = from IR in db.IRAAccount
+                                          where IR.IRAID == ira.IRAID
+                                          select IR.Customer.CustomerID;
+
 
                 // Execute the Find
-                List <String> CustomerID = CheckingCustomerQuery.ToList();
+                List<Int32> CustomerID = IRACustomerQuery.ToList();
 
-                String IntCustomerID = CustomerID[0];
+                Int32 IntCustomerID = CustomerID[0];
 
-                db.Entry(checking).State = EntityState.Modified;
+                db.Entry(ira).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id = IntCustomerID});
+                return RedirectToAction("Portal", "Home", new { id = IntCustomerID });
             }
-            return RedirectToAction("Index", "Checkings", new { id = checking.CheckingID });
+            return RedirectToAction("Index", "Checkings", new { id = ira.IRAID });
         }
 
-        // GET: Checkings/Delete/5
+        // GET: IRAs/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Checking checking = db.CheckingAccount.Find(id);
-            if (checking == null)
+            IRA ira = db.IRAAccount.Find(id);
+            if (ira == null)
             {
                 return HttpNotFound();
             }
-            return View(checking);
+            return View(ira);
         }
 
-        // POST: Checkings/Delete/5
+        // POST: IRAs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             // Find the CustomerID Associated with the Account
-            var CheckingCustomerQuery = from ca in db.CheckingAccount
-                                        where ca.CheckingID == id
-                                        select ca.Customer.Id;
+            var IRACustomerQuery = from IR in db.IRAAccount
+                                      where IR.IRAID == id
+                                      select IR.Customer.CustomerID;
 
             // Execute the Find
-            List<String> CustomerID = CheckingCustomerQuery.ToList();
+            List<Int32> CustomerID = IRACustomerQuery.ToList();
 
-            String IntCustomerID = CustomerID[0];
+            Int32 IntCustomerID = CustomerID[0];
 
-            Checking checking = db.CheckingAccount.Find(id);
-            db.CheckingAccount.Remove(checking);
+            IRA ira = db.IRAAccount.Find(id);
+            db.IRAAccount.Remove(ira);
             db.SaveChanges();
-            return RedirectToAction("Portal", "Home", new { id = IntCustomerID});
+            return RedirectToAction("Portal", "Home", new { id = IntCustomerID });
         }
 
         protected override void Dispose(bool disposing)

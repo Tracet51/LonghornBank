@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using LonghornBank.Dal;
 using LonghornBank.Models;
 
 namespace LonghornBank.Controllers
@@ -22,10 +21,11 @@ namespace LonghornBank.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.CustomerAccount.Find(id);
+            AppUser customer = db.Users.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
+
             }
 
             // Add the Customer to ViewBag to Access information 
@@ -33,7 +33,7 @@ namespace LonghornBank.Controllers
 
             // Select The Savings Accounts Associated with this customer 
             var SavingAccountQuery = from sa in db.SavingsAccount
-                                       where sa.Customer.CustomerID == customer.CustomerID
+                                       where sa.Customer.Id == customer.Id
                                        select sa;
 
             // Create list and execute the query 
@@ -54,6 +54,13 @@ namespace LonghornBank.Controllers
             {
                 return HttpNotFound();
             }
+
+            // Get the List off all of the Banking Transaction For this Account 
+            List<BankingTransaction> SavingTransactions = saving.BankingTransactions.ToList();
+
+            // Pass the List to the ViewBag
+            ViewBag.SavingTransactions = SavingTransactions;
+
             return View(saving);
         }
 
@@ -64,7 +71,7 @@ namespace LonghornBank.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.CustomerAccount.Find(id);
+            AppUser customer = db.Users.Find(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -85,7 +92,7 @@ namespace LonghornBank.Controllers
                 return HttpNotFound();
             }
 
-            Customer customer = db.CustomerAccount.Find(CustomerID);
+            AppUser customer = db.Users.Find(CustomerID);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -130,13 +137,13 @@ namespace LonghornBank.Controllers
                 // Find the CustomerID Associated with the Account
                 var SavingCustomerQuery = from sa in db.SavingsAccount
                                             where sa.SavingID == saving.SavingID
-                                            select sa.Customer.CustomerID;
+                                            select sa.Customer.Id;
 
 
                 // Execute the Find
-                List<Int32> CustomerID = SavingCustomerQuery.ToList();
+                List<String> CustomerID = SavingCustomerQuery.ToList();
 
-                Int32 IntCustomerID = CustomerID[0];
+                String IntCustomerID = CustomerID[0];
 
                 db.Entry(saving).State = EntityState.Modified;
                 db.SaveChanges();
@@ -168,12 +175,12 @@ namespace LonghornBank.Controllers
             // Find the CustomerID Associated with the Account
             var SavingCustomerQuery = from sa in db.SavingsAccount
                                         where sa.SavingID == id
-                                        select sa.Customer.CustomerID;
+                                        select sa.Customer.Id;
 
             // Execute the Find
-            List<Int32> CustomerID = SavingCustomerQuery.ToList();
+            List<String> CustomerID = SavingCustomerQuery.ToList();
 
-            Int32 IntCustomerID = CustomerID[0];
+            String IntCustomerID = CustomerID[0];
 
             Saving saving = db.SavingsAccount.Find(id);
             db.SavingsAccount.Remove(saving);
