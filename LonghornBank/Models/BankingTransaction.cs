@@ -55,5 +55,8 @@ namespace LonghornBank.Models
 
         // Many to Many: a transaction can belong to multiple IRA accounts
         public virtual List<IRA> IRAAccount { get; set; }
+
+        // A Transaction can belong to 1 trade
+        public virtual Trade Trade { get; set; }
     }
 }

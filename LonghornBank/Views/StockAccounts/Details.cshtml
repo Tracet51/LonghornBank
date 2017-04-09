@@ -1,0 +1,58 @@
+﻿@model LonghornBank.Models.StockAccount
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>StockAccount</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CashBalance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CashBalance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StockBalance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StockBalance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TradingFee)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TradingFee)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Gains)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gains)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Bounses)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Bounses)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.StockAccountID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

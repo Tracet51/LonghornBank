@@ -61,6 +61,9 @@ namespace LonghornBank.Models
 
         public virtual List<IRA> IRAAccounts { get; set; }
 
+        // A person can have 1 stock account 
+        public virtual List<StockAccount> StockAccount { get; set; }
+
 
         //This method allows you to create a new user
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager)
@@ -89,6 +92,14 @@ namespace LonghornBank.Models
 
         // Create IRA Access
         public DbSet<IRA> IRAAccount { get; set; }
+
+        // Create Stock Access
+        public DbSet<StockAccount> StockAccount { get; set; }
+
+        // Create Trade Access 
+        public DbSet<Trade> Trades { get; set; }
+
+        public DbSet<StockMarket> StockMarket { get; set; }
 
         //TODO: Make sure that your connection string name is correct here.
         public AppDbContext()

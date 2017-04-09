@@ -6,6 +6,11 @@ using LonghornBank.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace LonghornBank.Models
+
+    // Trade represents the transactions that occurs 
+    // An account can have multiple trades 
+    // Trades have 1 transaction
+
 {   
     public enum TradeType { Buy, Sell}
     public class Trade
@@ -51,6 +56,24 @@ namespace LonghornBank.Models
         [Required(ErrorMessage = "Ticker is Required")]
         [Display(Name = "Ticker")]
         public string Ticker { get; set; }
+
+        /*                         //
+        // Navigational Properties //
+        //                         //
+        //                         */
+
+        // A trade can have 1 transaction! 
+        public virtual List<BankingTransaction> BankingTransactions { get; set; }
+
+        // A trade can belong to only 1 stock account
+        public virtual StockAccount StockAccount { get; set; }
+
+        // A trade can belong to 1 stock 
+        public virtual StockMarket StockMarket { get; set; }
+
+
+
+
 
 
     }
