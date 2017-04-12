@@ -1,0 +1,56 @@
+﻿@model LonghornBank.Models.StocksAvailable
+
+@{
+    ViewBag.Title = "Stock Trade and Transaction";
+}
+
+<h2>Here are the stocks you asked for</h2>
+<table class="table">
+    <tr>
+        <th>
+            Stock Name
+        </th>
+        <th>
+            Ticker Symbol
+        </th>
+        <th>
+            Type
+        </th>
+        <th>
+            Current Share Price
+        </th>
+        <th>
+            Fees
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.AvailableStocks)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ticker)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StockType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StockPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fee)
+            </td>
+            <td>
+                @Html.ActionLink("Buy", "PurchaseStock", "StockTrades", new { StockID = item.StockMarketID }, null)
+            </td>
+        </tr>
+    }
+</table>
+
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>

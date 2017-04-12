@@ -275,6 +275,10 @@
     <Content Include="Views\StockAccounts\Details.cshtml" />
     <Content Include="Views\StockAccounts\Edit.cshtml" />
     <Content Include="Views\StockAccounts\Index.cshtml" />
+    <Content Include="Views\StockTrades\StockChoices.cshtml" />
+    <Content Include="Views\StockTrades\ViewSelectedStock.cshtml" />
+    <Content Include="Views\StockTrades\PurchaseStocks.cshtml" />
+    <Content Include="Views\StockTrades\ChooseAccount.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

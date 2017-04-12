@@ -1,0 +1,97 @@
+﻿@model LonghornBank.Models.PurchaseStockTrade
+
+@{
+    ViewBag.Title = "Stock Trade and Transaction";
+}
+
+<h2>Confirm Your Stock and Select Your Quantity</h2>
+
+<h3>Selected Stock Information</h3>
+<table class="table">
+    <tr>
+        <th>
+            Stock Name
+        </th>
+        <th>
+            Ticker Symbol
+        </th>
+        <th>
+            Type
+        </th>
+        <th>
+            Current Share Price
+        </th>
+        <th>
+            Fees
+        </th>
+        <th></th>
+    </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(i => i.SelectedStock.CompanyName)
+        </td>
+        <td>
+            @Html.DisplayFor(i => i.SelectedStock.Ticker)
+        </td>
+        <td>
+            @Html.DisplayFor(i => i.SelectedStock.StockType)
+        </td>
+        <td>
+            @Html.DisplayFor(i => i.SelectedStock.StockPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(i => i.SelectedStock.Fee)
+        </td>
+    </tr>
+</table>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Select the stock quantity, and date</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @if (Model.CheckingAccounts != null)
+        {
+            @Html.HiddenFor(model => model.CheckingAccounts.CheckingID)
+
+        }
+        @if (Model.SavingsAccount != null)
+        {
+            @Html.HiddenFor(model => model.SavingsAccount.SavingID)
+
+        }
+        @if (Model.AccountStock != null)
+        {
+            @Html.HiddenFor(model => model.AccountStock.StockAccountID)
+        }
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TradeDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TradeDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TradeDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
