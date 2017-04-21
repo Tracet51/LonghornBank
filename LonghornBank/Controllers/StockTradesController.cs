@@ -306,7 +306,7 @@ namespace LonghornBank.Controllers
             {
                 Amount = SelectedStock.Fee,
                 BankingTransactionType = BankingTranactionType.Fee,
-                Description = ("Fee for purchase of" + SelectedStock.CompanyName),
+                Description = ("Fee for purchase of " + SelectedStock.CompanyName),
                 TransactionDate = (PurchcaseTrade.TradeDate),
                 StockAccount = Customer.StockAccount.FirstOrDefault()
             };
@@ -352,7 +352,7 @@ namespace LonghornBank.Controllers
                         Amount = decTotal,
                         BankingTransactionType = BankingTranactionType.Withdrawl,
                         CheckingAccount = CheckingList,
-                        Description = ("Stock Purchase - Stock Account" + Customer.StockAccount.FirstOrDefault().StockAccountID.ToString()),
+                        Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().StockAccountID.ToString()),
                         TransactionDate = PurchcaseTrade.TradeDate,
                         Trade = Trade,
                     };

@@ -28,7 +28,7 @@ namespace LonghornBank.Migrations
             //
 
             //SeedProfile.SeedEmployees(context);
-            SeedDataCustomers.SeedCustomers(context);
+            //SeedDataCustomers.SeedCustomers(context);
         }
     }
 }

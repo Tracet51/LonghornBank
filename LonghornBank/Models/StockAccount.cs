@@ -21,9 +21,32 @@ namespace LonghornBank.Models
         [Display(Name = "Account Number")]
         public String AccountNumber { get; set; }
 
+        private Decimal _decStockBalance;
+
+
         [Required(ErrorMessage = "A Stock Value is Required")]
         [Display(Name = "Stock Value")]
-        public Decimal StockBalance { get; set; }
+        public Decimal StockBalance
+        {
+            get
+            {
+                if (this.Trades.Count() != 0)
+                {
+                    foreach (var t in this.Trades)
+                    {
+                        _decStockBalance = (t.Quantity * t.PricePerShare);
+
+                    }
+                }
+
+                else
+                {
+                    _decStockBalance = 0;
+                }
+
+                return _decStockBalance;
+            }
+        }
 
         [Required(ErrorMessage = "A Trading Fee is Required")]
         [Display(Name = "Trading Fee")]

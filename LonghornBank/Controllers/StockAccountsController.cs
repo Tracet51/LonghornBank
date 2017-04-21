@@ -50,21 +50,34 @@ namespace LonghornBank.Controllers
 
             AppUser Customer = CustomerQuery.FirstOrDefault();
 
+            // Get the Stock Account 
+            var StockAccountQuery = from s in db.StockAccount
+                               where s.Customer.Id == Customer.Id
+                               select s;
+
+            StockAccount CustomerStockAccount = StockAccountQuery.FirstOrDefault();
+
+
             // Get all of the trades for the customer 
             var TradesQuery = from t in db.Trades
-                              where t.StockAccount.StockAccountID == Customer.StockAccount.FirstOrDefault().StockAccountID
+                              where t.StockAccount.StockAccountID == CustomerStockAccount.StockAccountID
                               select t;
 
             List<Trade> Trades = TradesQuery.ToList();
 
             // Get all of the transactions
             var TransQuery = from t in db.BankingTransaction
-                             where t.StockAccount.StockAccountID == Customer.StockAccount.FirstOrDefault().StockAccountID
+                             where t.StockAccount.StockAccountID == CustomerStockAccount.StockAccountID
                              select t;
 
             List<BankingTransaction> Trans = TransQuery.ToList();
 
-            return View();
+            // Add to view bag
+            ViewBag.Trades = Trades;
+            ViewBag.Transactions = Trans;
+            ViewBag.Customer = Customer;
+
+            return View(CustomerStockAccount);
         }
 
         // GET: StockAccounts/Create
