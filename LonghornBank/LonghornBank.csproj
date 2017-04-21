@@ -295,6 +295,8 @@
     <Content Include="Views\StockMarkets\Details.cshtml" />
     <Content Include="Views\StockMarkets\Edit.cshtml" />
     <Content Include="Views\StockMarkets\Index.cshtml" />
+    <Content Include="Views\StockTrades\PurchaseConfirmation.cshtml" />
+    <Content Include="Views\StockTrades\PurchaseError.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

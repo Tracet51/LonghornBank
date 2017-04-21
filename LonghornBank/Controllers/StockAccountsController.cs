@@ -84,6 +84,25 @@ namespace LonghornBank.Controllers
         // Page to create the account
         public ActionResult Create()
         {
+            // Query the Database for the logged in user 
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Check to see if there is an account 
+            // HACK
+            if (customer.StockAccount.FirstOrDefault() != null)
+            {
+                return View("Index");
+            }
+
             return View();
         }
 

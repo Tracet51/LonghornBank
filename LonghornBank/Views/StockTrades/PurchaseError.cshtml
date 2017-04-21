@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewBag.Title = "PurchaseError";
+    String Error = ViewBag.Error;
+}
+
+<h2>Purchase Error - See Below For Details</h2>
+<h3 class="has-error">@Html.Raw(Error)</h3>
+@Html.ActionLink("Return to Stock Account Home", "Index", "StockAccounts")

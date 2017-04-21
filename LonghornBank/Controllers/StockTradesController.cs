@@ -342,6 +342,13 @@ namespace LonghornBank.Controllers
                 // take the money from the account
                 if (CustomerChecking.Balance - decTotal >= 0)
                 {
+                    // Check to see if the cash balance is enough for the fee
+                    if (db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance < SelectedStock.Fee)
+                    {
+                        ViewBag.Error = "Fee was greater than Stock Cash Balance";
+                        return View("PurchaseError");
+                    }
+
                     // create a list to hold the checking account
                     List<Checking> CheckingList = new List<Checking>();
                     CheckingList.Add(CustomerChecking);
@@ -373,18 +380,125 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(CheckingTrans);
                     db.SaveChanges();
                 }
-                
-                
+
+                // HACK
+                else
+                {
+                    ViewBag.Error = "Not Enough Money in Account to Purchase the Stocks";
+                    return View("PurchaseError");
+                }
+
 
                 // Any further changes
             }
             else if (PurchcaseTrade.SavingsAccount != null)
             {
+                // Get the customer Savings account 
+                Saving CustomerSavings = db.SavingsAccount.Find(PurchcaseTrade.SavingsAccount.SavingID);
 
+                // take the money from the account
+                if (CustomerSavings.Balance - decTotal >= 0)
+                {
+
+                    // Check to see if the cash balance is enough for the fee
+                    if (db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance < SelectedStock.Fee)
+                    {
+                        ViewBag.Error = "Fee was greater than Stock Cash Balance";
+                        return View("PurchaseError");
+                    }
+
+                    // create a list to hold the checking account
+                    List<Saving> SavingsList = new List<Saving>();
+                    SavingsList.Add(CustomerSavings);
+
+                    //Create a new transaction 
+                    BankingTransaction CheckingTrans = new BankingTransaction
+                    {
+                        Amount = decTotal,
+                        BankingTransactionType = BankingTranactionType.Withdrawl,
+                        SavingsAccount = SavingsList,
+                        Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().StockAccountID.ToString()),
+                        TransactionDate = PurchcaseTrade.TradeDate,
+                        Trade = Trade,
+                    };
+
+                    // add the stuff to the database  
+                    db.BankingTransaction.Add(FeeTrans);
+                    db.SaveChanges();
+
+                    db.Trades.Add(Trade);
+                    db.SaveChanges();
+
+                    // Take the money out 
+                    db.SavingsAccount.Find(CustomerSavings.SavingID).Balance -= decTotal;
+
+                    // take out the fee 
+                    db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance -= SelectedStock.Fee;
+
+                    db.BankingTransaction.Add(CheckingTrans);
+                    db.SaveChanges();
+                }
+
+                // HACK
+                else
+                {
+                    ViewBag.Error = "Not Enough Money in Account to Purchase the Stocks";
+                    return View("PurchaseError");
+                }
             }
             else if (PurchcaseTrade.SavingsAccount!= null)
             {
+                // Get the customer Savings account 
+                StockAccount CustomerStockAccount = db.StockAccount.Find(PurchcaseTrade.AccountStock.StockAccountID);
 
+                // take the money from the account
+                if (CustomerStockAccount.CashBalance - decTotal >= 0)
+                {
+                    // Check to see if the cash balance is enough for the fee
+                    if (db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance < SelectedStock.Fee)
+                    {
+                        ViewBag.Error = "Fee was greater than Stock Cash Balance";
+                        return View("PurchaseError");
+                    }
+
+                    // create a list to hold the checking account
+                    List<StockAccount> StockAccountList = new List<StockAccount>();
+                    StockAccountList.Add(CustomerStockAccount);
+
+                    //Create a new transaction 
+                    BankingTransaction CheckingTrans = new BankingTransaction
+                    {
+                        Amount = decTotal,
+                        BankingTransactionType = BankingTranactionType.Withdrawl,
+                        StockAccount = CustomerStockAccount,
+                        Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().StockAccountID.ToString()),
+                        TransactionDate = PurchcaseTrade.TradeDate,
+                        Trade = Trade,
+                    };
+
+                    // add the stuff to the database  
+                    db.BankingTransaction.Add(FeeTrans);
+                    db.SaveChanges();
+
+                    db.Trades.Add(Trade);
+                    db.SaveChanges();
+
+                    // Take the money out 
+                    db.StockAccount.Find(CustomerStockAccount.StockAccountID).CashBalance -= decTotal;
+
+                    // take out the fee 
+                    db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance -= SelectedStock.Fee;
+
+                    db.BankingTransaction.Add(CheckingTrans);
+                    db.SaveChanges();
+                }
+
+                // HACK
+                else
+                {
+                    ViewBag.Error = "Not Enough Money in Account to Purchase the Stocks";
+                    return View("PurchaseError");
+                }
             }
 
             else
@@ -394,7 +508,7 @@ namespace LonghornBank.Controllers
 
             // Add the stuff to the database 
 
-            return RedirectToAction("Portal", "Home" );
+            return RedirectToAction("PurchaseConfirmation" );
         }
 
     }
