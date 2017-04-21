@@ -43,7 +43,28 @@ namespace LonghornBank.Controllers
         // Takes the Users to the index page of the StockTradeViewModel
         public ActionResult Details()
         {
-            return RedirectToAction("Index", "StockTrades");
+            // Get the customer 
+            var CustomerQuery = from u in db.Users
+                                where u.UserName == User.Identity.Name
+                                select u;
+
+            AppUser Customer = CustomerQuery.FirstOrDefault();
+
+            // Get all of the trades for the customer 
+            var TradesQuery = from t in db.Trades
+                              where t.StockAccount.StockAccountID == Customer.StockAccount.FirstOrDefault().StockAccountID
+                              select t;
+
+            List<Trade> Trades = TradesQuery.ToList();
+
+            // Get all of the transactions
+            var TransQuery = from t in db.BankingTransaction
+                             where t.StockAccount.StockAccountID == Customer.StockAccount.FirstOrDefault().StockAccountID
+                             select t;
+
+            List<BankingTransaction> Trans = TransQuery.ToList();
+
+            return View();
         }
 
         // GET: StockAccounts/Create
@@ -57,7 +78,7 @@ namespace LonghornBank.Controllers
         // Post request to create the account
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StockAccountID,CashBalance,StockBalance")] StockAccount stockAccount)
+        public ActionResult Create([Bind(Include = "StockAccountID,CashBalance,Name")] StockAccount stockAccount)
         {
             if (ModelState.IsValid)
             {

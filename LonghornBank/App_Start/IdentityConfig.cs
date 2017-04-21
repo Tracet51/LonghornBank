@@ -35,7 +35,7 @@ namespace LonghornBank
             // TODO: Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 5,
+                RequiredLength = 3,
                 RequireNonLetterOrDigit = false,
                 RequireDigit = false,
                 RequireLowercase = false,

@@ -18,6 +18,9 @@ namespace LonghornBank.Models
         [Required(ErrorMessage = "An Account Name is Required")]
         public String Name { get; set; }
 
+        [Display(Name = "Account Number")]
+        public String AccountNumber { get; set; }
+
         [Required(ErrorMessage = "A Stock Value is Required")]
         [Display(Name = "Stock Value")]
         public Decimal StockBalance { get; set; }
@@ -39,5 +42,8 @@ namespace LonghornBank.Models
 
         // A stock account can have many trades
         public virtual List<Trade> Trades { get; set; }
+
+        // Stock account can have many transactions 
+        public virtual List<BankingTransaction> BankingTransaction { get; set; }
     }
 }

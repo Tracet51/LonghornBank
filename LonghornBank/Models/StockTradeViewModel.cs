@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace LonghornBank.Models
 
@@ -43,6 +44,10 @@ namespace LonghornBank.Models
         public Int32 Quantity { get; set; }
 
         // Date of the Purchase 
+        [Required(ErrorMessage = "Trade Date is Required")]
+        [Display(Name ="Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime TradeDate { get; set; }
 
     }

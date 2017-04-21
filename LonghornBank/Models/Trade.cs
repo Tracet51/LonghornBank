@@ -17,7 +17,6 @@ namespace LonghornBank.Models
     {
         public Int32 TradeID { get; set; }
 
-        [Required(ErrorMessage = "Transaction Dispute Status is Required")]
         [Display(Name = "Transaction Dispute Status")]
         public DisputeStatus TransactionDispute { get; set; }
 
@@ -29,15 +28,13 @@ namespace LonghornBank.Models
         [Display(Name = "Transaction Amount")]
         public Decimal Amount { get; set; }
 
-        [Required(ErrorMessage = "Transaction Description is Required")]
+
         [Display(Name = "Transaction Description")]
         public String Description { get; set; }
 
-        [Required(ErrorMessage = "Dispute Message is Required")]
         [Display(Name = "Dispute Message")]
         public String DisputeMessage { get; set; }
 
-        [Required(ErrorMessage = "Corrected Transaction Amount is Required")]
         [Display(Name = "Corrected Transaction Amount")]
         public Decimal CorrectedAmount { get; set; }
 
@@ -62,7 +59,9 @@ namespace LonghornBank.Models
         //                         //
         //                         */
 
-        // A trade can have 1 transaction! 
+        // A trade can have 2 transactions! 
+        // One for the fee 
+        // Two for the withdrawl
         public virtual List<BankingTransaction> BankingTransactions { get; set; }
 
         // A trade can belong to only 1 stock account

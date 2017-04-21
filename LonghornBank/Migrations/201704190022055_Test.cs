@@ -3,7 +3,7 @@ namespace LonghornBank.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialSetup : DbMigration
+    public partial class Test : DbMigration
     {
         public override void Up()
         {
@@ -44,8 +44,11 @@ namespace LonghornBank.Migrations
                         CustomerOpinion = c.Decimal(nullable: false, precision: 18, scale: 2),
                         CorrectedAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
                         BankingTransactionType = c.Int(nullable: false),
+                        Trade_TradeID = c.Int(),
                     })
-                .PrimaryKey(t => t.BankingTransactionID);
+                .PrimaryKey(t => t.BankingTransactionID)
+                .ForeignKey("dbo.Trades", t => t.Trade_TradeID)
+                .Index(t => t.Trade_TradeID);
             
             CreateTable(
                 "dbo.Checkings",
@@ -75,6 +78,7 @@ namespace LonghornBank.Migrations
                         Zip = c.String(nullable: false),
                         DOB = c.DateTime(nullable: false),
                         ActiveStatus = c.Boolean(nullable: false),
+                        SSN = c.String(),
                         Email = c.String(maxLength: 256),
                         EmailConfirmed = c.Boolean(nullable: false),
                         PasswordHash = c.String(),
@@ -104,6 +108,23 @@ namespace LonghornBank.Migrations
                 .Index(t => t.UserId);
             
             CreateTable(
+                "dbo.IRAs",
+                c => new
+                    {
+                        IRAID = c.Int(nullable: false, identity: true),
+                        Balance = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        AccountNumber = c.String(nullable: false),
+                        Name = c.String(nullable: false),
+                        RunningTotal = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        MaxWithdrawl = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        PendingBalance = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        Customer_Id = c.String(maxLength: 128),
+                    })
+                .PrimaryKey(t => t.IRAID)
+                .ForeignKey("dbo.AspNetUsers", t => t.Customer_Id)
+                .Index(t => t.Customer_Id);
+            
+            CreateTable(
                 "dbo.AspNetUserLogins",
                 c => new
                     {
@@ -131,20 +152,58 @@ namespace LonghornBank.Migrations
                 .Index(t => t.Customer_Id);
             
             CreateTable(
-                "dbo.IRAs",
+                "dbo.StockAccounts",
                 c => new
                     {
-                        IRAID = c.Int(nullable: false, identity: true),
-                        Balance = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        StockAccountID = c.Int(nullable: false, identity: true),
+                        CashBalance = c.Decimal(nullable: false, precision: 18, scale: 2),
                         Name = c.String(nullable: false),
-                        RunningTotal = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        MaxWithdrawl = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        PendingBalance = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        BankingTransaction_BankingTransactionID = c.Int(),
+                        StockBalance = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        TradingFee = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        Gains = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        Bounses = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        Customer_Id = c.String(maxLength: 128),
                     })
-                .PrimaryKey(t => t.IRAID)
-                .ForeignKey("dbo.BankingTransactions", t => t.BankingTransaction_BankingTransactionID)
-                .Index(t => t.BankingTransaction_BankingTransactionID);
+                .PrimaryKey(t => t.StockAccountID)
+                .ForeignKey("dbo.AspNetUsers", t => t.Customer_Id)
+                .Index(t => t.Customer_Id);
+            
+            CreateTable(
+                "dbo.Trades",
+                c => new
+                    {
+                        TradeID = c.Int(nullable: false, identity: true),
+                        TransactionDispute = c.Int(nullable: false),
+                        TransactionDate = c.DateTime(nullable: false),
+                        Amount = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        Description = c.String(nullable: false),
+                        DisputeMessage = c.String(nullable: false),
+                        CorrectedAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        TradeType = c.Int(nullable: false),
+                        PricePerShare = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        Quantity = c.Int(nullable: false),
+                        Ticker = c.String(nullable: false),
+                        StockAccount_StockAccountID = c.Int(),
+                        StockMarket_StockMarketID = c.Int(),
+                    })
+                .PrimaryKey(t => t.TradeID)
+                .ForeignKey("dbo.StockAccounts", t => t.StockAccount_StockAccountID)
+                .ForeignKey("dbo.StockMarkets", t => t.StockMarket_StockMarketID)
+                .Index(t => t.StockAccount_StockAccountID)
+                .Index(t => t.StockMarket_StockMarketID);
+            
+            CreateTable(
+                "dbo.StockMarkets",
+                c => new
+                    {
+                        StockMarketID = c.Int(nullable: false, identity: true),
+                        CompanyName = c.String(nullable: false),
+                        Ticker = c.String(nullable: false),
+                        StockType = c.Int(nullable: false),
+                        Fee = c.Decimal(nullable: false, precision: 18, scale: 2),
+                        StockPrice = c.Decimal(nullable: false, precision: 18, scale: 2),
+                    })
+                .PrimaryKey(t => t.StockMarketID);
             
             CreateTable(
                 "dbo.CheckingBankingTransactions",
@@ -157,6 +216,19 @@ namespace LonghornBank.Migrations
                 .ForeignKey("dbo.Checkings", t => t.Checking_CheckingID, cascadeDelete: true)
                 .ForeignKey("dbo.BankingTransactions", t => t.BankingTransaction_BankingTransactionID, cascadeDelete: true)
                 .Index(t => t.Checking_CheckingID)
+                .Index(t => t.BankingTransaction_BankingTransactionID);
+            
+            CreateTable(
+                "dbo.IRABankingTransactions",
+                c => new
+                    {
+                        IRA_IRAID = c.Int(nullable: false),
+                        BankingTransaction_BankingTransactionID = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.IRA_IRAID, t.BankingTransaction_BankingTransactionID })
+                .ForeignKey("dbo.IRAs", t => t.IRA_IRAID, cascadeDelete: true)
+                .ForeignKey("dbo.BankingTransactions", t => t.BankingTransaction_BankingTransactionID, cascadeDelete: true)
+                .Index(t => t.IRA_IRAID)
                 .Index(t => t.BankingTransaction_BankingTransactionID);
             
             CreateTable(
@@ -177,34 +249,50 @@ namespace LonghornBank.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
-            DropForeignKey("dbo.IRAs", "BankingTransaction_BankingTransactionID", "dbo.BankingTransactions");
+            DropForeignKey("dbo.Trades", "StockMarket_StockMarketID", "dbo.StockMarkets");
+            DropForeignKey("dbo.Trades", "StockAccount_StockAccountID", "dbo.StockAccounts");
+            DropForeignKey("dbo.BankingTransactions", "Trade_TradeID", "dbo.Trades");
+            DropForeignKey("dbo.StockAccounts", "Customer_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.Savings", "Customer_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.SavingBankingTransactions", "BankingTransaction_BankingTransactionID", "dbo.BankingTransactions");
             DropForeignKey("dbo.SavingBankingTransactions", "Saving_SavingID", "dbo.Savings");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.IRAs", "Customer_Id", "dbo.AspNetUsers");
+            DropForeignKey("dbo.IRABankingTransactions", "BankingTransaction_BankingTransactionID", "dbo.BankingTransactions");
+            DropForeignKey("dbo.IRABankingTransactions", "IRA_IRAID", "dbo.IRAs");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.Checkings", "Customer_Id", "dbo.AspNetUsers");
             DropForeignKey("dbo.CheckingBankingTransactions", "BankingTransaction_BankingTransactionID", "dbo.BankingTransactions");
             DropForeignKey("dbo.CheckingBankingTransactions", "Checking_CheckingID", "dbo.Checkings");
             DropIndex("dbo.SavingBankingTransactions", new[] { "BankingTransaction_BankingTransactionID" });
             DropIndex("dbo.SavingBankingTransactions", new[] { "Saving_SavingID" });
+            DropIndex("dbo.IRABankingTransactions", new[] { "BankingTransaction_BankingTransactionID" });
+            DropIndex("dbo.IRABankingTransactions", new[] { "IRA_IRAID" });
             DropIndex("dbo.CheckingBankingTransactions", new[] { "BankingTransaction_BankingTransactionID" });
             DropIndex("dbo.CheckingBankingTransactions", new[] { "Checking_CheckingID" });
-            DropIndex("dbo.IRAs", new[] { "BankingTransaction_BankingTransactionID" });
+            DropIndex("dbo.Trades", new[] { "StockMarket_StockMarketID" });
+            DropIndex("dbo.Trades", new[] { "StockAccount_StockAccountID" });
+            DropIndex("dbo.StockAccounts", new[] { "Customer_Id" });
             DropIndex("dbo.Savings", new[] { "Customer_Id" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
+            DropIndex("dbo.IRAs", new[] { "Customer_Id" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.Checkings", new[] { "Customer_Id" });
+            DropIndex("dbo.BankingTransactions", new[] { "Trade_TradeID" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropTable("dbo.SavingBankingTransactions");
+            DropTable("dbo.IRABankingTransactions");
             DropTable("dbo.CheckingBankingTransactions");
-            DropTable("dbo.IRAs");
+            DropTable("dbo.StockMarkets");
+            DropTable("dbo.Trades");
+            DropTable("dbo.StockAccounts");
             DropTable("dbo.Savings");
             DropTable("dbo.AspNetUserLogins");
+            DropTable("dbo.IRAs");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.Checkings");

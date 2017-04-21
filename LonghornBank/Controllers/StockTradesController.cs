@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using LonghornBank.Models;
+using System.Net;
 
 namespace LonghornBank.Controllers
     // This Controller will handle the displaying of all stocks, purchasing of stocks, and selling of stocks
@@ -52,10 +53,16 @@ namespace LonghornBank.Controllers
         }
 
 
-
+        // GET: / StockTrades/StockChoices/
+        // shows all of the stock choices 
+        public ActionResult StockChoices()
+        {
+            return View();
+        }
 
 
         // GET: /StockTrades/ViewSelectedStock/
+        // Views the selected stock type 
         public ActionResult ViewSelectedStock(int? id)
         {
             // Get the users account 
@@ -143,11 +150,9 @@ namespace LonghornBank.Controllers
 
         // GET: /StockTrade/ChooseAccount
         // Once the user has selected the stock they want, they will now select the acocunt
-        public ActionResult ChooseAccount(int? StockID)
+        
+        public ActionResult ChooseAccount(int? id)
         {
-            // Find the Selected Stock 
-            StockMarket SelectedStock = db.StockMarket.Find(StockID);
-
             // Get the users account 
             // Query the Database for the logged in user 
             var CustomerQuery = from c in db.Users
@@ -155,6 +160,7 @@ namespace LonghornBank.Controllers
                                 select c;
             // Get the Customer 
             AppUser customer = CustomerQuery.FirstOrDefault();
+
 
             // Get the customers stock account 
             // Query the Database for the logged in user 
@@ -165,12 +171,10 @@ namespace LonghornBank.Controllers
             // Select the account 
             List<StockAccount> CustomerStockAccount = StockAccountQuery.ToList();
 
-            // Create a None Options 
+            /* Create a None Options 
             StockAccount SelectNoStockAccount = new StockAccount() { StockAccountID = 0, Name = "None", CashBalance = 0 };
             CustomerStockAccount.Add(SelectNoStockAccount);
-
-
-
+            */
 
 
 
@@ -182,9 +186,10 @@ namespace LonghornBank.Controllers
             // Create a list to hold all of the checking accounts 
             List<Checking> CustomerCheckingAccounts = CheckingQuery.ToList();
 
-            // Create a None Options 
+            /* Create a None Options 
             Checking SelectNoChecking = new Checking() { CheckingID = 0, Name = "None", Balance = 0 };
             CustomerCheckingAccounts.Add(SelectNoChecking);
+            */
 
 
 
@@ -198,9 +203,10 @@ namespace LonghornBank.Controllers
             // Create a list to hold all of the checking accounts 
             List<Saving> CustomerSavingsAccounts = SavingsQuery.ToList();
 
-            // Create a None Options 
+            /* Create a None Options 
             Saving SelectNoSavings = new Saving() { SavingID = 0, Name = "None", Balance = 0 };
             CustomerSavingsAccounts.Add(SelectNoSavings);
+            */
 
             // bind to the model 
             ChooseAcocunt CustomerInfo = new ChooseAcocunt
@@ -209,11 +215,13 @@ namespace LonghornBank.Controllers
                 CheckingAccounts = CustomerCheckingAccounts,
                 SavingsAccount = CustomerSavingsAccounts,
                 CustomerProfile = customer,
-                StockSelected = SelectedStock
+                StockSelected = db.StockMarket.Find(id)
             };
 
-            return View(CustomerInfo);
+            return View("ChooseAccount", CustomerInfo);
         }
+
+
 
         // GET: /StockTrades/PurchaseStocks
         // Returns page to purchase stocks
@@ -279,27 +287,102 @@ namespace LonghornBank.Controllers
         // Post the trade to the respective accounts
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PurchaseStocks(PurchaseStockTrade Trade)
+        public ActionResult PurchaseStocks(PurchaseStockTrade PurchcaseTrade)
         {
+            // get the customer 
+            AppUser Customer = db.Users.Find(PurchcaseTrade.CustomerProfile.Id);
+
+            // Get the stock 
+            StockMarket SelectedStock = db.StockMarket.Find(PurchcaseTrade.SelectedStock.StockMarketID);
+
+            // Get the total amount 
+            Decimal decTotal = (PurchcaseTrade.Quantity * SelectedStock.StockPrice);
+
+            // create a new transaction list for the trade 
+            List<BankingTransaction> TradeTrans = new List<BankingTransaction>();
+
+            // Create a new fee transaction and add it to the list 
+            BankingTransaction FeeTrans = new BankingTransaction
+            {
+                Amount = SelectedStock.Fee,
+                BankingTransactionType = BankingTranactionType.Fee,
+                Description = ("Fee for purchase of" + SelectedStock.CompanyName),
+                TransactionDate = (PurchcaseTrade.TradeDate),
+                StockAccount = Customer.StockAccount.FirstOrDefault()
+            };
+
+            TradeTrans.Add(FeeTrans);
+
+            // Make the trade happen
+            Trade Trade = new Trade()
+            {
+                Amount = decTotal,
+                Quantity = PurchcaseTrade.Quantity,
+                Ticker = SelectedStock.Ticker,
+                TransactionDate = PurchcaseTrade.TradeDate,
+                PricePerShare = SelectedStock.StockPrice,
+                TradeType = TradeType.Buy,
+                StockAccount = Customer.StockAccount.FirstOrDefault(),
+                StockMarket = SelectedStock,
+                BankingTransactions = TradeTrans,
+                DisputeMessage = "None",
+                TransactionDispute = DisputeStatus.Accepted,
+                Description = "None",
+                CorrectedAmount = 0 
+            };
+
+
 
             // check the account nulls 
-            if (Trade.CheckingAccounts != null)
+            if (PurchcaseTrade.CheckingAccounts != null)
             {
-                // Make the trade happen
-
-                // post the transaction
+                // find the account
+                Checking CustomerChecking = db.CheckingAccount.Find(PurchcaseTrade.CheckingAccounts.CheckingID);
 
                 // take the money from the account
+                if (CustomerChecking.Balance - decTotal >= 0)
+                {
+                    // create a list to hold the checking account
+                    List<Checking> CheckingList = new List<Checking>();
+                    CheckingList.Add(CustomerChecking);
+
+                    //Create a new transaction 
+                    BankingTransaction CheckingTrans = new BankingTransaction
+                    {
+                        Amount = decTotal,
+                        BankingTransactionType = BankingTranactionType.Withdrawl,
+                        CheckingAccount = CheckingList,
+                        Description = ("Stock Purchase - Stock Account" + Customer.StockAccount.FirstOrDefault().StockAccountID.ToString()),
+                        TransactionDate = PurchcaseTrade.TradeDate,
+                        Trade = Trade,
+                    };
+
+                    // add the stuff to the database  
+                    db.BankingTransaction.Add(FeeTrans);
+                    db.SaveChanges();
+
+                    db.Trades.Add(Trade);
+                    db.SaveChanges();
+
+                    // Take the money out 
+                    db.CheckingAccount.Find(CustomerChecking.CheckingID).Balance -= decTotal;
+
+                    // take out the fee 
+                    db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance -= SelectedStock.Fee;
+
+                    db.BankingTransaction.Add(CheckingTrans);
+                    db.SaveChanges();
+                }
                 
-                // update the stock account 
+                
 
                 // Any further changes
             }
-            else if (Trade.SavingsAccount != null)
+            else if (PurchcaseTrade.SavingsAccount != null)
             {
 
             }
-            else if (Trade.SelectedStock != null)
+            else if (PurchcaseTrade.SavingsAccount!= null)
             {
 
             }
@@ -309,8 +392,9 @@ namespace LonghornBank.Controllers
                 return HttpNotFound();
             }
 
+            // Add the stuff to the database 
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Portal", "Home" );
         }
 
     }

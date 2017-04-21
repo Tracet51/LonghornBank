@@ -193,23 +193,26 @@
     <Compile Include="Controllers\RoleAdminController.cs" />
     <Compile Include="Controllers\SavingsController.cs" />
     <Compile Include="Controllers\StockAccountsController.cs" />
+    <Compile Include="Controllers\StockMarketsController.cs" />
     <Compile Include="Controllers\StockTradesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704070201360_InitialSetup.cs" />
-    <Compile Include="Migrations\201704070201360_InitialSetup.Designer.cs">
-      <DependentUpon>201704070201360_InitialSetup.cs</DependentUpon>
+    <Compile Include="Migrations\201704190022055_Test.cs" />
+    <Compile Include="Migrations\201704190022055_Test.Designer.cs">
+      <DependentUpon>201704190022055_Test.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704070218430_IRAAccount.cs" />
-    <Compile Include="Migrations\201704070218430_IRAAccount.Designer.cs">
-      <DependentUpon>201704070218430_IRAAccount.cs</DependentUpon>
+    <Compile Include="Migrations\201704190101081_Test2.cs" />
+    <Compile Include="Migrations\201704190101081_Test2.Designer.cs">
+      <DependentUpon>201704190101081_Test2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704071512411_IRAEnabled.cs" />
-    <Compile Include="Migrations\201704071512411_IRAEnabled.Designer.cs">
-      <DependentUpon>201704071512411_IRAEnabled.cs</DependentUpon>
+    <Compile Include="Migrations\201704202125445_Trades.cs" />
+    <Compile Include="Migrations\201704202125445_Trades.Designer.cs">
+      <DependentUpon>201704202125445_Trades.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\SeedDataCustomers.cs" />
+    <Compile Include="Migrations\SeedProfiles.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
@@ -279,6 +282,11 @@
     <Content Include="Views\StockTrades\ViewSelectedStock.cshtml" />
     <Content Include="Views\StockTrades\PurchaseStocks.cshtml" />
     <Content Include="Views\StockTrades\ChooseAccount.cshtml" />
+    <Content Include="Views\StockMarkets\Create.cshtml" />
+    <Content Include="Views\StockMarkets\Delete.cshtml" />
+    <Content Include="Views\StockMarkets\Details.cshtml" />
+    <Content Include="Views\StockMarkets\Edit.cshtml" />
+    <Content Include="Views\StockMarkets\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -290,14 +298,14 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704070201360_InitialSetup.resx">
-      <DependentUpon>201704070201360_InitialSetup.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704190022055_Test.resx">
+      <DependentUpon>201704190022055_Test.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704070218430_IRAAccount.resx">
-      <DependentUpon>201704070218430_IRAAccount.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704190101081_Test2.resx">
+      <DependentUpon>201704190101081_Test2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704071512411_IRAEnabled.resx">
-      <DependentUpon>201704071512411_IRAEnabled.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704202125445_Trades.resx">
+      <DependentUpon>201704202125445_Trades.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

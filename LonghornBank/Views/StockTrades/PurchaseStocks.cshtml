@@ -68,6 +68,8 @@
             @Html.HiddenFor(model => model.AccountStock.StockAccountID)
         }
 
+        @Html.HiddenFor(model => model.CustomerProfile.Id)
+        @Html.HiddenFor(model => model.SelectedStock.StockMarketID)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -88,7 +90,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Buy" class="btn btn-default" />
             </div>
         </div>
     </div>
