@@ -34,7 +34,7 @@ namespace LonghornBank.Models
                 {
                     foreach (var t in this.Trades)
                     {
-                        _decStockBalance = (t.Quantity * t.PricePerShare);
+                        _decStockBalance += (t.Quantity * t.PricePerShare);
 
                     }
                 }
