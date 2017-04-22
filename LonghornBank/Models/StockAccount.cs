@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace LonghornBank.Models
 {
     public class StockAccount
     {
+        private AppDbContext db = new AppDbContext();
+
         public Int32 StockAccountID { get; set; }
 
         [Display(Name = "Cash Balance")]
@@ -30,13 +33,17 @@ namespace LonghornBank.Models
         {
             get
             {
-                if (this.Trades.Count() != 0)
+                if (this.Trades != null)
                 {
-                    foreach (var t in this.Trades)
+                    if (this.Trades.Count() != 0)
                     {
-                        _decStockBalance += (t.Quantity * t.PricePerShare);
+                        foreach (var t in this.Trades)
+                        {
+                            _decStockBalance += (t.Quantity * t.PricePerShare);
 
+                        }
                     }
+                    
                 }
 
                 else
@@ -52,9 +59,38 @@ namespace LonghornBank.Models
         [Display(Name = "Trading Fee")]
         public Decimal TradingFee { get; set; }
 
-        [Required(ErrorMessage = "Unrealized Gains are Required")]
+        private Decimal decGains;
+
         [Display(Name = "Unrealized Gains")]
-        public Decimal Gains { get; set; }
+        public Decimal Gains
+        {
+            get
+            {
+                if (this.Trades != null)
+                {
+                    if (this.Trades.Count() != 0)
+                    {
+                        foreach (var t in this.Trades)
+                        {
+                            Decimal TradeValue = (t.Quantity * t.PricePerShare);
+
+                            Decimal CurrentValue = (t.Quantity * db.StockMarket.Find(t.StockMarket.StockMarketID).StockPrice);
+
+                            decGains += (CurrentValue - TradeValue);
+
+                        }
+                    }
+
+                }
+
+                else
+                {
+                    decGains = 0;
+                }
+
+                return decGains;
+            }
+        }
 
         [Required(ErrorMessage = "A Bonus Portfolio Balance is Required")]
         [Display(Name = "Balanced Portfolio Bonus Balance")]

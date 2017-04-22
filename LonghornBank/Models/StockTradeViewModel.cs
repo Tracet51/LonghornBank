@@ -79,18 +79,47 @@ namespace LonghornBank.Models
         public List<StockMarket> AvailableStocks { get; set; }
     }
 
-    public class SellStockTrade
+    public class SellStockTradeOptions
     {
-        // The customer
-        public AppUser StockCustomerProfile { get; set; }
 
-        // The Stock Account Associated 
-        public StockAccount AccountStock { get; set; }
+        [Required(ErrorMessage = "Quantity is Required")]
+        public Int32 Quantity { get; set; }
 
-        // Property to hold all of the trades
-        public Trade Trades { get; set; }
+        // Date of the Purchase 
+        [Display(Name = "Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime SaleDate { get; set; }
 
-        // Hold the transaction for the trade 
-        public BankingTransaction Transaction { get; set; }
+        public Int32 StockMarketID { get; set; }
+
+        public Int32 StockAccountID { get; set; }
+
+        public Trade CustomerTrade { get; set; }
+
+    }
+
+    public class TradeDetails
+    {
+        public Int32 StockMarketID { get; set; }
+
+        public Int32 StockAccountID { get; set; }
+
+        public Int32 TradeID { get; set; }
+
+        [Display(Name = "Quantity")]
+        public Decimal Quantity { get; set; }
+
+        [Display(Name = "Purchase Price")]
+        public Decimal PurchasePrice { get; set; }
+
+        [Display(Name = "Current Price")]
+        public Decimal CurrentPrice { get; set; }
+
+        [Display(Name = "Price Change")]
+        public Decimal PriceChange { get; set; }
+
+        [Display(Name = "Total Gains/Losses")]
+        public Decimal Gains { get; set; }
     }
 }

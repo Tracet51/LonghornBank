@@ -85,6 +85,9 @@
             Price Per Share
         </th>
         <th>
+            Current Price
+        </th>
+        <th>
             Quantity
         </th>
         <th>
@@ -118,15 +121,16 @@
                 @Html.DisplayFor(modelItem => t.PricePerShare)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => t.StockMarket.StockPrice)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => t.Quantity)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => t.StockMarket.Fee)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = t.TradeID }) |
-                @Html.ActionLink("Details", "Details", new { id = t.TradeID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = t.TradeID })
+                @Html.ActionLink("Trade Details", "TradeDetails", "StockTrades", new { id = t.TradeID }, null)
             </td>
         </tr>
     }

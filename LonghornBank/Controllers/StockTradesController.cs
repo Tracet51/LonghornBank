@@ -359,7 +359,7 @@ namespace LonghornBank.Controllers
                         Amount = decTotal,
                         BankingTransactionType = BankingTranactionType.Withdrawl,
                         CheckingAccount = CheckingList,
-                        Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().StockAccountID.ToString()),
+                        Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().AccountNumber.ToString()),
                         TransactionDate = PurchcaseTrade.TradeDate,
                         Trade = Trade,
                     };
@@ -417,7 +417,7 @@ namespace LonghornBank.Controllers
                         Amount = decTotal,
                         BankingTransactionType = BankingTranactionType.Withdrawl,
                         SavingsAccount = SavingsList,
-                        Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().StockAccountID.ToString()),
+                        Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().AccountNumber.ToString()),
                         TransactionDate = PurchcaseTrade.TradeDate,
                         Trade = Trade,
                     };
@@ -446,7 +446,7 @@ namespace LonghornBank.Controllers
                     return View("PurchaseError");
                 }
             }
-            else if (PurchcaseTrade.SavingsAccount!= null)
+            else if (PurchcaseTrade.AccountStock!= null)
             {
                 // Get the customer Savings account 
                 StockAccount CustomerStockAccount = db.StockAccount.Find(PurchcaseTrade.AccountStock.StockAccountID);
@@ -471,7 +471,7 @@ namespace LonghornBank.Controllers
                         Amount = decTotal,
                         BankingTransactionType = BankingTranactionType.Withdrawl,
                         StockAccount = CustomerStockAccount,
-                        Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().StockAccountID.ToString()),
+                        Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().AccountNumber.ToString()),
                         TransactionDate = PurchcaseTrade.TradeDate,
                         Trade = Trade,
                     };
@@ -508,8 +508,95 @@ namespace LonghornBank.Controllers
 
             // Add the stuff to the database 
 
-            return RedirectToAction("PurchaseConfirmation" );
+            return View("PurchaseConfirmation");
         }
 
+        // GET: Trades
+        // The individual details for each stock trade
+        // id = trade id 
+        public ActionResult TradeDetails(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Find the trade
+            Trade CustomerTrade = db.Trades.Find(id);
+
+            if (CustomerTrade == null)
+            {
+                return HttpNotFound();
+            }
+
+            TradeDetails TD = new Models.TradeDetails
+            {
+                StockAccountID = CustomerTrade.StockAccount.StockAccountID,
+                StockMarketID = CustomerTrade.StockMarket.StockMarketID,
+                PurchasePrice = CustomerTrade.PricePerShare,
+                CurrentPrice = CustomerTrade.StockMarket.StockPrice,
+                PriceChange = (CustomerTrade.PricePerShare - CustomerTrade.StockMarket.StockPrice),
+                Quantity = CustomerTrade.Quantity,
+                TradeID = CustomerTrade.TradeID,
+                Gains = ((CustomerTrade.Quantity * CustomerTrade.PricePerShare) - (CustomerTrade.Quantity * CustomerTrade.StockMarket.StockPrice))
+            };
+
+            return View(TD);
+        }
+
+        //GET: StockTrades/SellStocksOptions
+        // Loads the information to sell the stock
+        public ActionResult SellStockOptions(int StockSaleID, int StockAccountID, int TradeID)
+        {
+            // Get the trade 
+            Trade CustomerTrade = db.Trades.Find(TradeID);
+
+            SellStockTradeOptions SSTO = new SellStockTradeOptions
+            {
+                StockAccountID = StockAccountID,
+                StockMarketID = StockSaleID,
+                CustomerTrade = CustomerTrade
+            };
+
+            return View(SSTO);
+        }
+
+        // POST: StockTrades/SellStocksOptions
+        // Displays the final information before posting the sale
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SellStockOptions([Bind(Include ="StockAccountID,StockMarketID,TradeID, Quantity,SaleDate")]SellStockTradeOptions SSTO)
+        {   
+            // 
+            return View("SellStocks");
+        }
+
+        // POST: StockTrades/SellStocks 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SellStocks(int StockSaleID, int StockAccountID, int TradeID)
+        {
+            // Get the Customer 
+            // Query the Database for the logged in user 
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
+            // Get the original trade 
+            Trade OriginalTrade = db.Trades.Find(TradeID);
+
+            // Get the Stock that is being sold
+            StockMarket StockSale = db.StockMarket.Find(StockSaleID);
+
+            // Get the Stock Account 
+            StockAccount CustomerStockAccount = db.StockAccount.Find(StockAccountID);
+
+            
+
+
+            return View();
+        }
     }
 }

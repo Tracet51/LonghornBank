@@ -33,6 +33,7 @@ namespace LonghornBank.Controllers
                 return HttpNotFound();
             }
 
+
             // Return the Stock Account Associated with the customer
             return View(db.StockAccount.Where(i => i.Customer.Id == customer.Id));
 
@@ -191,7 +192,8 @@ namespace LonghornBank.Controllers
 
             // Find the stock account associated with the customer 
             // Return the Stock Account Associated with the customer
-            return View(db.StockAccount.Where(i => i.Customer.Id == customer.Id));
+            StockAccount CustomerStockAccount = customer.StockAccount.FirstOrDefault();
+            return View(CustomerStockAccount);
         }
 
         // POST: StockAccounts/Delete
@@ -207,7 +209,12 @@ namespace LonghornBank.Controllers
             // Get the Customer 
             AppUser customer = CustomerQuery.FirstOrDefault();
 
-            StockAccount stockAccount = db.StockAccount.Find(customer.Id);
+            StockAccount stockAccount = db.StockAccount.Find(customer.StockAccount.FirstOrDefault().StockAccountID);
+
+            // Remove all dependencies
+            stockAccount.Trades.RemoveAll(i => i.StockAccount.StockAccountID == stockAccount.StockAccountID);
+            stockAccount.BankingTransaction.RemoveAll(i => i.StockAccount.StockAccountID == stockAccount.StockAccountID);
+
             db.StockAccount.Remove(stockAccount);
             db.SaveChanges();
             return RedirectToAction("Index");

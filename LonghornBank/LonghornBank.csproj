@@ -218,6 +218,14 @@
     <Compile Include="Migrations\201704210238526_ChangeStocks.Designer.cs">
       <DependentUpon>201704210238526_ChangeStocks.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704212351413_Gains.cs" />
+    <Compile Include="Migrations\201704212351413_Gains.Designer.cs">
+      <DependentUpon>201704212351413_Gains.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704220043307_TradeDetails.cs" />
+    <Compile Include="Migrations\201704220043307_TradeDetails.Designer.cs">
+      <DependentUpon>201704220043307_TradeDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
     <Compile Include="Migrations\SeedProfiles.cs" />
@@ -297,6 +305,8 @@
     <Content Include="Views\StockMarkets\Index.cshtml" />
     <Content Include="Views\StockTrades\PurchaseConfirmation.cshtml" />
     <Content Include="Views\StockTrades\PurchaseError.cshtml" />
+    <Content Include="Views\StockTrades\TradeDetails.cshtml" />
+    <Content Include="Views\StockTrades\SellStockOptions.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -322,6 +332,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704210238526_ChangeStocks.resx">
       <DependentUpon>201704210238526_ChangeStocks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704212351413_Gains.resx">
+      <DependentUpon>201704212351413_Gains.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704220043307_TradeDetails.resx">
+      <DependentUpon>201704220043307_TradeDetails.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
