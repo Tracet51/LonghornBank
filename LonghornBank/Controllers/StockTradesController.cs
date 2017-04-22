@@ -565,10 +565,26 @@ namespace LonghornBank.Controllers
         // Displays the final information before posting the sale
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SellStockOptions([Bind(Include ="StockAccountID,StockMarketID,TradeID, Quantity,SaleDate")]SellStockTradeOptions SSTO)
-        {   
-            // 
-            return View("SellStocks");
+        public ActionResult SellStockOptions([Bind(Include ="StockAccountID,StockMarketID,TradeID,Quantity,SaleDate")]SellStockTradeOptions SSTO)
+        {
+            // Get the stock to sell 
+            StockMarket StockToSell = db.StockMarket.Find(SSTO.StockMarketID);
+
+            // Get the trade 
+            Trade CustomerTrade = db.Trades.Find(SSTO.CustomerTrade.TradeID);
+
+            // Create a new sellstock object and send to the view 
+            SellStocksTrade SST = new SellStocksTrade
+            {
+                StockMarketID = SSTO.StockMarketID,
+                StockAccountID = SSTO.StockAccountID,
+                StockName = StockToSell.CompanyName,
+                QuantitySold = SSTO.Quantity,
+                Fee = StockToSell.Fee,
+                Profit = ((StockToSell.StockPrice * SSTO.Quantity) - (CustomerTrade.PricePerShare * SSTO.Quantity)),
+                SharesRemaining = (CustomerTrade.Quantity - SSTO.Quantity)
+            };
+            return View("SellStocks", SST);
         }
 
         // POST: StockTrades/SellStocks 

@@ -99,6 +99,28 @@ namespace LonghornBank.Models
 
     }
 
+    public class SellStocksTrade
+    {
+        public Int32 QuantitySold { get; set; }
+
+        public String StockName { get; set; }
+
+        public Int32 SharesRemaining { get; set; }
+
+        public Decimal Fee { get; set; }
+
+        public Decimal Profit { get; set; }
+
+        // Date of the Purchase 
+        [Display(Name = "Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+
+        public Int32 StockMarketID { get; set; }
+
+        public Int32 StockAccountID { get; set; }
+    }
+
     public class TradeDetails
     {
         public Int32 StockMarketID { get; set; }

@@ -1,0 +1,52 @@
+﻿@model LonghornBank.Models.SellStocksTrade
+@{
+    ViewBag.Title = "SellStocks";
+}
+
+<h2>Sell Stock Confirmation</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StockName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QuantitySold)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SharesRemaining)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fee)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Profit)
+        </th>
+        <th></th>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayFor(model => model.StockName)
+        </th>
+        <th>
+            @Html.DisplayFor(model => model.QuantitySold)
+        </th>
+        <th>
+            @Html.DisplayFor(model => model.SharesRemaining)
+        </th>
+        <th>
+            @Html.DisplayFor(model => model.Fee)
+        </th>
+        <th>
+            @Html.DisplayFor(model => model.Profit)
+        </th>
+    </tr>
+</table>
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Sell" class="btn btn-default" />
+    </div>
+}
+
