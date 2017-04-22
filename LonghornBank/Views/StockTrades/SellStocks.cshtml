@@ -4,9 +4,6 @@
 }
 
 <h2>Sell Stock Confirmation</h2>
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
 <table class="table">
     <tr>
         <th>
@@ -44,6 +41,15 @@
         </th>
     </tr>
 </table>
+
+@using (Html.BeginForm("SellStocks", "StockTrades", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.StockMarketID)
+    @Html.HiddenFor(model => model.StockAccountID)
+    @Html.HiddenFor(model => model.TradeID)
+    @Html.HiddenFor(model => model.QuantitySold)
+    @Html.HiddenFor(model => model.SaleDate)
 
     <div class="form-actions no-color">
         <input type="submit" value="Sell" class="btn btn-default" />

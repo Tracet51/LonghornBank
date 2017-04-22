@@ -43,16 +43,16 @@ namespace LonghornBank.Models
                 {
                     var quote_service = new QuoteService();
 
-                    var quotes = quote_service.Quote(this.Ticker.ToUpper()).Return(QuoteReturnParameter.LatestTradePrice);
+                    var quotes = quote_service.Quote(this.Ticker.ToUpper()).Return(QuoteReturnParameter.PreviousClose);
 
-                    _decStockPrice = Convert.ToDecimal(quotes.LatestTradePrice);
+                    _decStockPrice = Convert.ToDecimal(quotes.PreviousClose);
                 }
+
                 catch (Exception)
                 {
 
                     _decStockPrice = 0;
                 }
-
 
                 // Return the price
                 return _decStockPrice;

@@ -95,6 +95,8 @@ namespace LonghornBank.Models
 
         public Int32 StockAccountID { get; set; }
 
+        public Int32 TradeID { get; set; }
+
         public Trade CustomerTrade { get; set; }
 
     }
@@ -115,10 +117,13 @@ namespace LonghornBank.Models
         [Display(Name = "Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-
+        public DateTime SaleDate { get; set; }
         public Int32 StockMarketID { get; set; }
 
         public Int32 StockAccountID { get; set; }
+
+        public Int32 TradeID { get; set; }
+
     }
 
     public class TradeDetails

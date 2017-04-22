@@ -292,6 +292,11 @@ namespace LonghornBank.Controllers
             // get the customer 
             AppUser Customer = db.Users.Find(PurchcaseTrade.CustomerProfile.Id);
 
+            if (Customer == null)
+            {
+                return RedirectToAction("Portal", "Home");
+            }
+
             // Get the stock 
             StockMarket SelectedStock = db.StockMarket.Find(PurchcaseTrade.SelectedStock.StockMarketID);
 
@@ -338,6 +343,11 @@ namespace LonghornBank.Controllers
             {
                 // find the account
                 Checking CustomerChecking = db.CheckingAccount.Find(PurchcaseTrade.CheckingAccounts.CheckingID);
+
+                if (CustomerChecking == null)
+                {
+                    return RedirectToAction("Portal", "Home");
+                }
 
                 // take the money from the account
                 if (CustomerChecking.Balance - decTotal >= 0)
@@ -412,7 +422,7 @@ namespace LonghornBank.Controllers
                     SavingsList.Add(CustomerSavings);
 
                     //Create a new transaction 
-                    BankingTransaction CheckingTrans = new BankingTransaction
+                    BankingTransaction SavingsTrans = new BankingTransaction
                     {
                         Amount = decTotal,
                         BankingTransactionType = BankingTranactionType.Withdrawl,
@@ -435,7 +445,7 @@ namespace LonghornBank.Controllers
                     // take out the fee 
                     db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance -= SelectedStock.Fee;
 
-                    db.BankingTransaction.Add(CheckingTrans);
+                    db.BankingTransaction.Add(SavingsTrans);
                     db.SaveChanges();
                 }
 
@@ -466,7 +476,7 @@ namespace LonghornBank.Controllers
                     StockAccountList.Add(CustomerStockAccount);
 
                     //Create a new transaction 
-                    BankingTransaction CheckingTrans = new BankingTransaction
+                    BankingTransaction StocksTrans = new BankingTransaction()
                     {
                         Amount = decTotal,
                         BankingTransactionType = BankingTranactionType.Withdrawl,
@@ -489,7 +499,7 @@ namespace LonghornBank.Controllers
                     // take out the fee 
                     db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance -= SelectedStock.Fee;
 
-                    db.BankingTransaction.Add(CheckingTrans);
+                    db.BankingTransaction.Add(StocksTrans);
                     db.SaveChanges();
                 }
 
@@ -555,6 +565,7 @@ namespace LonghornBank.Controllers
             {
                 StockAccountID = StockAccountID,
                 StockMarketID = StockSaleID,
+                TradeID = TradeID,
                 CustomerTrade = CustomerTrade
             };
 
@@ -571,7 +582,7 @@ namespace LonghornBank.Controllers
             StockMarket StockToSell = db.StockMarket.Find(SSTO.StockMarketID);
 
             // Get the trade 
-            Trade CustomerTrade = db.Trades.Find(SSTO.CustomerTrade.TradeID);
+            Trade CustomerTrade = db.Trades.Find(SSTO.TradeID);
 
             // Create a new sellstock object and send to the view 
             SellStocksTrade SST = new SellStocksTrade
@@ -582,7 +593,9 @@ namespace LonghornBank.Controllers
                 QuantitySold = SSTO.Quantity,
                 Fee = StockToSell.Fee,
                 Profit = ((StockToSell.StockPrice * SSTO.Quantity) - (CustomerTrade.PricePerShare * SSTO.Quantity)),
-                SharesRemaining = (CustomerTrade.Quantity - SSTO.Quantity)
+                SharesRemaining = (CustomerTrade.Quantity - SSTO.Quantity),
+                TradeID = SSTO.TradeID,
+                SaleDate = SSTO.SaleDate
             };
             return View("SellStocks", SST);
         }
@@ -590,7 +603,7 @@ namespace LonghornBank.Controllers
         // POST: StockTrades/SellStocks 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SellStocks(int StockSaleID, int StockAccountID, int TradeID)
+        public ActionResult SellStocks([Bind] SellStocksTrade Sale)
         {
             // Get the Customer 
             // Query the Database for the logged in user 
@@ -601,18 +614,116 @@ namespace LonghornBank.Controllers
             AppUser customer = CustomerQuery.FirstOrDefault();
 
             // Get the original trade 
-            Trade OriginalTrade = db.Trades.Find(TradeID);
+            Trade OriginalTrade = db.Trades.Find(Sale.TradeID);
 
             // Get the Stock that is being sold
-            StockMarket StockSale = db.StockMarket.Find(StockSaleID);
+            StockMarket StockSale = db.StockMarket.Find(Sale.StockMarketID);
 
             // Get the Stock Account 
-            StockAccount CustomerStockAccount = db.StockAccount.Find(StockAccountID);
+            StockAccount CustomerStockAccount = db.StockAccount.Find(Sale.StockAccountID);
 
-            
+            // create a new transaction list for the trade 
+            List<BankingTransaction> TradeTrans = new List<BankingTransaction>();
 
 
-            return View();
+            // String for the description
+            String Description = ($"Sale of {StockSale.CompanyName}, for {Sale.QuantitySold} shares, with initial price of {OriginalTrade.PricePerShare}, current price of {StockSale.StockPrice}, and a gain/loss of {Sale.Profit}");
+
+            // Sale Amount
+            Decimal SaleAmount = (Sale.QuantitySold * StockSale.StockPrice);
+
+            // Create a new fee transaction and add it to the list 
+            BankingTransaction FeeTrans = new BankingTransaction
+            {
+                Amount = StockSale.Fee,
+                BankingTransactionType = BankingTranactionType.Fee,
+                Description = ("Fee for sale of " + StockSale.CompanyName),
+                StockAccount = CustomerStockAccount,
+                TransactionDate = Sale.SaleDate 
+            };
+
+            // Add the transaction to the list 
+            TradeTrans.Add(FeeTrans);
+
+            // Make the trade happen
+            Trade SaleTrade = new Trade()
+            {
+                TradeType = TradeType.Sell,
+                Amount = (Sale.QuantitySold * StockSale.StockPrice),
+                PricePerShare = StockSale.StockPrice,
+                Ticker = StockSale.Ticker,
+                Quantity = Sale.QuantitySold,
+                TransactionDate = Sale.SaleDate,
+                Description = Description,
+                StockMarket = StockSale,
+                StockAccount = CustomerStockAccount,
+                BankingTransactions = TradeTrans,
+                
+            };
+
+            // Create a new transaction for the actual sale 
+            BankingTransaction SaleTrans = new BankingTransaction
+            {
+                Amount = SaleAmount,
+                BankingTransactionType = BankingTranactionType.Deposit,
+                Description = Description,
+                StockAccount = CustomerStockAccount,
+                Trade = SaleTrade,
+                TransactionDate = Sale.SaleDate
+            };
+
+            // Add the transactions and the trades the the db
+            db.BankingTransaction.Add(FeeTrans);
+            db.SaveChanges();
+
+            db.Trades.Add(SaleTrade);
+            db.SaveChanges();
+
+            db.BankingTransaction.Add(SaleTrans);
+            db.SaveChanges();
+
+            // Update the stock account 
+
+            // Take out the fee 
+            CustomerStockAccount.CashBalance -= Sale.Fee;
+
+            // Add/Subtract the profit
+            CustomerStockAccount.CashBalance += Sale.Profit;
+
+            // Update the Database
+            db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
+
+
+
+            // Remove the shares from the account
+
+            // Check to see if there is any stock left
+            // If there is no stock left then we need to remove the original buy trade
+            if (OriginalTrade.Quantity - Sale.QuantitySold == 0)
+            {
+
+                // Clear the associated foriegn keys
+                OriginalTrade.BankingTransactions.Clear();
+
+                // Remove the original trade 
+                db.Trades.Remove(OriginalTrade);
+            }
+
+            // If the original trade quantity is not zero
+            else
+            {
+                // update the quantity
+                OriginalTrade.Quantity -= Sale.QuantitySold;
+
+                // update the database
+                db.Entry(OriginalTrade).State = System.Data.Entity.EntityState.Modified;
+            }
+
+            // Save the changes
+            db.SaveChanges();
+
+            // Return users to the stock account details page
+            return RedirectToAction("Details","StockAccounts");
         }
     }
 }
