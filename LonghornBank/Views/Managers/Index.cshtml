@@ -1,0 +1,12 @@
+﻿@using LonghornBank.Models;
+@model IEnumerable<LonghornBank.Models.BankingTransaction>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1>Manager Portal</h1>
+@Html.ActionLink("Resolve Disputes", "Disputes")
+@Html.ActionLink("Approve Deposits", "DepositApproval")
+
+
