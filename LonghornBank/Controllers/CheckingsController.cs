@@ -15,13 +15,17 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Checkings
-        public ActionResult Index(int? id)
+        public ActionResult Index()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser customer = db.Users.Find(id);
+            // Query the Database for the logged in user 
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
             if (customer == null)
             {
                 return HttpNotFound();
@@ -66,33 +70,37 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Checkings/Create
-        public ActionResult Create(int? id)
+        public ActionResult Create()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser customer = db.Users.Find(id);
+
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
             if (customer == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CustomerID = id;
+            ViewBag.CustomerID = customer.Id;
             return View();
         }
 
         // POST: Checkings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CheckingID, Balance, Name, AccountNumber, Customer_CustomerID")] Checking checking, int? CustomerID)
+        public ActionResult Create([Bind(Include = "CheckingID, Balance, Name, AccountNumber")] Checking checking)
         {
-            
-            if (CustomerID == null)
-            {
-                return HttpNotFound();
-            }
 
-            AppUser customer = db.Users.Find(CustomerID);
+            var CustomerQuery = from c in db.Users
+                               where c.UserName == User.Identity.Name
+                               select c;
+
+            AppUser customer = CustomerQuery.FirstOrDefault(); 
+
             if (customer == null)
             {
                 return HttpNotFound();
@@ -113,6 +121,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Checkings/Edit/5
+        // id = checkingID
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -149,9 +158,9 @@ namespace LonghornBank.Controllers
 
                 db.Entry(checking).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id = IntCustomerID});
+                return RedirectToAction("Portal", "Home");
             }
-            return RedirectToAction("Index", "Checkings", new { id = checking.CheckingID });
+            return RedirectToAction("Index", "Checkings");
         }
 
         // GET: Checkings/Delete/5
@@ -187,7 +196,7 @@ namespace LonghornBank.Controllers
             Checking checking = db.CheckingAccount.Find(id);
             db.CheckingAccount.Remove(checking);
             db.SaveChanges();
-            return RedirectToAction("Portal", "Home", new { id = IntCustomerID});
+            return RedirectToAction("Portal", "Home");
         }
 
         protected override void Dispose(bool disposing)

@@ -9,7 +9,6 @@ namespace LonghornBank.Models
 {
     public class IRA
     {
-        
         [Key]
         public Int32 IRAID { get; set; }
 
@@ -43,6 +42,9 @@ namespace LonghornBank.Models
         // IRA can have 1 user
         public virtual AppUser Customer { get; set; }
 
-    
+        // IRA can have many transactions 
+        public virtual List<BankingTransaction> BankingTransactions { get; set; }
+
+
     }
 }

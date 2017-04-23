@@ -15,13 +15,14 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Savings
-        public ActionResult Index(int? id)
+        public ActionResult Index()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser customer = db.Users.Find(id);
+            // Query the Customer
+            var CustomerQuery = from c in db.Users
+                                    where c.UserName == User.Identity.Name
+                                    select c;
+
+            AppUser customer = CustomerQuery.FirstOrDefault();
             if (customer == null)
             {
                 return HttpNotFound();
@@ -65,18 +66,20 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Savings/Create
-        public ActionResult Create(int? id)
+        public ActionResult Create()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser customer = db.Users.Find(id);
+            // Query the Customer
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
             if (customer == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CustomerID = id;
+            ViewBag.CustomerID = customer.Id;
             return View();
         }
 
@@ -85,14 +88,15 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SavingID, Balance, Name, AccountNumber, Customer_CustomerID")] Saving saving, int? CustomerID)
+        public ActionResult Create([Bind(Include = "SavingID, Balance, Name, AccountNumber")] Saving saving)
         {
-            if (CustomerID == null)
-            {
-                return HttpNotFound();
-            }
+            // Query the Customer
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
 
-            AppUser customer = db.Users.Find(CustomerID);
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
             if (customer == null)
             {
                 return HttpNotFound();
@@ -104,7 +108,7 @@ namespace LonghornBank.Controllers
 
                 db.SavingsAccount.Add(saving);
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id = 1 });
+                return RedirectToAction("Portal", "Home", new { id = customer.Id });
             }
 
             return View(saving);

@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Create";
-    Int32 CustomerID = ViewBag.CustomerID;
+    String CustomerID = ViewBag.CustomerID;
 }
 
 <h2>Create</h2>
@@ -16,7 +16,7 @@
         <h4>IRA</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(modelItem => modelItem.Customer.CustomerID)
+        @Html.HiddenFor(modelItem => modelItem.Customer.Id)
 
         <div class="form-group">
             @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -48,12 +48,6 @@
                 @Html.EditorFor(model => model.RunningTotal, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.RunningTotal, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-check">
-            <label class="form=check-label">
-                @Html.RadioButton("CustomerID", CustomerID, true, new { @class = "form-check-input" }) Select Your Profile
-            </label>
         </div>
 
         <div class="form-group">

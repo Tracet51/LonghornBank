@@ -20,15 +20,26 @@ namespace LonghornBank.Controllers
             return View();
         }
 
+        // GET: Home/Create 
+        // Page where the newly created user chooses what account to make
+        public ActionResult Create(string id)
+        {
+            AppUser customer = db.Users.Find(id);
+            return View(customer);
+        }
+
 
         // GET: Home/Portal
-        public ActionResult Portal(String id)
+        public ActionResult Portal()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser customer = db.Users.Find(id);
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
             if (customer == null)
             {
                 return HttpNotFound();
@@ -36,7 +47,7 @@ namespace LonghornBank.Controllers
 
             // Find the Checking Accounts Associated
             var CheckingQuery = from ca in db.CheckingAccount
-                                where ca.Customer.Id == id
+                                where ca.Customer.Id == customer.Id
                                 select ca;
 
             // Convert to a list and execute
@@ -47,7 +58,7 @@ namespace LonghornBank.Controllers
 
             // Find the Savings Accounts Associated 
             var SavingsQuery = from sa in db.SavingsAccount
-                               where sa.Customer.Id == id
+                               where sa.Customer.Id == customer.Id
                                select sa;
 
             // Convert to a list and execute 
@@ -56,8 +67,8 @@ namespace LonghornBank.Controllers
 
             // Find the IRA Accounts Associated
             var IRAQuery = from IR in db.IRAAccount
-                               where IR.Customer.Id == id
-                               select IR;
+                               where IR.Customer.Id == customer.Id
+                           select IR;
 
             List<IRA> CustomerIRA = IRAQuery.ToList();
             ViewBag.IRAAccounts = CustomerIRA;
