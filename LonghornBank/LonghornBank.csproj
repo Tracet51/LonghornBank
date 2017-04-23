@@ -198,33 +198,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704190022055_Test.cs" />
-    <Compile Include="Migrations\201704190022055_Test.Designer.cs">
-      <DependentUpon>201704190022055_Test.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704190101081_Test2.cs" />
-    <Compile Include="Migrations\201704190101081_Test2.Designer.cs">
-      <DependentUpon>201704190101081_Test2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704202125445_Trades.cs" />
-    <Compile Include="Migrations\201704202125445_Trades.Designer.cs">
-      <DependentUpon>201704202125445_Trades.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704210210274_Stocks.cs" />
-    <Compile Include="Migrations\201704210210274_Stocks.Designer.cs">
-      <DependentUpon>201704210210274_Stocks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704210238526_ChangeStocks.cs" />
-    <Compile Include="Migrations\201704210238526_ChangeStocks.Designer.cs">
-      <DependentUpon>201704210238526_ChangeStocks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704212351413_Gains.cs" />
-    <Compile Include="Migrations\201704212351413_Gains.Designer.cs">
-      <DependentUpon>201704212351413_Gains.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704220043307_TradeDetails.cs" />
-    <Compile Include="Migrations\201704220043307_TradeDetails.Designer.cs">
-      <DependentUpon>201704220043307_TradeDetails.cs</DependentUpon>
+    <Compile Include="Migrations\201704231837408_PaulRound2.cs" />
+    <Compile Include="Migrations\201704231837408_PaulRound2.Designer.cs">
+      <DependentUpon>201704231837408_PaulRound2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201704231810478_ManagerStuff.cs" />
     <Compile Include="Migrations\201704231810478_ManagerStuff.Designer.cs">
@@ -239,9 +215,6 @@
       <DependentUpon>201704231903051_Account.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Migrations\SeedDataCustomers.cs" />
-    <Compile Include="Migrations\SeedProfiles.cs" />
-    <Compile Include="Migrations\SeedStocks.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
@@ -332,26 +305,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704190022055_Test.resx">
-      <DependentUpon>201704190022055_Test.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704190101081_Test2.resx">
-      <DependentUpon>201704190101081_Test2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704202125445_Trades.resx">
-      <DependentUpon>201704202125445_Trades.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704210210274_Stocks.resx">
-      <DependentUpon>201704210210274_Stocks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704210238526_ChangeStocks.resx">
-      <DependentUpon>201704210238526_ChangeStocks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704212351413_Gains.resx">
-      <DependentUpon>201704212351413_Gains.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704220043307_TradeDetails.resx">
-      <DependentUpon>201704220043307_TradeDetails.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704231837408_PaulRound2.resx">
+      <DependentUpon>201704231837408_PaulRound2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704231810478_ManagerStuff.resx">
       <DependentUpon>201704231810478_ManagerStuff.cs</DependentUpon>

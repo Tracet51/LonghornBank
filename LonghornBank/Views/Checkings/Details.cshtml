@@ -56,6 +56,8 @@
         </th>
     </tr>
 
+
+
     @foreach (var item in CheckingTransactions)
     {
         <tr>
@@ -71,6 +73,8 @@
         </tr>
     }
 </table>
+
+
         <p>
             @Html.ActionLink("Edit", "Edit", new { id = Model.CheckingID }) |
             @Html.ActionLink("Back Checking Home", "Index", "Checkings", new { id = Model.CheckingID }, null)
