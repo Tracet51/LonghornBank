@@ -1,0 +1,87 @@
+﻿@using LonghornBank.Models;
+@model IEnumerable<LonghornBank.Models.BankingTransaction>
+
+
+<h2>Disputes</h2>
+<h2>Open Banking Disputes</h2>
+<body>
+    If you wish to revise a transaction, enter the revised amount into the appropriate text box.
+</body>
+<br />
+<body>
+    If you wish to close a dispute and leave the amount unchanged, enter the original amount into the 'revise to' textbox.
+</body>
+<br/>
+<a>@ViewBag.ConfirmationMessage</a>
+<br/>
+<table class="table">
+    <tr>
+        <th>
+            Transaction Date
+        </th>
+        <th>
+            Transaction Type
+        </th>
+        <th>
+            Original Amount
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Dispute Status
+        </th>
+        <th>
+            Customer's Suggested Correction
+        </th>
+        <th>
+            Launch Dispute Management
+        </th>
+        <th>
+            Corrected Amount
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+       
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankingTransactionType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionDispute)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerOpinion)
+            </td>
+            <td>
+                @Html.ActionLink("Launch", "DisputeManagementDetail", item.BankingTransactionID)
+            </td>
+                @using (Html.BeginForm("Disputes", "Managers", new { BankingTransactionID = item.BankingTransactionID }, FormMethod.Post, null))
+                {
+            <td>
+                @Html.DisplayFor(modelItem => item.CorrectedAmount)
+                revise to
+                @Html.TextBox("ManagerApprovedAmount", item.CorrectedAmount, null, new { @class = "form-control" })
+                @Html.Hidden(Convert.ToString(item.BankingTransactionID))
+            </td>
+            <td>
+                <input type="submit" name="Disputes" value="Revise" class="btn btn-default" />
+            </td>
+                }
+        </tr>
+            }
+        
+</table>
+@Html.ActionLink("Manager Home", "Index", "Managers")
+
+

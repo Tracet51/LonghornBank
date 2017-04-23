@@ -195,7 +195,16 @@
     <Compile Include="Migrations\201704070218430_IRAAccount.Designer.cs">
       <DependentUpon>201704070218430_IRAAccount.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704110214523_Whereareyoumanager.cs" />
+    <Compile Include="Migrations\201704110214523_Whereareyoumanager.Designer.cs">
+      <DependentUpon>201704110214523_Whereareyoumanager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704112342351_CarsonMigration.cs" />
+    <Compile Include="Migrations\201704112342351_CarsonMigration.Designer.cs">
+      <DependentUpon>201704112342351_CarsonMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\DepositApprovalViewModel.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
@@ -254,6 +263,9 @@
     <Content Include="Views\Managers\Details.cshtml" />
     <Content Include="Views\Managers\Edit.cshtml" />
     <Content Include="Views\Managers\Index.cshtml" />
+    <Content Include="Views\Managers\Disputes.cshtml" />
+    <Content Include="Views\Managers\DepositApproval.cshtml" />
+    <Content Include="Views\Managers\DisputeManagementDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -270,6 +282,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704070218430_IRAAccount.resx">
       <DependentUpon>201704070218430_IRAAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704110214523_Whereareyoumanager.resx">
+      <DependentUpon>201704110214523_Whereareyoumanager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704112342351_CarsonMigration.resx">
+      <DependentUpon>201704112342351_CarsonMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

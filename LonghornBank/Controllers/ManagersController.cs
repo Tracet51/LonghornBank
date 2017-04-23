@@ -17,9 +17,100 @@ namespace LonghornBank.Controllers
         // GET: Managers
         public ActionResult Index()
         {
-            return View(db.Managers.ToList());
+            return View("Index");
+        }
+        // Post Index To revise disputed amounts
+        [HttpPost]
+        public ActionResult Disputes(string BankingTransactionID, string ManagerApprovedAmount)
+        {
+            Int32 IntBankingTransactionID = Convert.ToInt32(BankingTransactionID);
+            decimal ManagerApprovedDecimal = Convert.ToDecimal(ManagerApprovedAmount);
+            BankingTransaction editedtransobject = db.BankingTransaction.Find(IntBankingTransactionID);
+            if (editedtransobject.CorrectedAmount == ManagerApprovedDecimal)
+            {
+                ViewBag.ConfirmationMessage = "You have accepted a customer's dispute for transaction ID #" + BankingTransactionID + " and the amount is now $" + ManagerApprovedDecimal;
+                editedtransobject.CorrectedAmount = ManagerApprovedDecimal;
+                editedtransobject.TransactionDispute = DisputeStatus.Accepted;
+                db.SaveChanges();
+            }
+            if (editedtransobject.CorrectedAmount != ManagerApprovedDecimal)
+            {
+                ViewBag.ConfirmationMessage = "You have adjusted transaction ID #" + BankingTransactionID + " and the amount is now $" + ManagerApprovedDecimal;
+                editedtransobject.CorrectedAmount = ManagerApprovedDecimal;
+                editedtransobject.TransactionDispute = DisputeStatus.Adjusted;
+                db.SaveChanges();
+            }
+            if (editedtransobject.Amount== ManagerApprovedDecimal)
+            {
+                ViewBag.ConfirmationMessage = "You have rejected the dispute for ID #" + editedtransobject.BankingTransactionID + " and the amount is unchanged";
+                editedtransobject.CorrectedAmount = ManagerApprovedDecimal;
+                editedtransobject.TransactionDispute = DisputeStatus.Adjusted;
+                db.SaveChanges();
+            }
+            List<BankingTransaction> SelectedDisputes = new List<BankingTransaction>();
+            SelectedDisputes = db.BankingTransaction.Where(b => b.TransactionDispute == DisputeStatus.Submitted).ToList();
+            SelectedDisputes.OrderBy(b => b.TransactionDate);
+            db.SaveChanges();
+            return View(SelectedDisputes);
+        }
+        //Get 
+        public ActionResult Disputes()
+        {
+            //var query = from b in db.BankingTransaction
+            //          select b;
+            //query = query.Where(b => b.TransactionDispute == DisputeStatus.Submitted);
+            //List<BankingTransaction> ListOfDisputes = query.ToList();
+            //return View("Disputes", ListOfDisputes);
+            List<BankingTransaction> SelectedDisputes = new List<BankingTransaction>();
+            SelectedDisputes = db.BankingTransaction.Where(b => b.TransactionDispute == DisputeStatus.Submitted).ToList();
+            SelectedDisputes.OrderBy(b => b.TransactionDate);
+            db.SaveChanges();
+            return View(SelectedDisputes);
         }
 
+        [HttpPost]
+        public ActionResult DisputeManagementDetail (string BankingTransactionID, string ManagerApprovedAmount)
+        {
+            Int32 IntBankingTransactionID = Convert.ToInt32(BankingTransactionID);
+            BankingTransaction editedtransobject = db.BankingTransaction.Find(IntBankingTransactionID);
+            decimal ManagerApprovedDecimal = Convert.ToDecimal(ManagerApprovedAmount);
+            ViewBag.ID = BankingTransactionID; if (editedtransobject.CorrectedAmount == ManagerApprovedDecimal)
+            {
+                ViewBag.ConfirmationMessage = "You have accepted a customer's dispute for transaction ID #" + BankingTransactionID + " and the amount is now $" + ManagerApprovedDecimal;
+                editedtransobject.CorrectedAmount = ManagerApprovedDecimal;
+                editedtransobject.TransactionDispute = DisputeStatus.Accepted;
+                db.SaveChanges();
+            }
+            if (editedtransobject.CorrectedAmount != ManagerApprovedDecimal)
+            {
+                ViewBag.ConfirmationMessage = "You have adjusted transaction ID #" + BankingTransactionID + " and the amount is now $" + ManagerApprovedDecimal;
+                editedtransobject.CorrectedAmount = ManagerApprovedDecimal;
+                editedtransobject.TransactionDispute = DisputeStatus.Adjusted;
+                db.SaveChanges();
+            }
+            if (editedtransobject.Amount == ManagerApprovedDecimal)
+            {
+                ViewBag.ConfirmationMessage = "You have rejected the dispute for ID #" + editedtransobject.BankingTransactionID + " and the amount is unchanged";
+                editedtransobject.CorrectedAmount = ManagerApprovedDecimal;
+                editedtransobject.TransactionDispute = DisputeStatus.Adjusted;
+                db.SaveChanges();
+            }
+            
+            db.SaveChanges();
+            return View(editedtransobject);
+        }
+
+        //GET
+        public ActionResult DisputeManagementDetail(string BankingTransactionID)
+        {
+            Int32 IntBankingTransactionID = Convert.ToInt32(BankingTransactionID);
+            BankingTransaction originaltransobject = db.BankingTransaction.Find(IntBankingTransactionID);
+            return View(originaltransobject);
+        }
+        public ActionResult DepositApproval()
+        {
+            return View();
+        }
         // GET: Managers/Details/5
         public ActionResult Details(int? id)
         {
