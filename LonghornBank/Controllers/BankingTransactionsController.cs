@@ -699,7 +699,49 @@ namespace LonghornBank.Controllers
 
         }
 
+        //Detailed Search function
+        public ActionResult SearchResults(String SearchDescription, BankingTranactionType SelectedType, Decimal SearchAmount, String SearchTransactionNumber, DateTime SearchDate)
+        {
+            var query = from c in db.BankingTransaction
+                        select c;
+
+            if (SearchDescription != null)
+            {
+                query = query.Where(c => c.Description.Contains(SearchDescription));
+            }
+
+            if (SelectedType != BankingTranactionType.None)
+            {
+                string BankingType = SelectedType.ToString();
+                query = query.Where(c => c.BankingTransactionType == SelectedType);
+            }
+
+           /*if (SearchAmount != null)
+            {
+                query = query.Where
+            }*/
+
+            if (SearchTransactionNumber != null)
+            {
+                query = query.Where(c => c.Description.Contains(SearchTransactionNumber));
+            }
+
+            ViewBag.DisplayedTransactionCount = query.ToList().Count;
+            ViewBag.TotalTransactionCount = db.BankingTransaction.ToList().Count;
+            List<BankingTransaction> SelectedTransactions = query.ToList();
+            return View("Index", SelectedTransactions);
+        }
         
+
+        public SelectList GetAllBankingTypesList()
+        {
+            List<BankingTranactionType> BBT = Enum.GetValues(typeof(BankingTranactionType)).Cast<BankingTranactionType>().ToList();
+            SelectList BBTSelectList = new SelectList(BBT, new BankingTranactionType());
+            ViewBag.AllBankingTypes = BBTSelectList;
+            return BBTSelectList;
+        }
+
+         
 
         protected override void Dispose(bool disposing)
         {
