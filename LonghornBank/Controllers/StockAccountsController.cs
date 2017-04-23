@@ -132,7 +132,7 @@ namespace LonghornBank.Controllers
 
                 db.StockAccount.Add(stockAccount);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Portal", "Home");
             }
 
             return View(stockAccount);

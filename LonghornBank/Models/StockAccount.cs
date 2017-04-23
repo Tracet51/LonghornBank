@@ -36,8 +36,9 @@ namespace LonghornBank.Models
                 // Create a list to hold all of the account number 
                 List<Decimal> AccountNumList = new List<Decimal>();
 
-                //Find the account with the largest account number
+                // Find the account with the largest account number
                 var SPQ = from sp in db.StockAccount
+                          where sp.AccountNumber != null
                           select sp;
 
                 SPQ = SPQ.OrderByDescending(s => s.StockAccountID);
