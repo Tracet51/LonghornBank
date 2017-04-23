@@ -1,0 +1,194 @@
+﻿@using LonghornBank.Models;
+@model LonghornBank.Models.StockAccount
+
+@{
+    ViewBag.Title = "Details";
+    // Add to view bag
+    List<Trade> Trades = ViewBag.Trades;
+    List<BankingTransaction> Trans = ViewBag.Transactions;
+    AppUser Customer = ViewBag.Customer;
+}
+
+
+
+<h2>Stock Account Details and Transactions</h2>
+
+<div>
+    <h4>Stock Account Details</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CashBalance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CashBalance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StockBalance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StockBalance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TradingFee)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TradingFee)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Gains)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gains)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Bounses)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Bounses)
+        </dd>
+
+    </dl>
+</div>
+    <h4>Trades</h4>
+    <hr />
+    <table class="table">
+    <tr>
+        <th>
+            Trade ID
+        </th>
+        <th>
+            Trade Type
+        </th>
+        <th>
+            Trade Date
+        </th>
+        <th>
+           Ticker
+        </th>
+        <th>
+            Company Name
+        </th>
+        <th>
+            Amount
+        </th>
+        <th>
+            Price Per Share
+        </th>
+        <th>
+            Current Price
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            Fees
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (Trade t in Trades)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => t.TradeID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.TradeType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.TransactionDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.Ticker)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.StockMarket.CompanyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.PricePerShare)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.StockMarket.StockPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.StockMarket.Fee)
+            </td>
+            <td>
+                @Html.ActionLink("Trade Details", "TradeDetails", "StockTrades", new { id = t.TradeID }, null)
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+<h4>Transactions</h4>
+<hr />
+<table class="table">
+    <tr>
+        <th>
+            Transaction ID
+        </th>
+        <th>
+            Transaction Type
+        </th>
+        <th>
+            Transaction Date
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Amount
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (BankingTransaction t in Trans)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => t.BankingTransactionID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.BankingTransactionType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.TransactionDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.Amount)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = t.BankingTransactionID }) |
+                @Html.ActionLink("Details", "Details", new { id = t.BankingTransactionID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = t.BankingTransactionID })
+            </td>
+        </tr>
+    }
+
+</table>
+    
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.StockAccountID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,41 @@
+﻿@using LonghornBank.Models;
+@model IEnumerable<LonghornBank.Models.DepositApprovalViewModel>
+
+
+<h2>DepositApproval</h2>
+<a>This is a list of deposits awaiting your approval. Check the box to approve</a>
+Html.BeginForm("DepositApproval","Managers", FormMethod.Get))
+{
+<table class="table">
+    <tr>
+        <th>
+            Deposit Date
+        </th>
+        <th>
+            Customer First Name
+        </th>
+        <th>
+            Customer Last Name
+        </th>
+        <th>
+            Deposit Amount
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Approve
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+           
+        </tr>
+        <tr>
+            
+        </tr>
+    }
+</table>
+}
+@Html.ActionLink("Manager Home", "Index", "Managers")
