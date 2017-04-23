@@ -1,0 +1,127 @@
+﻿@model LonghornBank.Models.ChooseAcocunt
+@{
+    ViewBag.Title = "ChooseAccount";
+}
+
+<h2>Please Choose an Account</h2>
+
+@if (Model.CheckingAccounts.Count() >= 1)
+{
+    <h3>Checking Accounts</h3>
+
+    <table class="table">
+        <tr>
+            <th>
+                Account Name
+            </th>
+            <th>
+                Account Number
+            </th>
+            <th>
+                Balance
+            </th>
+            <th>
+                Select
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.CheckingAccounts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Balance)
+                </td>
+                <td>
+                @Html.ActionLink("Choose Account", "PurchaseStocks", "StockTrades", new {StockID = Model.StockSelected.StockMarketID, AccountID = item.CheckingID, Choice = 1 }, null)
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@if (Model.SavingsAccount.Count() >= 1)
+{
+    <h3>Savings Accounts</h3>
+    <table class="table">
+        <tr>
+            <th>
+                Account Name
+            </th>
+            <th>
+                Account Number
+            </th>
+            <th>
+                Balance
+            </th>
+            <th>
+                Select
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.SavingsAccount)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Balance)
+                </td>
+                <td>
+                    @Html.ActionLink("Choose Account", "PurchaseStocks", "StockTrades", new { StockID = Model.StockSelected.StockMarketID, AccountID = item.SavingID, Choice = 2 }, null)
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@if (Model.AccountStock.Count() >= 1)
+{
+    <h3>Stock Account</h3>
+    <table class="table">
+        <tr>
+            <th>
+                Account Name
+            </th>
+            <th>
+                Account Number
+            </th>
+            <th>
+                Balance
+            </th>
+            <th>
+                Select
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.AccountStock)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CashBalance)
+                </td>
+                <td>
+                    @Html.ActionLink("Choose Account", "PurchaseStocks", "StockTrades", new { StockID = Model.StockSelected.StockMarketID, AccountID = item.StockAccountID, Choice = 3 }, null)
+                </td>
+            </tr>
+        }
+    </table>
+
+}

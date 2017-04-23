@@ -53,6 +53,9 @@ namespace LonghornBank.Models
         [Required(ErrorMessage = "An Active Status is Required")]
         public Boolean ActiveStatus { get; set; }
 
+        [Display(Name = "SSN")]
+        public String SSN { get; set; }
+
         // Navigational Properties 
 
         public virtual List<Checking> CheckingAccounts { get; set; }
@@ -60,6 +63,9 @@ namespace LonghornBank.Models
         public virtual List<Saving> SavingAccounts { get; set; }
 
         public virtual List<IRA> IRAAccounts { get; set; }
+
+        // A person can have 1 stock account 
+        public virtual List<StockAccount> StockAccount { get; set; }
 
 
         //This method allows you to create a new user
@@ -89,6 +95,14 @@ namespace LonghornBank.Models
 
         // Create IRA Access
         public DbSet<IRA> IRAAccount { get; set; }
+
+        // Create Stock Access
+        public DbSet<StockAccount> StockAccount { get; set; }
+
+        // Create Trade Access 
+        public DbSet<Trade> Trades { get; set; }
+
+        public DbSet<StockMarket> StockMarket { get; set; }
 
         //TODO: Make sure that your connection string name is correct here.
         public AppDbContext()

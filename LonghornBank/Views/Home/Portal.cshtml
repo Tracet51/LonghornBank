@@ -6,6 +6,7 @@
     List<Checking> CheckingAccounts = ViewBag.CheckingAccounts;
     List<Saving> SavingsAccounts = ViewBag.SavingsAccounts;
     List<IRA> IRAAccounts = ViewBag.IRAAccounts;
+    Decimal StockValue = ViewBag.StockAccountValue;
 }
 
 <h2>Portal</h2>
@@ -90,8 +91,8 @@
 
 </table>
     <h4>IRA Account(s)</h4>
-    <p>@Html.ActionLink("IRA Accounts Home", "Index", "IRA")</p>
-    <table class="table">
+ <p>@Html.ActionLink("IRA Accounts Home", "Index", "IRA")</p>
+<table class="table">
     <tr>
         <th>
             IRA Account Name
@@ -124,3 +125,36 @@
 
 </table>
         <h4>Stock Portfolio(s)</h4>
+        <p>@Html.ActionLink("Stock Accounts Home", "Index", "StockAccounts")</p>
+        <table class="table">
+            <tr>
+                <th>
+                    Stock Account Name
+                </th>
+                <th>
+                    Stock Account Number
+                </th>
+                <th>
+                    Stock Account Value
+                </th>
+                <th>
+                    Stock Account Gains
+                </th>
+            </tr>
+
+            @foreach (var item in Model.StockAccount)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
+                    <td>@Html.Raw(StockValue)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Gains)</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", "StockAccounts") |
+                        @Html.ActionLink("Details", "Details", "StockAccounts") |
+                        @Html.ActionLink("Delete", "Delete", "StockAccounts")
+                    </td>
+                </tr>
+            }
+
+        </table>
