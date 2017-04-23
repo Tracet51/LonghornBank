@@ -226,6 +226,18 @@
     <Compile Include="Migrations\201704220043307_TradeDetails.Designer.cs">
       <DependentUpon>201704220043307_TradeDetails.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704231810478_ManagerStuff.cs" />
+    <Compile Include="Migrations\201704231810478_ManagerStuff.Designer.cs">
+      <DependentUpon>201704231810478_ManagerStuff.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704231829164_ChangeAccountModel.cs" />
+    <Compile Include="Migrations\201704231829164_ChangeAccountModel.Designer.cs">
+      <DependentUpon>201704231829164_ChangeAccountModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704231903051_Account.cs" />
+    <Compile Include="Migrations\201704231903051_Account.Designer.cs">
+      <DependentUpon>201704231903051_Account.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
     <Compile Include="Migrations\SeedProfiles.cs" />
@@ -340,6 +352,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704220043307_TradeDetails.resx">
       <DependentUpon>201704220043307_TradeDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704231810478_ManagerStuff.resx">
+      <DependentUpon>201704231810478_ManagerStuff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704231829164_ChangeAccountModel.resx">
+      <DependentUpon>201704231829164_ChangeAccountModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704231903051_Account.resx">
+      <DependentUpon>201704231903051_Account.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -114,7 +114,7 @@ namespace LonghornBank.Controllers
 
                 db.CheckingAccount.Add(checking);
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id = customer.Id});
+                return RedirectToAction("Portal", "Home");
             }
 
             return View(checking);

@@ -28,15 +28,21 @@ namespace LonghornBank.Models
         {
             get
             {
-                // Create a list to hold all of the account number 
+                return strAccountNumber;
+            }
+
+            set
+            {
+                /* Create a list to hold all of the account number 
                 List<Decimal> AccountNumList = new List<Decimal>();
 
                 // Find the account with the largest account number
                 var SPQ = from sp in db.StockAccount
-                          orderby sp.StockAccountID
                           select sp;
 
-                StockAccount SP = SPQ.LastOrDefault();
+                SPQ = SPQ.OrderByDescending(s => s.StockAccountID);
+
+                StockAccount SP = SPQ.First();
 
                 if (SP != null)
                 {
@@ -45,10 +51,11 @@ namespace LonghornBank.Models
                 }
 
                 var CAQ = from ca in db.CheckingAccount
-                          orderby ca.CheckingID
                           select ca;
 
-                Checking CA = CAQ.LastOrDefault();
+                CAQ = CAQ.OrderByDescending(c => c.CheckingID);
+
+                Checking CA = CAQ.FirstOrDefault();
 
                 if (CA != null)
                 {
@@ -57,10 +64,11 @@ namespace LonghornBank.Models
                 }
 
                 var SAQ = from sa in db.SavingsAccount
-                          orderby sa.SavingID
                           select sa;
 
-                Saving SA = SAQ.LastOrDefault();
+                SAQ = SAQ.OrderByDescending(s => s.SavingID);
+
+                Saving SA = SAQ.FirstOrDefault();
 
                 if (SA != null)
                 {
@@ -69,10 +77,11 @@ namespace LonghornBank.Models
                 }
 
                 var IQ = from ira in db.IRAAccount
-                         orderby ira.IRAID
                          select ira;
 
-                IRA I = IQ.LastOrDefault();
+                IQ = IQ.OrderByDescending(s => s.IRAID);
+
+                IRA I = IQ.FirstOrDefault();
 
                 if (I != null)
                 {
@@ -90,12 +99,11 @@ namespace LonghornBank.Models
                     {
                         MaxAccNum = AccNum;
                     }
-                }
+                } 
 
-                MaxAccNum += 1;
-                strAccountNumber = Convert.ToString(MaxAccNum);
-                return strAccountNumber;
-
+                MaxAccNum += 1; */
+                strAccountNumber = value; // MaxAccNum.ToString();
+                
             }
         }
 

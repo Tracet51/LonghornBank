@@ -76,7 +76,7 @@ namespace LonghornBank.Controllers
             // Get the total value of the stock porfolio 
             // Get the stock account
             var StockQuery = from sa in db.StockAccount
-                             where sa.Customer == customer
+                             where sa.Customer.Id == customer.Id
                              select sa;
 
             StockAccount CustomerSA = StockQuery.FirstOrDefault();
