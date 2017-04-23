@@ -31,24 +31,24 @@ namespace LonghornBank.Models
                 return strAccountNumber;
             }
 
-            set
+            private set
             {
                 // Create a list to hold all of the account number 
                 List<Decimal> AccountNumList = new List<Decimal>();
 
-                /* Find the account with the largest account number
+                //Find the account with the largest account number
                 var SPQ = from sp in db.StockAccount
                           select sp;
 
                 SPQ = SPQ.OrderByDescending(s => s.StockAccountID);
 
-                StockAccount SP = SPQ.First();
+                StockAccount SP = SPQ.FirstOrDefault();
 
                 if (SP != null)
                 {
                     Decimal SPAN = Convert.ToDecimal(SP.AccountNumber);
                     AccountNumList.Add(SPAN);
-                } */
+                } 
                 
 
                 var CAQ = from ca in db.CheckingAccount
