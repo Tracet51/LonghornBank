@@ -229,6 +229,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
     <Compile Include="Migrations\SeedProfiles.cs" />
+    <Compile Include="Migrations\SeedStocks.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
