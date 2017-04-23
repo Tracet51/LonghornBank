@@ -187,21 +187,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704070201360_InitialSetup.cs" />
-    <Compile Include="Migrations\201704070201360_InitialSetup.Designer.cs">
-      <DependentUpon>201704070201360_InitialSetup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704070218430_IRAAccount.cs" />
-    <Compile Include="Migrations\201704070218430_IRAAccount.Designer.cs">
-      <DependentUpon>201704070218430_IRAAccount.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704110214523_Whereareyoumanager.cs" />
-    <Compile Include="Migrations\201704110214523_Whereareyoumanager.Designer.cs">
-      <DependentUpon>201704110214523_Whereareyoumanager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704112342351_CarsonMigration.cs" />
-    <Compile Include="Migrations\201704112342351_CarsonMigration.Designer.cs">
-      <DependentUpon>201704112342351_CarsonMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201704231810046_InitialSetUp.cs" />
+    <Compile Include="Migrations\201704231810046_InitialSetUp.Designer.cs">
+      <DependentUpon>201704231810046_InitialSetUp.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DepositApprovalViewModel.cs" />
@@ -277,17 +265,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704070201360_InitialSetup.resx">
-      <DependentUpon>201704070201360_InitialSetup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704070218430_IRAAccount.resx">
-      <DependentUpon>201704070218430_IRAAccount.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704110214523_Whereareyoumanager.resx">
-      <DependentUpon>201704110214523_Whereareyoumanager.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704112342351_CarsonMigration.resx">
-      <DependentUpon>201704112342351_CarsonMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704231810046_InitialSetUp.resx">
+      <DependentUpon>201704231810046_InitialSetUp.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
