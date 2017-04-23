@@ -21,8 +21,83 @@ namespace LonghornBank.Models
         [Required(ErrorMessage = "An Account Name is Required")]
         public String Name { get; set; }
 
+        private String strAccountNumber;
+
         [Display(Name = "Account Number")]
-        public String AccountNumber { get; set; }
+        public String AccountNumber
+        {
+            get
+            {
+                // Create a list to hold all of the account number 
+                List<Decimal> AccountNumList = new List<Decimal>();
+
+                // Find the account with the largest account number
+                var SPQ = from sp in db.StockAccount
+                          orderby sp.StockAccountID
+                          select sp;
+
+                StockAccount SP = SPQ.LastOrDefault();
+
+                if (SP != null)
+                {
+                    Decimal SPAN = Convert.ToDecimal(SP.AccountNumber);
+                    AccountNumList.Add(SPAN);
+                }
+
+                var CAQ = from ca in db.CheckingAccount
+                          orderby ca.CheckingID
+                          select ca;
+
+                Checking CA = CAQ.LastOrDefault();
+
+                if (CA != null)
+                {
+                    Decimal CAN = Convert.ToDecimal(CA.AccountNumber);
+                    AccountNumList.Add(CAN);
+                }
+
+                var SAQ = from sa in db.SavingsAccount
+                          orderby sa.SavingID
+                          select sa;
+
+                Saving SA = SAQ.LastOrDefault();
+
+                if (SA != null)
+                {
+                    Decimal SAN = Convert.ToDecimal(SA.AccountNumber);
+                    AccountNumList.Add(SAN);
+                }
+
+                var IQ = from ira in db.IRAAccount
+                         orderby ira.IRAID
+                         select ira;
+
+                IRA I = IQ.LastOrDefault();
+
+                if (I != null)
+                {
+                    Decimal IN = Convert.ToDecimal(I.AccountNumber);
+                    AccountNumList.Add(IN);
+                }
+
+                // Variable to hold the max
+                Decimal MaxAccNum = 0;
+
+                // Loop through each Account Number and find the biggest one
+                foreach (Decimal AccNum in AccountNumList)
+                {
+                    if (AccNum > MaxAccNum)
+                    {
+                        MaxAccNum = AccNum;
+                    }
+                }
+
+                MaxAccNum += 1;
+                strAccountNumber = Convert.ToString(MaxAccNum);
+                return strAccountNumber;
+
+            }
+        }
 
         private Decimal _decStockBalance;
 
@@ -37,7 +112,7 @@ namespace LonghornBank.Models
                 {
                     if (this.Trades.Count() != 0)
                     {
-                        foreach (var t in this.Trades)
+                        foreach (var t in this.Trades.Where(i => i.TradeType == TradeType.Buy))
                         {
                             _decStockBalance += (t.Quantity * t.PricePerShare);
 
@@ -92,9 +167,8 @@ namespace LonghornBank.Models
             }
         }
 
-        [Required(ErrorMessage = "A Bonus Portfolio Balance is Required")]
         [Display(Name = "Balanced Portfolio Bonus Balance")]
-        public Decimal Bounses { get; set; }
+        public Boolean Bounses { get; set; }
 
         // A stock account can belong to 1 person 
         public virtual AppUser Customer { get; set; }

@@ -6,6 +6,7 @@
     List<Checking> CheckingAccounts = ViewBag.CheckingAccounts;
     List<Saving> SavingsAccounts = ViewBag.SavingsAccounts;
     List<IRA> IRAAccounts = ViewBag.IRAAccounts;
+    Decimal StockValue = ViewBag.StockAccountValue;
 }
 
 <h2>Portal</h2>
@@ -134,7 +135,7 @@
                     Stock Account Number
                 </th>
                 <th>
-                    Stock Account Cash Balance
+                    Stock Account Value
                 </th>
                 <th>
                     Stock Account Gains
@@ -146,7 +147,7 @@
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.Name)</td>
                     <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
-                    <td>@Html.DisplayFor(modelItem => item.CashBalance)</td>
+                    <td>@Html.Raw(StockValue)</td>
                     <td>@Html.DisplayFor(modelItem => item.Gains)</td>
                     <td>
                         @Html.ActionLink("Edit", "Edit", "StockAccounts") |
