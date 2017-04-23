@@ -116,6 +116,80 @@ namespace LonghornBank.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult AddPayee()
+        {
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.AllPayees = GetAllPayees();
+
+            return View(customer);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddPayee( AppUser customer, Int32 PayeeID1)
+        {
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+            AppUser user = CustomerQuery.FirstOrDefault(); 
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+
+            Payee selectedPayee = db.Payees.Find(PayeeID1);
+
+            List<Payee> PayeeList = new List<Payee>();
+
+            PayeeList.Add(selectedPayee);
+
+            user.PayeeAccounts = new List<Payee>();
+
+            user.PayeeAccounts.Add(selectedPayee);
+
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index","Payees");
+        }
+
+        public SelectList GetAllPayees(Payee selectedPayee)
+        {
+            var query = from p in db.Payees
+                        orderby p.Name
+                        select p;
+
+            List<Payee> payeeList = query.ToList();
+
+            SelectList PayeeSelectList = new SelectList(payeeList, "PayeeID", "Name");
+
+            return PayeeSelectList;
+        }
+
+        public SelectList GetAllPayees()
+        {
+            var query = from p in db.Payees
+                        orderby p.Name
+                        select p;
+
+            List<Payee> payeeList = query.ToList();
+
+            SelectList PayeeSelectList = new SelectList(payeeList, "PayeeID", "Name");
+
+            return PayeeSelectList;
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

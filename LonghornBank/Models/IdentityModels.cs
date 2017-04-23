@@ -61,6 +61,8 @@ namespace LonghornBank.Models
 
         public virtual List<IRA> IRAAccounts { get; set; }
 
+        public virtual List<Payee> PayeeAccounts { get; set; }
+
 
         //This method allows you to create a new user
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager)
@@ -102,5 +104,7 @@ namespace LonghornBank.Models
         }
 
         public DbSet<AppRole> AppRoles { get; set; }
+
+        public System.Data.Entity.DbSet<LonghornBank.Models.Payee> Payees { get; set; }
     }
 }

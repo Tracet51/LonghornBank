@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "Index";
-    Customer CustomerAccount = ViewBag.CustomerAccount;
+    AppUser CustomerAccount = ViewBag.CustomerAccount;
 }
 
 <h2>Savings Account Home</h2>
@@ -46,13 +46,13 @@
                 @Html.DisplayFor(modelItem => item.PendingBalance)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.SavingID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.SavingID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.SavingID })
+                @Html.ActionLink("Edit", "Edit", new { id = item.IRAID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.IRAID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.IRAID })
             </td>
         </tr>
     }
 
 </table>
 
-@Html.ActionLink("Back to Accounts Portal", "Portal", "Home", new { id = CustomerAccount.CustomerID }, null)
+@Html.ActionLink("Back to Accounts Portal", "Portal", "Home", new { id = CustomerAccount.Id }, null)

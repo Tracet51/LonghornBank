@@ -111,7 +111,8 @@ namespace LonghornBank.Controllers
             {
                 // Associate the Customer with the checking account
                 checking.Customer = customer;
-
+                int new_account_number = Convert.ToInt32(db.CheckingAccount.Count()) + 1000000000;
+                checking.AccountNumber = new_account_number.ToString();
                 db.CheckingAccount.Add(checking);
                 db.SaveChanges();
                 return RedirectToAction("Portal", "Home", new { id = customer.Id});
@@ -141,7 +142,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CheckingID,AccountNumber,Name")] Checking checking)
+        public ActionResult Edit([Bind(Include = "CheckingID,Name,Balance")] Checking checking)
         {
             if (ModelState.IsValid)
             {

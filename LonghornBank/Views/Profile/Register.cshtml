@@ -71,10 +71,12 @@
             @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
         </div>
     </div>
+
     <div class="form-group">
-        @Html.LabelFor(m => m.DOB, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(model => model.DOB, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.DOB, new { @class = "form-control" })
+            @Html.EditorFor(model => model.DOB, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger" })
         </div>
     </div>
 
