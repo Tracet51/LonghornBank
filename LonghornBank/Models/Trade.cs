@@ -6,13 +6,17 @@ using LonghornBank.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace LonghornBank.Models
+
+    // Trade represents the transactions that occurs 
+    // An account can have multiple trades 
+    // Trades have 1 transaction
+
 {   
     public enum TradeType { Buy, Sell}
     public class Trade
     {
         public Int32 TradeID { get; set; }
 
-        [Required(ErrorMessage = "Transaction Dispute Status is Required")]
         [Display(Name = "Transaction Dispute Status")]
         public DisputeStatus TransactionDispute { get; set; }
 
@@ -24,15 +28,13 @@ namespace LonghornBank.Models
         [Display(Name = "Transaction Amount")]
         public Decimal Amount { get; set; }
 
-        [Required(ErrorMessage = "Transaction Description is Required")]
+
         [Display(Name = "Transaction Description")]
         public String Description { get; set; }
 
-        [Required(ErrorMessage = "Dispute Message is Required")]
         [Display(Name = "Dispute Message")]
         public String DisputeMessage { get; set; }
 
-        [Required(ErrorMessage = "Corrected Transaction Amount is Required")]
         [Display(Name = "Corrected Transaction Amount")]
         public Decimal CorrectedAmount { get; set; }
 
@@ -51,6 +53,26 @@ namespace LonghornBank.Models
         [Required(ErrorMessage = "Ticker is Required")]
         [Display(Name = "Ticker")]
         public string Ticker { get; set; }
+
+        /*                         //
+        // Navigational Properties //
+        //                         //
+        //                         */
+
+        // A trade can have 2 transactions! 
+        // One for the fee 
+        // Two for the withdrawl
+        public virtual List<BankingTransaction> BankingTransactions { get; set; }
+
+        // A trade can belong to only 1 stock account
+        public virtual StockAccount StockAccount { get; set; }
+
+        // A trade can belong to 1 stock 
+        public virtual StockMarket StockMarket { get; set; }
+
+
+
+
 
 
     }

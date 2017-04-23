@@ -73,6 +73,38 @@ namespace LonghornBank.Controllers
             List<IRA> CustomerIRA = IRAQuery.ToList();
             ViewBag.IRAAccounts = CustomerIRA;
 
+            // Get the total value of the stock porfolio 
+            // Get the stock account
+            var StockQuery = from sa in db.StockAccount
+                             where sa.Customer.Id == customer.Id
+                             select sa;
+
+            StockAccount CustomerSA = StockQuery.FirstOrDefault();
+
+            if (CustomerSA != null)
+            {
+                /* Variable to hold the total amount 
+                Decimal StockAccountValue = 0;
+
+                foreach (Trade t in CustomerSA.Trades.Where(i => i.TradeType == TradeType.Buy))
+                {
+                    StockAccountValue += (t.Quantity * t.PricePerShare);
+                }
+
+                StockAccountValue += CustomerSA.CashBalance;
+
+                */
+
+                // Add to the view bag 
+                ViewBag.StockAccountValue = (CustomerSA.CashBalance + CustomerSA.StockBalance);
+            }
+
+            else
+            {
+                // Add to the view bag 
+                ViewBag.StockAccountValue = 0;
+            }
+
             return View(customer);
         }
     }

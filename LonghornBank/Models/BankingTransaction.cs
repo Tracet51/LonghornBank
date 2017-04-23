@@ -7,8 +7,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LonghornBank.Models
 {
-    public enum DisputeStatus { Submitted, Accepted, Rejected, Adjusted }
-    public enum BankingTranactionType { Deposit, Withdrawl, Transfer, Fee}
+    public enum DisputeStatus { Submitted, Accepted, Rejected, Adjusted, None }
+    public enum BankingTranactionType {None, Deposit, Withdrawl, Transfer, Fee}
     public class BankingTransaction
     {
         public Int32 BankingTransactionID { get; set; }
@@ -53,7 +53,13 @@ namespace LonghornBank.Models
         // Many to Many: A Transaction can belong to multiple Savings Accounts
         public virtual List<Saving> SavingsAccount { get; set; }
 
+        // 1 to Many: A transaction can belong to 1 stock account
+        public virtual StockAccount StockAccount { get; set; }
+
         // Many to Many: a transaction can belong to multiple IRA accounts
         public virtual List<IRA> IRAAccount { get; set; }
+
+        // A Transaction can belong to 1 trade
+        public virtual Trade Trade { get; set; }
     }
 }

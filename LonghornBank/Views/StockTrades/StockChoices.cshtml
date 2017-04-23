@@ -1,0 +1,23 @@
+﻿@model LonghornBank.Models.PurchaseStockTrade
+
+@{
+    ViewBag.Title = "Stock Trade and Transaction";
+}
+
+<h2>Create a Stock Trade and Transaction</h2>
+
+    <div class="form-horizontal">
+
+    <h4>Select the Stock you would like to buy</h4>
+        <hr />
+    <div>
+        @Html.ActionLink("Ordinary Stocks", "ViewSelectedStock", new { id = 1 }) | 
+        @Html.ActionLink("Mutual Funds", "ViewSelectedStock", new { id = 2 })) | 
+        @Html.ActionLink("Index Funds", "ViewSelectedStock", new { id = 3 })) |
+        @Html.ActionLink("ETFs", "ViewSelectedStock", new { id = 4 })) | 
+        @Html.ActionLink("Future Shares", "ViewSelectedStock", new { id = 5 })) | 
+        @Html.ActionLink("Other Shares", "ViewSelectedStock", new { id = 6 }))
+    </div>
+
+    </div>
+

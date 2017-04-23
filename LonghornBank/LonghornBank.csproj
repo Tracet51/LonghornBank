@@ -24,7 +24,6 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,16 +43,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LumenWorks.Framework.IO, Version=3.9.1.0, Culture=neutral, PublicKeyToken=5ad3ea2f85776344, processorArchitecture=MSIL">
+      <HintPath>..\packages\LumenWorksCsvReader.3.9.1\lib\net20\LumenWorks.Framework.IO.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -94,7 +93,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
@@ -110,10 +109,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -121,8 +116,8 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    <Reference Include="YSQ.core, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\YahooStockQuotes.1.0.7\lib\YSQ.core.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -183,16 +178,13 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\IRAsController.cs" />
-    <Compile Include="Controllers\PayeesController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\BankingTransactionsController.cs" />
     <Compile Include="Controllers\CheckingsController.cs" />
@@ -200,8 +192,27 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RoleAdminController.cs" />
     <Compile Include="Controllers\SavingsController.cs" />
+    <Compile Include="Controllers\StockAccountsController.cs" />
+    <Compile Include="Controllers\StockMarketsController.cs" />
+    <Compile Include="Controllers\StockTradesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704231837408_PaulRound2.cs" />
+    <Compile Include="Migrations\201704231837408_PaulRound2.Designer.cs">
+      <DependentUpon>201704231837408_PaulRound2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704231810478_ManagerStuff.cs" />
+    <Compile Include="Migrations\201704231810478_ManagerStuff.Designer.cs">
+      <DependentUpon>201704231810478_ManagerStuff.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704231829164_ChangeAccountModel.cs" />
+    <Compile Include="Migrations\201704231829164_ChangeAccountModel.Designer.cs">
+      <DependentUpon>201704231829164_ChangeAccountModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704231903051_Account.cs" />
+    <Compile Include="Migrations\201704231903051_Account.Designer.cs">
+      <DependentUpon>201704231903051_Account.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
@@ -218,6 +229,7 @@
     <Compile Include="Models\Saving.cs" />
     <Compile Include="Models\StockAccount.cs" />
     <Compile Include="Models\StockMarket.cs" />
+    <Compile Include="Models\StockTradeViewModel.cs" />
     <Compile Include="Models\Trade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -263,18 +275,25 @@
     <Content Include="Views\IRAs\Details.cshtml" />
     <Content Include="Views\IRAs\Edit.cshtml" />
     <Content Include="Views\IRAs\Index.cshtml" />
-    <Content Include="Views\IRAs\MoreThanOneError.cshtml" />
-    <Content Include="Views\BankingTransactions\IRAError.cshtml" />
-    <Content Include="Views\Payees\Create.cshtml" />
-    <Content Include="Views\Payees\Delete.cshtml" />
-    <Content Include="Views\Payees\Details.cshtml" />
-    <Content Include="Views\Payees\Edit.cshtml" />
-    <Content Include="Views\Payees\Index.cshtml" />
-    <Content Include="Views\Payees\PayBillsPage.cshtml" />
-    <Content Include="Views\Customers\AddPayee.cshtml" />
-    <Content Include="Views\Payees\EditOwnPayee.cshtml" />
-    <Content Include="Views\Payees\WithDrawlError.cshtml" />
-    <Content Include="Views\Payees\PayPayee.cshtml" />
+    <Content Include="Views\StockAccounts\Create.cshtml" />
+    <Content Include="Views\StockAccounts\Delete.cshtml" />
+    <Content Include="Views\StockAccounts\Details.cshtml" />
+    <Content Include="Views\StockAccounts\Edit.cshtml" />
+    <Content Include="Views\StockAccounts\Index.cshtml" />
+    <Content Include="Views\StockTrades\StockChoices.cshtml" />
+    <Content Include="Views\StockTrades\ViewSelectedStock.cshtml" />
+    <Content Include="Views\StockTrades\PurchaseStocks.cshtml" />
+    <Content Include="Views\StockTrades\ChooseAccount.cshtml" />
+    <Content Include="Views\StockMarkets\Create.cshtml" />
+    <Content Include="Views\StockMarkets\Delete.cshtml" />
+    <Content Include="Views\StockMarkets\Details.cshtml" />
+    <Content Include="Views\StockMarkets\Edit.cshtml" />
+    <Content Include="Views\StockMarkets\Index.cshtml" />
+    <Content Include="Views\StockTrades\PurchaseConfirmation.cshtml" />
+    <Content Include="Views\StockTrades\PurchaseError.cshtml" />
+    <Content Include="Views\StockTrades\TradeDetails.cshtml" />
+    <Content Include="Views\StockTrades\SellStockOptions.cshtml" />
+    <Content Include="Views\StockTrades\SellStocks.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -284,6 +303,20 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201704231837408_PaulRound2.resx">
+      <DependentUpon>201704231837408_PaulRound2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704231810478_ManagerStuff.resx">
+      <DependentUpon>201704231810478_ManagerStuff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704231829164_ChangeAccountModel.resx">
+      <DependentUpon>201704231829164_ChangeAccountModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704231903051_Account.resx">
+      <DependentUpon>201704231903051_Account.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -74,7 +74,6 @@ namespace LonghornBank.Controllers
                 List<BankingTransaction> TempTransaction = query.ToList();
                 CustomerTransactions.AddRange(TempTransaction);
             }
-            */
 
             // Get the IRA account associated with Customer ID
             IRA CustomerIRA = customer.IRAAccounts.FirstOrDefault();
@@ -92,7 +91,7 @@ namespace LonghornBank.Controllers
                 List<BankingTransaction> IRATransactions = IraQuery.ToList();
                 CustomerTransactions.AddRange(IRATransactions);
             }
-            
+            */
 
 
             // Add the customer to the view bag
@@ -235,31 +234,36 @@ namespace LonghornBank.Controllers
                         return RedirectToAction("Index", "BankingTransactions", new { id = id });
                     }
 
-                    // Check to see if IRA Account
+                    //Check to see if depositing into IRRA
                     if (IraID != 0)
                     {
                         // Find the Selected Checking Account
-                        IRA SelectedIra = db.IRAAccount.Find(IraID);
+                        IRA SelectedIRA = db.IRAAccount.Find(IraID);
 
                         // Create a list of checking accounts and add the one seleceted 
-                        List<IRA> NewIraAccounts = new List<IRA> { SelectedIra};
+                        List<IRA> NewIRAAccounts = new List<IRA> { SelectedIRA };
 
-                        bankingTransaction.IRAAccount = NewIraAccounts;
+                        bankingTransaction.IRAAccount = NewIRAAccounts;
 
                         //Adds money to account if under 5000
-                        if (bankingTransaction.Amount + SelectedIra.RunningTotal  <= 5000)
+                        if (bankingTransaction.Amount <= 5000)
                         {
-                            SelectedIra.RunningTotal = SelectedIra.RunningTotal + bankingTransaction.Amount;
-                            Decimal New_Balance = SelectedIra.Balance + bankingTransaction.Amount;
-                            SelectedIra.Balance = New_Balance;
+                          //  if(customer.DOB< )
+                            if (bankingTransaction.Amount + SelectedIRA.RunningTotal <= 5000)
+                            {
+                                Decimal New_Balance = SelectedIRA.Balance + bankingTransaction.Amount;
+                                SelectedIRA.Balance = New_Balance;
+                            }
+                            else
+                            {
+                                return View("IRADepositError");
+                            }
                         }
-
-                        //Adds to pending balance if over 5000
+                        
+                        //If amount is over $5000, returns an error message
                         else
                         {
-                            ViewBag.CorrectIra = "Would you like to automatically deposit " + (bankingTransaction.Amount - SelectedIra.RunningTotal) + " To make the transaction valid";
-                            decimal CorrectAmount = 5000 - SelectedIra.RunningTotal;
-                            return RedirectToAction("IRAError", "BankingTransactions", new { CorrectAmount, bankingTransaction.BankingTransactionID, bankingTransaction.BankingTransactionType, bankingTransaction.Description, bankingTransaction.TransactionDate, IraID, IraIDTrans});
+                            return View("IRADepositError");
                         }
 
 
@@ -273,6 +277,7 @@ namespace LonghornBank.Controllers
                     }
 
                 }
+
                 
                 // Check to see if of Type Withdrawl
                 else if (bankingTransaction.BankingTransactionType == BankingTranactionType.Withdrawl)
@@ -292,12 +297,14 @@ namespace LonghornBank.Controllers
                         if (bankingTransaction.Amount <= SelectedChecking.Balance)
                         {
                             //TODO: Write error message for invalid withdrawl
-
+                            
                             Decimal New_Balance = SelectedChecking.Balance - bankingTransaction.Amount;
                             SelectedChecking.Balance = New_Balance;
                         }
-
-
+                        else
+                        {
+                            return View("WithdrawlError");
+                        }
 
                         // Add to database
                         db.BankingTransaction.Add(bankingTransaction);
@@ -321,62 +328,17 @@ namespace LonghornBank.Controllers
                         //Subtracts Money to account if under amount required for approval
                         if (bankingTransaction.Amount <= SelectedSaving.Balance)
                         {
-                            //TODO: Write error message for invalid withdrawl
-                            /*if (bankingTransaction.Amount > SelectedChecking.Balance)
-                            {
-                                return
-                            }*/
+
                             Decimal New_Balance = SelectedSaving.Balance - bankingTransaction.Amount;
                             SelectedSaving.Balance = New_Balance;
                         }
-
-                        // Add to database
-                        db.BankingTransaction.Add(bankingTransaction);
-                        db.SaveChanges();
-
-                        // Redirect 
-                        return RedirectToAction("Index", "BankingTransactions", new { id = id });
-
-                    }
-
-                    else if (IraID != 0)
-                    {
-                        DateTime Restrict1 = new DateTime(1952, 5, 5, 0, 0, 0);
-
-                        // Find the Selected Checking Account
-                        IRA SelectedIra = db.IRAAccount.Find(IraID);
-
-                        // Create a list of checking accounts and add the one seleceted 
-                        List<IRA> NewIraAccounts = new List<IRA> { SelectedIra };
-
-                        bankingTransaction.IRAAccount = NewIraAccounts;
-
-                        if (customer.DOB <= Restrict1)
-                        {
-                            if (bankingTransaction.Amount <= SelectedIra.Balance)
-                            {
-                                Decimal New_Balance = SelectedIra.Balance - bankingTransaction.Amount;
-                                SelectedIra.Balance = New_Balance;
-                            }
-                            else
-                            {
-                                //Returns error if the withdrawl is more than bankingTransaction.Amount
-                                return View("IRAError");
-                            }
-
-                        }
+                        
+                        //Error for withdrawling too much
                         else
                         {
-                            if (bankingTransaction.Amount <= SelectedIra.Balance)
-                            {
-                                db.BankingTransaction.Add(bankingTransaction);
-                                db.SaveChanges();
-
-                                bankingTransaction.Amount = 30;
-                                bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            }
+                            return View("WithdrawlError");
                         }
-                        
+
                         // Add to database
                         db.BankingTransaction.Add(bankingTransaction);
                         db.SaveChanges();
@@ -421,6 +383,10 @@ namespace LonghornBank.Controllers
                                 Decimal New_Transfer_Balance = CheckingTrans.Balance + bankingTransaction.Amount;
                                 CheckingTrans.Balance = New_Transfer_Balance;
                             }
+                            else
+                            {
+                                return View("WithdrawlError");
+                            }
 
                             // Add to database
                             db.BankingTransaction.Add(bankingTransaction);
@@ -452,6 +418,12 @@ namespace LonghornBank.Controllers
 
                                 Decimal New_Balance = SavingsTrans.Balance + bankingTransaction.Amount;
                                 SavingsTrans.Balance = New_Balance;
+                                Decimal New_Transfer_Balance = SavingsTrans.Balance - bankingTransaction.Amount;
+                                SavingsTrans.Balance = New_Transfer_Balance;
+                            }
+                            else
+                            {
+                                return View("WithdrawlError");
                             }
 
                             // Add to database
@@ -493,6 +465,23 @@ namespace LonghornBank.Controllers
                             // Associate with Savings Account 
                             bankingTransaction.SavingsAccount = NewSavingsAccounts;
 
+                            //Adds money from savings to checking account
+                            if (bankingTransaction.Amount <= SelectedSavings.Balance)
+                            {
+                                //Adds money to transferred account
+                                Decimal New_Balance = CheckingTrans.Balance + bankingTransaction.Amount;
+                                CheckingTrans.Balance = New_Balance;
+
+                                //Takes away money from account being withdrawn from 
+                                Decimal New_Transfer_Balance = SelectedSavings.Balance - bankingTransaction.Amount;
+                                SelectedSavings.Balance = New_Transfer_Balance;
+                            }
+                            else
+                            {
+                                return View("WithdrawlError");
+                            }
+
+
                             // Add to database
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
@@ -504,7 +493,7 @@ namespace LonghornBank.Controllers
                         // If Transfering to a Savings Account 
                         else if (SavingIDTrans != 0)
                         {
-                            // Find the Selected Checking Account
+                            // Find the Selected saving Account
                             Saving SavingsTrans = db.SavingsAccount.Find(SavingIDTrans);
 
                             // Add to the Savings Account List
@@ -512,6 +501,22 @@ namespace LonghornBank.Controllers
 
                             // Associate with Savings Account 
                             bankingTransaction.SavingsAccount = NewSavingsAccounts;
+
+                            //Adds money from savings to checking account
+                            if (bankingTransaction.Amount <= SelectedSavings.Balance)
+                            {
+                                //Adds money to transferred account
+                                Decimal New_Balance = SavingsTrans.Balance + bankingTransaction.Amount;
+                                SavingsTrans.Balance = New_Balance;
+
+                                //Takes away money from account being withdrawn from 
+                                Decimal New_Transfer_Balance = SelectedSavings.Balance - bankingTransaction.Amount;
+                                SelectedSavings.Balance = New_Transfer_Balance;
+                            }
+                            else
+                            {
+                                return View("WithdrawlError");
+                            }
 
                             // Add to database
                             db.BankingTransaction.Add(bankingTransaction);
@@ -558,6 +563,7 @@ namespace LonghornBank.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            
             return View(bankingTransaction);
         }
 
@@ -637,98 +643,6 @@ namespace LonghornBank.Controllers
             return View(bankingTransaction);
         }
 
-        public ActionResult IRAError()
-        {
-            // Query the Database for the logged in user 
-            var CustomerQuery = from c in db.Users
-                                where c.UserName == User.Identity.Name
-                                select c;
-
-
-            // Get the Customer 
-            AppUser customer = CustomerQuery.FirstOrDefault();
-
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-
-            // Get all of the accounts
-            Tuple<SelectList, SelectList, SelectList> AllAcounts = GetAllAccounts(customer.Id);
-
-            // Add the SelectList Tuple to the ViewBag
-            ViewBag.AllAccounts = AllAcounts;
-
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult IRAError([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description,BankingTransactionType")]BankingTransaction bankingTransaction, Decimal CorrectAmount, Int32 BankingTransactionID, String Description, DateTime TransactionDate, int IraID, int IraIDTrans, String submit)
-        {
-            var CustomerQuery = from c in db.Users
-                                where c.UserName == User.Identity.Name
-                                select c;
-
-
-            // Get the Customer 
-            AppUser customer = CustomerQuery.FirstOrDefault();
-
-            string id = customer.Id;
-            if (ModelState.IsValid)
-            {
-                bankingTransaction.Description = Description;
-                bankingTransaction.TransactionDate = TransactionDate;
-                bankingTransaction.BankingTransactionID = BankingTransactionID;
-                bankingTransaction.BankingTransactionType = BankingTranactionType.Deposit;
-                // Check to see if Deposit 
-                if (bankingTransaction.BankingTransactionType == BankingTranactionType.Deposit)
-                {
-                    if (IraID != 0)
-                    {
-                        // Find the Selected Checking Account
-                        IRA SelectedIra = db.IRAAccount.Find(IraID);
-
-                        // Create a list of checking accounts and add the one seleceted 
-                        List<IRA> NewIraAccounts = new List<IRA> { SelectedIra };
-
-                        bankingTransaction.IRAAccount = NewIraAccounts;
-
-                        switch (submit)
-                        {
-                            case "Automatic":
-                                Decimal New_Balance = SelectedIra.Balance + CorrectAmount;
-                                bankingTransaction.Amount = New_Balance;
-                                SelectedIra.RunningTotal = New_Balance;
-                                SelectedIra.Balance = 0 + New_Balance;
-                                break;
-                            case "User":
-                                if (bankingTransaction.Amount + SelectedIra.RunningTotal <= 5000)
-                                {
-                                    SelectedIra.RunningTotal = SelectedIra.RunningTotal + bankingTransaction.Amount;
-                                    Decimal New_Balance2 = SelectedIra.Balance + bankingTransaction.Amount;
-                                    SelectedIra.RunningTotal = 0 + New_Balance2;
-                                    SelectedIra.Balance = New_Balance2;
-                                }
-                                else
-                                {
-                                    return RedirectToAction("IRAError", "BankingTransactions", new { CorrectAmount, bankingTransaction.BankingTransactionID, bankingTransaction.BankingTransactionType, bankingTransaction.Description, bankingTransaction.TransactionDate, IraID, IraIDTrans });
-                                }
-                                break;
-                        }
-                    }
-
-                }
-
-            }
-            // Add to database
-            db.BankingTransaction.Add(bankingTransaction);
-            db.SaveChanges();
-
-            // Redirect 
-            return RedirectToAction("Index", "BankingTransactions", new { id = id });
-        }
-
         // Get all of the customer's account 
         // id == customer's id
         public Tuple<SelectList, SelectList, SelectList> GetAllAccounts(string id)
@@ -785,7 +699,49 @@ namespace LonghornBank.Controllers
 
         }
 
+        //Detailed Search function
+        public ActionResult SearchResults(String SearchDescription, BankingTranactionType SelectedType, Decimal SearchAmount, String SearchTransactionNumber, DateTime SearchDate)
+        {
+            var query = from c in db.BankingTransaction
+                        select c;
+
+            if (SearchDescription != null)
+            {
+                query = query.Where(c => c.Description.Contains(SearchDescription));
+            }
+
+            if (SelectedType != BankingTranactionType.None)
+            {
+                string BankingType = SelectedType.ToString();
+                query = query.Where(c => c.BankingTransactionType == SelectedType);
+            }
+
+           /*if (SearchAmount != null)
+            {
+                query = query.Where
+            }*/
+
+            if (SearchTransactionNumber != null)
+            {
+                query = query.Where(c => c.Description.Contains(SearchTransactionNumber));
+            }
+
+            ViewBag.DisplayedTransactionCount = query.ToList().Count;
+            ViewBag.TotalTransactionCount = db.BankingTransaction.ToList().Count;
+            List<BankingTransaction> SelectedTransactions = query.ToList();
+            return View("Index", SelectedTransactions);
+        }
         
+
+        public SelectList GetAllBankingTypesList()
+        {
+            List<BankingTranactionType> BBT = Enum.GetValues(typeof(BankingTranactionType)).Cast<BankingTranactionType>().ToList();
+            SelectList BBTSelectList = new SelectList(BBT, new BankingTranactionType());
+            ViewBag.AllBankingTypes = BBTSelectList;
+            return BBTSelectList;
+        }
+
+         
 
         protected override void Dispose(bool disposing)
         {

@@ -1,0 +1,93 @@
+﻿@model LonghornBank.Models.BankingTransaction
+@{
+    ViewBag.Title = "DisputeManagementDetail";
+}
+
+<h2>DisputeManagementDetail</h2>
+@ViewBag.ConfirmationMessage
+
+<div>
+    <h4>Transaction</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionDispute)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransactionDispute)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransactionDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DisputeMessage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DisputeMessage)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerOpinion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerOpinion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CorrectedAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CorrectedAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BankingTransactionType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankingTransactionType)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @using (Html.BeginForm("DisputeManagementDetail", "Managers", new { BankingTransactionID = Model.BankingTransactionID }, FormMethod.Post, null))
+    {
+        
+            @Html.DisplayFor(modelItem => Model.CorrectedAmount)
+            
+            @Html.TextBox("ManagerApprovedAmount", Model.CorrectedAmount, null, new { @class = "form-control" })
+            @Html.Hidden(Convert.ToString(Model.BankingTransactionID))
+            
+            @Html.TextBox("ManagerMessage", Model.DisputeMessage, null, new { @class = "form-control" })
+
+            <input type="submit" name="Disputes" value="Revise" class="btn btn-default" />
+     }
+</p>
+
