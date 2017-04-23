@@ -5,13 +5,16 @@
     ViewBag.Title = "New Transaction";
 
     // Grab the Tuple from ViewBag
-    Tuple<SelectList, SelectList> AllAccounts = ViewBag.AllAccounts;
+    Tuple<SelectList, SelectList, SelectList> AllAccounts = ViewBag.AllAccounts;
 
     // Create a SelectList for Checking Accounts
     SelectList CheckingAccounts = AllAccounts.Item1;
 
     // Create a SelectList for Savings Accounts 
     SelectList SavingsAccounts = AllAccounts.Item2;
+
+    // Create a SelectList for IRA
+    SelectList IraAccounts = AllAccounts.Item3;
     
 
 }
@@ -108,6 +111,11 @@
          @Html.DropDownList("SavingID", SavingsAccounts, new { @class = "form-control" })
         <br />
         <br />
+
+        <b class="control-label col-md-2">IRA Accounts:</b>
+        @Html.DropDownList("IraID", IraAccounts, new { @class = "form-control" })
+        <br />
+        <br />
         
         <p>If Transfering, Please Select Another Account</p>
         <b class="control-label col-md-2">Checking Accounts:</b>
@@ -117,6 +125,11 @@
 
         <b class="control-label col-md-2">Savings Accounts:</b>
         @Html.DropDownList("SavingIDTrans", SavingsAccounts, new { @class = "form-control" })
+        <br />
+        <br />
+
+        <b class="control-label col-md-2">IRA Accounts:</b>
+        @Html.DropDownList("IraIDTrans", IraAccounts, new { @class = "form-control" })
         <br />
         <br />
 

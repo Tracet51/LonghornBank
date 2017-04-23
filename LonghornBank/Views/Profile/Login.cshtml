@@ -1,4 +1,4 @@
-﻿@using IdentityTemplate.Models
+﻿@using LonghornBank.Models
 @model LoginViewModel
 @{
     ViewBag.Title = "Log in";
@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("Login", "Profile", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
                 <h4>Use a local account to log in.</h4>
@@ -52,7 +52,3 @@
         </section>
     </div>
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

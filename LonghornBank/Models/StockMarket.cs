@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using YSQ.core.Quotes;
 
 namespace LonghornBank.Models
+
+    // Stock Market Represents the actual stocks that can be traded
 {   
     public enum StockType { Ordinary, ETF, Future_Share, Mutual_Fund, Index_Fund, Other}
     public class StockMarket
@@ -27,8 +30,46 @@ namespace LonghornBank.Models
         [Display(Name = "Trading Fee")]
         public Decimal Fee { get; set; }
 
+        // Create a backing variable
+        private Decimal _decStockPrice;
+
         [Required(ErrorMessage = "A Stock Price is Required")]
         [Display(Name = "Stock Price")]
-        public Decimal StockPrice { get; set; }
+        public Decimal StockPrice
+        {
+            get {
+
+                try
+                {
+                    var quote_service = new QuoteService();
+
+                    var quotes = quote_service.Quote(this.Ticker.ToUpper()).Return(QuoteReturnParameter.PreviousClose);
+
+                    _decStockPrice = Convert.ToDecimal(quotes.PreviousClose);
+                }
+
+                catch (Exception)
+                {
+
+                    _decStockPrice = 0;
+                }
+
+                // Return the price
+                return _decStockPrice;
+
+            }
+
+            set { _decStockPrice = value; }
+        }
+
+        /*                         //
+        // Navigational Properties //
+        //                         //
+        //                         */
+
+        // A stock can belong to multiple trades 
+        public virtual List<Trade> Trades { get; set; }
+
+
     }
 }

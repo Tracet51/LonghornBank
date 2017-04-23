@@ -13,16 +13,16 @@ using LonghornBank.Models;
 namespace LonghornBank.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class ProfileController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private AppUserManager _userManager;
 
-        public AccountController()
+        public ProfileController()
         {
         }
 
-        public AccountController(AppUserManager userManager, ApplicationSignInManager signInManager)
+        public ProfileController(AppUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -53,7 +53,7 @@ namespace LonghornBank.Controllers
         }
 
         //
-        // GET: /Account/Login
+        // GET: /Profile/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -67,7 +67,7 @@ namespace LonghornBank.Controllers
         }
 
         //
-        // POST: /Account/Login
+        // POST: /Profile/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -94,7 +94,7 @@ namespace LonghornBank.Controllers
 
 
         //
-        // GET: /Account/Register
+        // GET: /Profile/Register
         [AllowAnonymous]
         public ActionResult Register()
         {
@@ -102,7 +102,7 @@ namespace LonghornBank.Controllers
         }
 
         //
-        // POST: /Account/Register
+        // POST: /Profile/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -115,6 +115,15 @@ namespace LonghornBank.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email,
+                    FName = model.FName,
+                    LName = model.LName,
+                    City = model.City,
+                    DOB = model.DOB,
+                    MiddleInitial = model.MiddleInitial,
+                    State = model.State,
+                    StreetAddress = model.StreetAddress,
+                    Zip = model.Zip,
+                    PhoneNumber = model.PhoneNumber
                     
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
@@ -125,7 +134,7 @@ namespace LonghornBank.Controllers
                 // await UserManager.AddToRoleAsync(user.Id, "Employee");
 
                 // Add ever new register as a member!
-                await UserManager.AddToRoleAsync(user.Id, "Member");
+                await UserManager.AddToRoleAsync(user.Id, "Customer");
 
 
                 if (result.Succeeded)
@@ -138,7 +147,9 @@ namespace LonghornBank.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                   
+
+                    return RedirectToAction("Create", "Home");
                 }
                 AddErrors(result);
             }

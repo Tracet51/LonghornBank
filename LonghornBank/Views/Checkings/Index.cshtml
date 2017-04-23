@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "Index";
-    Customer CustomerAccount = ViewBag.CustomerAccount;
+    AppUser CustomerAccount = ViewBag.CustomerAccount;
 }
 
 <h2>Checking Account Home</h2>
@@ -45,7 +45,7 @@
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", "Checkings", new { id = item.CheckingID }, null) |
-            @Html.ActionLink("Details", "Details", "Checkings", new { id = item.CheckingID }, null) |
+            @Html.ActionLink("Account", "Details", "Checkings", new { id = item.CheckingID }, null) |
             @Html.ActionLink("Delete", "Delete", "Checkings", new { id = item.CheckingID }, null)
         </td>
     </tr>
@@ -53,4 +53,4 @@
 
 </table>
 
-@Html.ActionLink("Back to Accounts Portal", "Portal", "Home", new { id = CustomerAccount.CustomerID }, null)
+@Html.ActionLink("Back to Accounts Portal", "Portal", "Home", new { id = CustomerAccount.Id }, null)

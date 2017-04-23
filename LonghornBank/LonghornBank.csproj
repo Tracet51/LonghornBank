@@ -51,6 +51,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="LumenWorks.Framework.IO, Version=3.9.1.0, Culture=neutral, PublicKeyToken=5ad3ea2f85776344, processorArchitecture=MSIL">
+      <HintPath>..\packages\LumenWorksCsvReader.3.9.1\lib\net20\LumenWorks.Framework.IO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -112,6 +116,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="YSQ.core, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\YahooStockQuotes.1.0.7\lib\YSQ.core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web.Razor">
@@ -176,18 +184,52 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\IRAsController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\BankingTransactionsController.cs" />
     <Compile Include="Controllers\CheckingsController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ManagersController.cs" />
     <Compile Include="Controllers\RoleAdminController.cs" />
     <Compile Include="Controllers\SavingsController.cs" />
+    <Compile Include="Controllers\StockAccountsController.cs" />
+    <Compile Include="Controllers\StockMarketsController.cs" />
+    <Compile Include="Controllers\StockTradesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DepositApprovalViewModel.cs" />
+    <Compile Include="Migrations\201704190022055_Test.cs" />
+    <Compile Include="Migrations\201704190022055_Test.Designer.cs">
+      <DependentUpon>201704190022055_Test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704190101081_Test2.cs" />
+    <Compile Include="Migrations\201704190101081_Test2.Designer.cs">
+      <DependentUpon>201704190101081_Test2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704202125445_Trades.cs" />
+    <Compile Include="Migrations\201704202125445_Trades.Designer.cs">
+      <DependentUpon>201704202125445_Trades.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704210210274_Stocks.cs" />
+    <Compile Include="Migrations\201704210210274_Stocks.Designer.cs">
+      <DependentUpon>201704210210274_Stocks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704210238526_ChangeStocks.cs" />
+    <Compile Include="Migrations\201704210238526_ChangeStocks.Designer.cs">
+      <DependentUpon>201704210238526_ChangeStocks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704212351413_Gains.cs" />
+    <Compile Include="Migrations\201704212351413_Gains.Designer.cs">
+      <DependentUpon>201704212351413_Gains.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704220043307_TradeDetails.cs" />
+    <Compile Include="Migrations\201704220043307_TradeDetails.Designer.cs">
+      <DependentUpon>201704220043307_TradeDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\SeedDataCustomers.cs" />
+    <Compile Include="Migrations\SeedProfiles.cs" />
+    <Compile Include="Migrations\SeedStocks.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
@@ -202,6 +244,7 @@
     <Compile Include="Models\Saving.cs" />
     <Compile Include="Models\StockAccount.cs" />
     <Compile Include="Models\StockMarket.cs" />
+    <Compile Include="Models\StockTradeViewModel.cs" />
     <Compile Include="Models\Trade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -241,14 +284,31 @@
     <Content Include="Views\RoleAdmin\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Managers\Create.cshtml" />
-    <Content Include="Views\Managers\Delete.cshtml" />
-    <Content Include="Views\Managers\Details.cshtml" />
-    <Content Include="Views\Managers\Edit.cshtml" />
-    <Content Include="Views\Managers\Index.cshtml" />
-    <Content Include="Views\Managers\Disputes.cshtml" />
-    <Content Include="Views\Managers\DepositApproval.cshtml" />
-    <Content Include="Views\Managers\DisputeManagementDetail.cshtml" />
+    <Content Include="Views\Home\Create.cshtml" />
+    <Content Include="Views\IRAs\Create.cshtml" />
+    <Content Include="Views\IRAs\Delete.cshtml" />
+    <Content Include="Views\IRAs\Details.cshtml" />
+    <Content Include="Views\IRAs\Edit.cshtml" />
+    <Content Include="Views\IRAs\Index.cshtml" />
+    <Content Include="Views\StockAccounts\Create.cshtml" />
+    <Content Include="Views\StockAccounts\Delete.cshtml" />
+    <Content Include="Views\StockAccounts\Details.cshtml" />
+    <Content Include="Views\StockAccounts\Edit.cshtml" />
+    <Content Include="Views\StockAccounts\Index.cshtml" />
+    <Content Include="Views\StockTrades\StockChoices.cshtml" />
+    <Content Include="Views\StockTrades\ViewSelectedStock.cshtml" />
+    <Content Include="Views\StockTrades\PurchaseStocks.cshtml" />
+    <Content Include="Views\StockTrades\ChooseAccount.cshtml" />
+    <Content Include="Views\StockMarkets\Create.cshtml" />
+    <Content Include="Views\StockMarkets\Delete.cshtml" />
+    <Content Include="Views\StockMarkets\Details.cshtml" />
+    <Content Include="Views\StockMarkets\Edit.cshtml" />
+    <Content Include="Views\StockMarkets\Index.cshtml" />
+    <Content Include="Views\StockTrades\PurchaseConfirmation.cshtml" />
+    <Content Include="Views\StockTrades\PurchaseError.cshtml" />
+    <Content Include="Views\StockTrades\TradeDetails.cshtml" />
+    <Content Include="Views\StockTrades\SellStockOptions.cshtml" />
+    <Content Include="Views\StockTrades\SellStocks.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -258,6 +318,29 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201704190022055_Test.resx">
+      <DependentUpon>201704190022055_Test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704190101081_Test2.resx">
+      <DependentUpon>201704190101081_Test2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704202125445_Trades.resx">
+      <DependentUpon>201704202125445_Trades.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704210210274_Stocks.resx">
+      <DependentUpon>201704210210274_Stocks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704210238526_ChangeStocks.resx">
+      <DependentUpon>201704210238526_ChangeStocks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704212351413_Gains.resx">
+      <DependentUpon>201704212351413_Gains.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704220043307_TradeDetails.resx">
+      <DependentUpon>201704220043307_TradeDetails.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

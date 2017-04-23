@@ -1,19 +1,20 @@
 ﻿@using LonghornBank.Models
-@model LonghornBank.Models.Customer
+@model LonghornBank.Models.AppUser
 
 @{
     ViewBag.Title = "Index";
     List<Checking> CheckingAccounts = ViewBag.CheckingAccounts;
     List<Saving> SavingsAccounts = ViewBag.SavingsAccounts;
     List<IRA> IRAAccounts = ViewBag.IRAAccounts;
+    Decimal StockValue = ViewBag.StockAccountValue;
 }
 
 <h2>Portal</h2>
 
 <p>
-    @Html.ActionLink("Add New Checking Account", "Create","Checkings", new { id = Model.CustomerID }, null) | 
-    @Html.ActionLink("Add New Savings Account", "Create", "Savings", new { id = Model.CustomerID }, null) |
-    @Html.ActionLink("Add New IRA", "Create", "IRA") |
+    @Html.ActionLink("Add New Checking Account", "Create","Checkings") | 
+    @Html.ActionLink("Add New Savings Account", "Create", "Savings") |
+    @Html.ActionLink("Add New IRA", "Create", "IRAs") |
     @Html.ActionLink("Add New Stock Account", "Create", "StockAccounts") | 
     @Html.ActionLink("Add New Transaction", "Create", "BankingTransactions")
 
@@ -21,7 +22,7 @@
 
 <h3> @Html.Raw(Model.FName)'s Accounts</h3>
 <h4>Checking Account(s)</h4>
-<p>@Html.ActionLink("Checking Accounts Home", "Index", "Checkings", new { id = Model.CustomerID }, null)</p>
+<p>@Html.ActionLink("Checking Accounts Home", "Index", "Checkings")</p>
 <table class="table">
    <tr>
        <th>
@@ -56,7 +57,7 @@
 
 </table>
     <h4>Savings Account(s)</h4>
-    <p>@Html.ActionLink("Saving Accounts Home", "Index", "Savings", new { id = Model.CustomerID }, null)</p>
+    <p>@Html.ActionLink("Saving Accounts Home", "Index", "Savings")</p>
 <table class="table">
     <tr>
         <th>
@@ -90,8 +91,8 @@
 
 </table>
     <h4>IRA Account(s)</h4>
-    <p>@Html.ActionLink("IRA Accounts Home", "Index", "IRA", new { id = Model.CustomerID }, null)</p>
-    <table class="table">
+ <p>@Html.ActionLink("IRA Accounts Home", "Index", "IRA")</p>
+<table class="table">
     <tr>
         <th>
             IRA Account Name
@@ -115,12 +116,45 @@
             <td>@Html.DisplayFor(modelItem => item.Balance)</td>
             <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
             <td>
-                @Html.ActionLink("Edit", "Edit", "IRA", new { id = item.IRAID }, null) |
-                @Html.ActionLink("Details", "Details", "IRA", new { id = item.IRAID }, null) |
-                @Html.ActionLink("Delete", "Delete", "IRA", new { id = item.IRAID }, null)
+                @Html.ActionLink("Edit", "Edit", "IRAs", new { id = item.IRAID }, null) |
+                @Html.ActionLink("Details", "Details", "IRAs", new { id = item.IRAID }, null) |
+                @Html.ActionLink("Delete", "Delete", "IRAs", new { id = item.IRAID }, null)
             </td>
         </tr>
     }
 
 </table>
         <h4>Stock Portfolio(s)</h4>
+        <p>@Html.ActionLink("Stock Accounts Home", "Index", "StockAccounts")</p>
+        <table class="table">
+            <tr>
+                <th>
+                    Stock Account Name
+                </th>
+                <th>
+                    Stock Account Number
+                </th>
+                <th>
+                    Stock Account Value
+                </th>
+                <th>
+                    Stock Account Gains
+                </th>
+            </tr>
+
+            @foreach (var item in Model.StockAccount)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
+                    <td>@Html.Raw(StockValue)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Gains)</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", "StockAccounts") |
+                        @Html.ActionLink("Details", "Details", "StockAccounts") |
+                        @Html.ActionLink("Delete", "Delete", "StockAccounts")
+                    </td>
+                </tr>
+            }
+
+        </table>
