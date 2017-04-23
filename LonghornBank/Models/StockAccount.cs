@@ -33,10 +33,10 @@ namespace LonghornBank.Models
 
             set
             {
-                /* Create a list to hold all of the account number 
+                // Create a list to hold all of the account number 
                 List<Decimal> AccountNumList = new List<Decimal>();
 
-                // Find the account with the largest account number
+                /* Find the account with the largest account number
                 var SPQ = from sp in db.StockAccount
                           select sp;
 
@@ -48,7 +48,8 @@ namespace LonghornBank.Models
                 {
                     Decimal SPAN = Convert.ToDecimal(SP.AccountNumber);
                     AccountNumList.Add(SPAN);
-                }
+                } */
+                
 
                 var CAQ = from ca in db.CheckingAccount
                           select ca;
@@ -101,8 +102,8 @@ namespace LonghornBank.Models
                     }
                 } 
 
-                MaxAccNum += 1; */
-                strAccountNumber = value; // MaxAccNum.ToString();
+                MaxAccNum += 1; 
+                strAccountNumber = MaxAccNum.ToString();
                 
             }
         }
