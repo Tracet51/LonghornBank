@@ -161,6 +161,7 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Models\Web.config" />
+    <Content Include="Models\IdentityModels" />
     <None Include="Properties\PublishProfiles\LonghornBank - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\LonghornBank - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -185,6 +186,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\IRAsController.cs" />
+    <Compile Include="Controllers\ManagersController.cs" />
+    <Compile Include="Controllers\PayeesController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\BankingTransactionsController.cs" />
     <Compile Include="Controllers\CheckingsController.cs" />
@@ -215,6 +218,8 @@
       <DependentUpon>201704231903051_Account.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DepositApprovalViewModel.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
@@ -294,6 +299,23 @@
     <Content Include="Views\StockTrades\TradeDetails.cshtml" />
     <Content Include="Views\StockTrades\SellStockOptions.cshtml" />
     <Content Include="Views\StockTrades\SellStocks.cshtml" />
+    <Content Include="Views\Payees\Create.cshtml" />
+    <Content Include="Views\Payees\Delete.cshtml" />
+    <Content Include="Views\Payees\Details.cshtml" />
+    <Content Include="Views\Payees\Edit.cshtml" />
+    <Content Include="Views\Payees\EditOwnPayee.cshtml" />
+    <Content Include="Views\Payees\Index.cshtml" />
+    <Content Include="Views\Payees\PayBillsPage.cshtml" />
+    <Content Include="Views\Payees\PayPayee.cshtml" />
+    <Content Include="Views\Payees\WithDrawlError.cshtml" />
+    <Content Include="Views\Managers\Create.cshtml" />
+    <Content Include="Views\Managers\Delete.cshtml" />
+    <Content Include="Views\Managers\DepositApproval.cshtml" />
+    <Content Include="Views\Managers\Details.cshtml" />
+    <Content Include="Views\Managers\DisputeManagementDetail.cshtml" />
+    <Content Include="Views\Managers\Disputes.cshtml" />
+    <Content Include="Views\Managers\Edit.cshtml" />
+    <Content Include="Views\Managers\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
