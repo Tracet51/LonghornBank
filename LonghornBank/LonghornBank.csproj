@@ -202,6 +202,18 @@
     <Compile Include="Migrations\201704232220429_Initial.Designer.cs">
       <DependentUpon>201704232220429_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704232347376_StockTable.cs" />
+    <Compile Include="Migrations\201704232347376_StockTable.Designer.cs">
+      <DependentUpon>201704232347376_StockTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704240040350_StockNum.cs" />
+    <Compile Include="Migrations\201704240040350_StockNum.Designer.cs">
+      <DependentUpon>201704240040350_StockNum.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704240059357_RequiredFields.cs" />
+    <Compile Include="Migrations\201704240059357_RequiredFields.Designer.cs">
+      <DependentUpon>201704240059357_RequiredFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
     <Compile Include="Migrations\SeedProfiles.cs" />
@@ -223,6 +235,7 @@
     <Compile Include="Models\StockTradeViewModel.cs" />
     <Compile Include="Models\Trade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\AccountNumber.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -298,6 +311,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201704232220429_Initial.resx">
       <DependentUpon>201704232220429_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704232347376_StockTable.resx">
+      <DependentUpon>201704232347376_StockTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704240040350_StockNum.resx">
+      <DependentUpon>201704240040350_StockNum.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704240059357_RequiredFields.resx">
+      <DependentUpon>201704240059357_RequiredFields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

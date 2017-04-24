@@ -88,7 +88,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SavingID, Balance, Name, AccountNumber")] Saving saving)
+        public ActionResult Create([Bind(Include = "SavingID, Balance, Name")] Saving saving)
         {
             // Query the Customer
             var CustomerQuery = from c in db.Users
@@ -106,9 +106,12 @@ namespace LonghornBank.Controllers
             {
                 saving.Customer = customer;
 
+                // Auto incremenment the account number
+                saving.AccountNumber = Utility.AccountNumber.AutoNumber(db);
+
                 db.SavingsAccount.Add(saving);
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id = customer.Id });
+                return RedirectToAction("Portal", "Home");
             }
 
             return View(saving);

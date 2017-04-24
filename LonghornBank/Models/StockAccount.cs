@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LonghornBank.Models
 {
@@ -15,104 +16,22 @@ namespace LonghornBank.Models
 
         [Display(Name = "Cash Balance")]
         [Required(ErrorMessage = "A Cash Balance is Required")]
+        [Column("CashBalance")]
         public Decimal CashBalance { get; set; }
 
         [Display(Name = "Account Name")]
         [Required(ErrorMessage = "An Account Name is Required")]
+        [Column("Name")]
         public String Name { get; set; }
 
-        private String strAccountNumber;
-
         [Display(Name = "Account Number")]
-        public String AccountNumber
-        {
-            get
-            {
-                return strAccountNumber;
-            }
+        [Column("AccountNumber")]
+        public String AccountNumber { get; set; }
 
-            private set
-            {
-                // Create a list to hold all of the account number 
-                List<Decimal> AccountNumList = new List<Decimal>();
-
-                // Find the account with the largest account number
-                var SPQ = from sp in db.StockAccount
-                          where sp.AccountNumber != null
-                          select sp;
-
-                SPQ = SPQ.OrderByDescending(s => s.StockAccountID);
-
-                StockAccount SP = SPQ.FirstOrDefault();
-
-                if (SP != null)
-                {
-                    Decimal SPAN = Convert.ToDecimal(SP.AccountNumber);
-                    AccountNumList.Add(SPAN);
-                } 
-                
-
-                var CAQ = from ca in db.CheckingAccount
-                          select ca;
-
-                CAQ = CAQ.OrderByDescending(c => c.CheckingID);
-
-                Checking CA = CAQ.FirstOrDefault();
-
-                if (CA != null)
-                {
-                    Decimal CAN = Convert.ToDecimal(CA.AccountNumber);
-                    AccountNumList.Add(CAN);
-                }
-
-                var SAQ = from sa in db.SavingsAccount
-                          select sa;
-
-                SAQ = SAQ.OrderByDescending(s => s.SavingID);
-
-                Saving SA = SAQ.FirstOrDefault();
-
-                if (SA != null)
-                {
-                    Decimal SAN = Convert.ToDecimal(SA.AccountNumber);
-                    AccountNumList.Add(SAN);
-                }
-
-                var IQ = from ira in db.IRAAccount
-                         select ira;
-
-                IQ = IQ.OrderByDescending(s => s.IRAID);
-
-                IRA I = IQ.FirstOrDefault();
-
-                if (I != null)
-                {
-                    Decimal IN = Convert.ToDecimal(I.AccountNumber);
-                    AccountNumList.Add(IN);
-                }
-
-                // Variable to hold the max
-                Decimal MaxAccNum = 0;
-
-                // Loop through each Account Number and find the biggest one
-                foreach (Decimal AccNum in AccountNumList)
-                {
-                    if (AccNum > MaxAccNum)
-                    {
-                        MaxAccNum = AccNum;
-                    }
-                } 
-
-                MaxAccNum += 1; 
-                strAccountNumber = MaxAccNum.ToString();
-                
-            }
-        }
 
         private Decimal _decStockBalance;
 
 
-        [Required(ErrorMessage = "A Stock Value is Required")]
         [Display(Name = "Stock Value")]
         public Decimal StockBalance
         {
@@ -140,13 +59,14 @@ namespace LonghornBank.Models
             }
         }
 
-        [Required(ErrorMessage = "A Trading Fee is Required")]
         [Display(Name = "Trading Fee")]
+        [Column("TradingFee")]
         public Decimal TradingFee { get; set; }
 
         private Decimal decGains;
 
         [Display(Name = "Unrealized Gains")]
+        [Column("Gains")]
         public Decimal Gains
         {
             get
@@ -178,6 +98,7 @@ namespace LonghornBank.Models
         }
 
         [Display(Name = "Balanced Portfolio Bonus Balance")]
+        [Column("Bounses")]
         public Boolean Bounses { get; set; }
 
         // A stock account can belong to 1 person 

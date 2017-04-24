@@ -20,7 +20,6 @@ namespace LonghornBank.Models
         public String Name { get; set; }
 
         [Display(Name="Account Number")]
-        [Required(ErrorMessage = "Account Number is Required")]
         public String AccountNumber { get; set; } 
 
         [Display(Name = "Pending Balance")]

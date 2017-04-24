@@ -10,6 +10,7 @@ using LonghornBank.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Host.SystemWeb;
+using LonghornBank.Utility;
 
 namespace LonghornBank.Controllers
 {
@@ -129,6 +130,9 @@ namespace LonghornBank.Controllers
 
                 // Add relate the stock account to the customer 
                 stockAccount.Customer = customer;
+
+                // Get the account number 
+                stockAccount.AccountNumber = AccountNumber.AutoNumber(db);
 
                 db.StockAccount.Add(stockAccount);
                 db.SaveChanges();
