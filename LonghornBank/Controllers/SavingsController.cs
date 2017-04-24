@@ -105,8 +105,8 @@ namespace LonghornBank.Controllers
 
             if (ModelState.IsValid)
             {
-                saving.AccountNumber = new_account_number.ToString();
                 saving.Customer = customer;
+
                 db.SavingsAccount.Add(saving);
                 db.SaveChanges();
                 return RedirectToAction("Portal", "Home", new { id = customer.Id });

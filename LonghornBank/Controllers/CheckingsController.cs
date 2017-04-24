@@ -111,8 +111,7 @@ namespace LonghornBank.Controllers
             {
                 // Associate the Customer with the checking account
                 checking.Customer = customer;
-                int new_account_number = Convert.ToInt32(db.CheckingAccount.Count()) + 1000000000;
-                checking.AccountNumber = new_account_number.ToString();
+
                 db.CheckingAccount.Add(checking);
                 db.SaveChanges();
                 return RedirectToAction("Portal", "Home");
