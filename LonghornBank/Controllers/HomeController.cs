@@ -53,6 +53,13 @@ namespace LonghornBank.Controllers
             // Convert to a list and execute
             List <Checking> CustomerCheckings = CheckingQuery.ToList();
 
+            // Loop through each checking account and change the account numbers
+            // Only include the last 4 digits
+            foreach (Checking account in CustomerCheckings)
+            {
+                account.AccountNumber = account.AccountNumber.Substring(6);
+            }
+
             // Send to the Viewbag
             ViewBag.CheckingAccounts = CustomerCheckings;
 
@@ -63,6 +70,13 @@ namespace LonghornBank.Controllers
 
             // Convert to a list and execute 
             List<Saving> CustomerSavings = SavingsQuery.ToList();
+
+            // Loop through and extract only the last 4 digits of account number 
+            foreach (Saving account in CustomerSavings)
+            {
+                account.AccountNumber = account.AccountNumber.Substring(6);
+            }
+
             ViewBag.SavingsAccounts = CustomerSavings;
 
             // Find the IRA Accounts Associated
@@ -71,6 +85,13 @@ namespace LonghornBank.Controllers
                            select IR;
 
             List<IRA> CustomerIRA = IRAQuery.ToList();
+
+            // Loop through and set the account number to last 4 digits 
+            foreach (IRA account in CustomerIRA)
+            {
+                account.AccountNumber = account.AccountNumber.Substring(6);
+            }
+
             ViewBag.IRAAccounts = CustomerIRA;
 
             // Get the total value of the stock porfolio 
@@ -95,6 +116,8 @@ namespace LonghornBank.Controllers
 
                 */
 
+                CustomerSA.AccountNumber = CustomerSA.AccountNumber.Substring(6);
+
                 // Add to the view bag 
                 ViewBag.StockAccountValue = (CustomerSA.CashBalance + CustomerSA.StockBalance);
             }
@@ -103,6 +126,13 @@ namespace LonghornBank.Controllers
             {
                 // Add to the view bag 
                 ViewBag.StockAccountValue = 0;
+            }
+
+            // check to make the customer has created an account 
+            if (CustomerCheckings == null && CustomerIRA == null && CustomerSavings == null && CustomerSA == null)
+            {
+                // redirect the user to the create an account page
+                return RedirectToAction("Create", "Home");
             }
 
             return View(customer);

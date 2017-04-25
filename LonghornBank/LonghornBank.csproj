@@ -246,6 +246,7 @@
     <Compile Include="Models\Trade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\AccountNumber.cs" />
+    <Compile Include="Utility\BalancedPortfolio.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />

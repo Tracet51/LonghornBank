@@ -98,7 +98,7 @@ namespace LonghornBank.Models
 
         [Display(Name = "Balanced Portfolio Bonus Balance")]
         [Column("Bounses")]
-        public Boolean Bounses { get; set; }
+        public Boolean Balanced { get; set; }
 
         // A stock account can belong to 1 person 
         public virtual AppUser Customer { get; set; }

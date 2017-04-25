@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using LonghornBank.Models;
+using LonghornBank.Utility;
 using System.Net;
 
 namespace LonghornBank.Controllers
@@ -54,7 +55,7 @@ namespace LonghornBank.Controllers
 
 
         // GET: / StockTrades/StockChoices/
-        // shows all of the stock choices 
+        // shows all of the stock type choices 
         public ActionResult StockChoices()
         {
             return View();
@@ -523,6 +524,8 @@ namespace LonghornBank.Controllers
             }
 
             // Add the stuff to the database 
+            // check to see if the porfolio is balanced
+            BalancedPortfolio.CheckBalanced(db, Customer);
 
             return View("PurchaseConfirmation");
         }
@@ -727,6 +730,9 @@ namespace LonghornBank.Controllers
 
             // Save the changes
             db.SaveChanges();
+
+            // Check to see if the account is balanced
+            BalancedPortfolio.CheckBalanced(db, customer);
 
             // Return users to the stock account details page
             return RedirectToAction("Details","StockAccounts");
