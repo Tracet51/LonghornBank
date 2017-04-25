@@ -3,7 +3,7 @@ namespace LonghornBank.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Account : DbMigration
+    public partial class payeefix2 : DbMigration
     {
         public override void Up()
         {

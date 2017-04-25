@@ -67,6 +67,8 @@ namespace LonghornBank.Models
         // A person can have 1 stock account 
         public virtual List<StockAccount> StockAccount { get; set; }
 
+        public virtual List<Payee> PayeeAccounts { get; set; }
+
 
         //This method allows you to create a new user
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager)
@@ -103,6 +105,8 @@ namespace LonghornBank.Models
         public DbSet<Trade> Trades { get; set; }
 
         public DbSet<StockMarket> StockMarket { get; set; }
+
+        public DbSet<Payee> Payees { get; set; }
 
         //TODO: Make sure that your connection string name is correct here.
         public AppDbContext()
