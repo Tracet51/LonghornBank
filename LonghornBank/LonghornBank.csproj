@@ -379,6 +379,8 @@
     <Content Include="Views\Account\RoleAdmin\Create.cshtml" />
     <Content Include="Views\Account\RoleAdmin\Edit.cshtml" />
     <Content Include="Views\Account\RoleAdmin\Index.cshtml" />
+    <Content Include="Views\BankingTransactions\IRAError.cshtml" />
+    <Content Include="Views\IRAs\MoreThanOneError.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
