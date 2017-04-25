@@ -158,8 +158,86 @@ namespace LonghornBank.Controllers
             return View(model);
         }
 
+        // GET: /Profile/Details
+        // Returns the customer's profile detials
+        public async Task<ActionResult> Details()
+        {
+            // Get the customers
+            var Customer = await UserManager.FindByNameAsync(User.Identity.Name);
+
+            // Build out the view
+            CustomerProfileDetails CustomerProfile = new CustomerProfileDetails
+            {
+                City = Customer.City,
+                DOB = Customer.DOB,
+                Email = Customer.Email,
+                FName = Customer.FName,
+                LName = Customer.LName,
+                MiddleInitial = Customer.MiddleInitial,
+                PhoneNumber = Customer.PhoneNumber,
+                State = Customer.State,
+                StreetAddress = Customer.StreetAddress,
+                Zip = Customer.Zip
+            };
+
+            // return the strongly typed view 
+            return View("Details", CustomerProfile);
+        }
+
+        // GET: /Profile/Edit
+        // Edit the customer's profile 
+        public async Task<ActionResult> Edit()
+        {
+            // Get the customers
+            var Customer = await UserManager.FindByNameAsync(User.Identity.Name);
+
+            // Build out the view
+            CustomerProfileEdit CustomerProfile = new CustomerProfileEdit
+            {
+                City = Customer.City,
+                FName = Customer.FName,
+                LName = Customer.LName,
+                MiddleInitial = Customer.MiddleInitial,
+                PhoneNumber = Customer.PhoneNumber,
+                State = Customer.State,
+                StreetAddress = Customer.StreetAddress,
+                Zip = Customer.Zip
+            };
+
+            return View("Edit", CustomerProfile);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(CustomerProfileEdit CustomerProfile)
+        {
+            // Check the model state 
+            if (!ModelState.IsValid)
+            {
+                return View(CustomerProfile);
+            }
+
+            // Get the customers
+            var Customer = await UserManager.FindByNameAsync(User.Identity.Name);
+
+            // update the customer 
+            Customer.City = CustomerProfile.City;
+            Customer.FName = CustomerProfile.FName;
+            Customer.LName = CustomerProfile.LName;
+            Customer.MiddleInitial = CustomerProfile.MiddleInitial;
+            Customer.PhoneNumber = CustomerProfile.PhoneNumber;
+            Customer.State = CustomerProfile.State;
+            Customer.StreetAddress = CustomerProfile.StreetAddress;
+            Customer.Zip = CustomerProfile.Zip;
+
+            // Update the customer 
+            var result = await UserManager.UpdateAsync(Customer);
+
+            return RedirectToAction("Portal","Home");
+        }
+
         //
-        // GET: /Account/ForgotPassword
+        // GET: /Profile/ForgotPassword
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
@@ -167,7 +245,7 @@ namespace LonghornBank.Controllers
         }
 
         //
-        // POST: /Account/ForgotPassword
+        // POST: /Profile/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -182,12 +260,19 @@ namespace LonghornBank.Controllers
                     return View("ForgotPasswordConfirmation");
                 }
 
+                // check the birthday 
+               if (user.DOB.Year.ToString() != model.Birthday.Trim())
+                {
+                    // The Birday years do not match up
+                    return View("ForgotPasswordConfirmation");
+                }
+
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Profile", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
+                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form

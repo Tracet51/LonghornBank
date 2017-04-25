@@ -20,7 +20,6 @@ namespace LonghornBank.Models
         public Decimal CashBalance { get; set; }
 
         [Display(Name = "Account Name")]
-        [Required(ErrorMessage = "An Account Name is Required")]
         [Column("Name")]
         public String Name { get; set; }
 

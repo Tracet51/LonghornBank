@@ -7,13 +7,13 @@ namespace LonghornBank.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class StockNum : IMigrationMetadata
+    public sealed partial class LonghornChecking : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(StockNum));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(LonghornChecking));
         
         string IMigrationMetadata.Id
         {
-            get { return "201704240040350_StockNum"; }
+            get { return "201704251635521_LonghornChecking"; }
         }
         
         string IMigrationMetadata.Source

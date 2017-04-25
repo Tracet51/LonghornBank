@@ -134,6 +134,11 @@ namespace LonghornBank.Controllers
                 // Get the account number 
                 stockAccount.AccountNumber = AccountNumber.AutoNumber(db);
 
+                if (stockAccount.Name == null)
+                {
+                    stockAccount.Name = "Longhorn Stock Portfolio";
+                }
+
                 db.StockAccount.Add(stockAccount);
                 db.SaveChanges();
                 return RedirectToAction("Portal", "Home");

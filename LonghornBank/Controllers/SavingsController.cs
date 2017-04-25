@@ -109,6 +109,11 @@ namespace LonghornBank.Controllers
                 // Auto incremenment the account number
                 saving.AccountNumber = Utility.AccountNumber.AutoNumber(db);
 
+                if (saving.Name == null)
+                {
+                    saving.Name = "Longhorn Savings";
+                }
+
                 db.SavingsAccount.Add(saving);
                 db.SaveChanges();
                 return RedirectToAction("Portal", "Home");

@@ -115,6 +115,11 @@ namespace LonghornBank.Controllers
                 // add the account number 
                 checking.AccountNumber = Utility.AccountNumber.AutoNumber(db);
 
+                if (checking.Name == null)
+                {
+                    checking.Name = "Longhorn Checking";
+                }
+
                 db.CheckingAccount.Add(checking);
 
 

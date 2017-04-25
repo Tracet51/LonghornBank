@@ -20,7 +20,6 @@ namespace LonghornBank.Models
         public String AccountNumber { get; set; }
 
         [Display(Name = "Account Balance")]
-        [Required(ErrorMessage = "An Account Name is Required")]
         public String Name { get; set; }
 
         [Display(Name = "Deposits made this year toward contribution limit")]

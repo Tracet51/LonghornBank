@@ -7,13 +7,13 @@ namespace LonghornBank.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class RequiredFields : IMigrationMetadata
+    public sealed partial class Checking2 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(RequiredFields));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Checking2));
         
         string IMigrationMetadata.Id
         {
-            get { return "201704240059357_RequiredFields"; }
+            get { return "201704251648486_Checking2"; }
         }
         
         string IMigrationMetadata.Source

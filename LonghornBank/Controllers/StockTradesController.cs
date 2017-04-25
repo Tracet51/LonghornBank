@@ -297,6 +297,12 @@ namespace LonghornBank.Controllers
                 return RedirectToAction("Portal", "Home");
             }
 
+            if (PurchcaseTrade.TradeDate < DateTime.Today)
+            {
+                ViewBag.Error = "Date cannot be before today";
+                return View("PurchaseError");
+            }
+
             // Get the stock 
             StockMarket SelectedStock = db.StockMarket.Find(PurchcaseTrade.SelectedStock.StockMarketID);
 

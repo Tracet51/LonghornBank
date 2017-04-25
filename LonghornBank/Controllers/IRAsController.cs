@@ -108,6 +108,11 @@ namespace LonghornBank.Controllers
 
                 ira.AccountNumber = Utility.AccountNumber.AutoNumber(db);
 
+                if (ira.Name == null)
+                {
+                    ira.Name = "Longhorn IRA";
+                }
+
                 db.IRAAccount.Add(ira);
                 db.SaveChanges();
                 return RedirectToAction("Portal", "Home", new { id = customer.Id });

@@ -22,7 +22,6 @@ namespace LonghornBank.Models
         public Decimal PendingBalance { get; set; }
 
         [Display(Name = "Account Name")]
-        [Required(ErrorMessage = "Account Name is Required")]
         public String Name { get; set; }
 
         // create connection to customer account 
