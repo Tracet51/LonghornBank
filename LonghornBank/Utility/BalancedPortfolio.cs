@@ -90,7 +90,21 @@ namespace LonghornBank.Utility
                 // Update the Database and Save
                 db.Entry(sa).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-            }
+
+                // Create a new transaction for the bonus 
+                BankingTransaction BonusTransaction = new BankingTransaction
+                {
+                    BankingTransactionType = BankingTranactionType.Bonus,
+                    Amount = Bonus,
+                    Description = "Balanced Portfolio Bonus",
+                    StockAccount = sa,
+                    TransactionDate = DateTime.Today,
+                };
+
+                // Add the transaction to the database and save the changes
+                db.BankingTransaction.Add(BonusTransaction);
+                db.SaveChanges();
+            };
         }
     }
 }
