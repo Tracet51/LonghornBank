@@ -54,9 +54,11 @@
         </dd>
 
     </dl>
-
-    @Html.ActionLink("Sell", "SellStockOptions", "StockTrades", new { StockSaleID = Model.StockMarketID, StockAccountID = Model.StockAccountID, TradeID = Model.TradeID}, new { @class = "btn btn-default" })
-
+    @if (Model.Type == LonghornBank.Models.TradeType.Buy)
+    {
+        @Html.ActionLink("Sell", "SellStockOptions", "StockTrades", new { StockSaleID = Model.StockMarketID, StockAccountID = Model.StockAccountID, TradeID = Model.TradeID }, new { @class = "btn btn-default" })
+    }
+    
 </div>
 <p>
     @Html.ActionLink("Back to List", "Index")

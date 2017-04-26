@@ -31,22 +31,25 @@ namespace LonghornBank.Utility
             // loop through the stocks and check the types
             foreach (Trade t in CustomerStockAccount.Trades)
             {
-                if (t.StockMarket.StockType == StockType.Ordinary)
+                if (t.TradeType == TradeType.Buy)
                 {
-                    ordinary += 1;
-                }
-                else if(t.StockMarket.StockType == StockType.Index_Fund)
-                {
-                    index += 1;
-                }
-                else if (t.StockMarket.StockType == StockType.Mutual_Fund)
-                {
-                    mutual += 1;
+                    if (t.StockMarket.StockType == StockType.Ordinary)
+                    {
+                        ordinary += 1;
+                    }
+                    else if (t.StockMarket.StockType == StockType.Index_Fund)
+                    {
+                        index += 1;
+                    }
+                    else if (t.StockMarket.StockType == StockType.Mutual_Fund)
+                    {
+                        mutual += 1;
+                    }
                 }
             }
 
             // check to see if balanced
-            if (ordinary == 2 && index == 1 && mutual == 1)
+            if (ordinary >= 2 && index >= 1 && mutual >= 1)
             {
                 CustomerStockAccount.Balanced = true;
             }
@@ -58,6 +61,36 @@ namespace LonghornBank.Utility
             // update the stock account
             db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
+        }
+
+        // check for the balanced portfolios
+        // add 10% cash bonus 
+        public static void AddBounus(AppDbContext db)
+        {
+            // Get all of the stock account 
+            var SAQ = from sa in db.StockAccount
+                      where sa.Trades != null && sa.BankingTransaction != null && sa.Balanced == true
+                      select sa;
+
+            List<StockAccount> AllStockAccounts = SAQ.ToList();
+
+            foreach (StockAccount sa in AllStockAccounts)
+            {
+                // Calculate the value 
+                Decimal value = sa.CashBalance;
+                value += sa.Gains;
+                value += sa.StockBalance;
+
+                // Calculate the 10% bonus 
+                Decimal Bonus = (value * 0.10m);
+
+                // Add the Bonus value to the cash portion of the stocks 
+                sa.CashBalance += Bonus;
+
+                // Update the Database and Save
+                db.Entry(sa).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
         }
     }
 }

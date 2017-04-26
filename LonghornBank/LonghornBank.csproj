@@ -223,6 +223,10 @@
     <Compile Include="Migrations\201704251659465_AutoNames.Designer.cs">
       <DependentUpon>201704251659465_AutoNames.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704252205015_Balanced.cs" />
+    <Compile Include="Migrations\201704252205015_Balanced.Designer.cs">
+      <DependentUpon>201704252205015_Balanced.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
     <Compile Include="Migrations\SeedProfiles.cs" />
@@ -351,6 +355,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704251659465_AutoNames.resx">
       <DependentUpon>201704251659465_AutoNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704252205015_Balanced.resx">
+      <DependentUpon>201704252205015_Balanced.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

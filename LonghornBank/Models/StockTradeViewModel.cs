@@ -50,6 +50,7 @@ namespace LonghornBank.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime TradeDate { get; set; }
 
+
     }
 
 
@@ -148,5 +149,7 @@ namespace LonghornBank.Models
 
         [Display(Name = "Total Gains/Losses")]
         public Decimal Gains { get; set; }
+
+        public TradeType Type { get; set; }
     }
 }

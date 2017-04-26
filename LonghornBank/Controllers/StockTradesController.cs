@@ -343,7 +343,12 @@ namespace LonghornBank.Controllers
                 CorrectedAmount = 0 
             };
 
+            // Get the customer Savings account 
+            var SAQ = from sa in db.StockAccount
+                      where sa.Customer.Id == Customer.Id
+                      select sa;
 
+            StockAccount CustomerStockAccount = SAQ.FirstOrDefault();
 
             // check the account nulls 
             if (PurchcaseTrade.CheckingAccounts != null)
@@ -392,8 +397,12 @@ namespace LonghornBank.Controllers
                     db.CheckingAccount.Find(CustomerChecking.CheckingID).Balance -= decTotal;
 
                     // take out the fee 
-                    db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance -= SelectedStock.Fee;
+                    CustomerStockAccount.CashBalance -= SelectedStock.Fee;
 
+                    // take out the fee 
+                    CustomerStockAccount.TradingFee += SelectedStock.Fee;
+
+                    db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
                     db.BankingTransaction.Add(CheckingTrans);
                     db.SaveChanges();
                 }
@@ -450,8 +459,12 @@ namespace LonghornBank.Controllers
                     db.SavingsAccount.Find(CustomerSavings.SavingID).Balance -= decTotal;
 
                     // take out the fee 
-                    db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance -= SelectedStock.Fee;
+                    CustomerStockAccount.CashBalance -= SelectedStock.Fee;
 
+                    // take out the fee 
+                    CustomerStockAccount.TradingFee += SelectedStock.Fee;
+
+                    db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
                     db.BankingTransaction.Add(SavingsTrans);
                     db.SaveChanges();
                 }
@@ -465,8 +478,6 @@ namespace LonghornBank.Controllers
             }
             else if (PurchcaseTrade.AccountStock!= null)
             {
-                // Get the customer Savings account 
-                StockAccount CustomerStockAccount = db.StockAccount.Find(PurchcaseTrade.AccountStock.StockAccountID);
 
                 // take the money from the account
                 if (CustomerStockAccount.CashBalance - decTotal >= 0)
@@ -501,11 +512,15 @@ namespace LonghornBank.Controllers
                     db.SaveChanges();
 
                     // Take the money out 
-                    db.StockAccount.Find(CustomerStockAccount.StockAccountID).CashBalance -= decTotal;
+                    CustomerStockAccount.CashBalance -= decTotal;
 
                     // take out the fee 
-                    db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance -= SelectedStock.Fee;
+                    CustomerStockAccount.CashBalance -= SelectedStock.Fee;
 
+                    // take out the fee 
+                    CustomerStockAccount.TradingFee += SelectedStock.Fee;
+
+                    db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
                     db.BankingTransaction.Add(StocksTrans);
                     db.SaveChanges();
                 }
@@ -557,7 +572,8 @@ namespace LonghornBank.Controllers
                 PriceChange = (CustomerTrade.PricePerShare - CustomerTrade.StockMarket.StockPrice),
                 Quantity = CustomerTrade.Quantity,
                 TradeID = CustomerTrade.TradeID,
-                Gains = ((CustomerTrade.Quantity * CustomerTrade.PricePerShare) - (CustomerTrade.Quantity * CustomerTrade.StockMarket.StockPrice))
+                Gains = ((CustomerTrade.Quantity * CustomerTrade.PricePerShare) - (CustomerTrade.Quantity * CustomerTrade.StockMarket.StockPrice)),
+                Type = CustomerTrade.TradeType
             };
 
             return View(TD);
@@ -696,12 +712,15 @@ namespace LonghornBank.Controllers
             // Take out the fee 
             CustomerStockAccount.CashBalance -= Sale.Fee;
 
+            // Add the fee to the account
+            CustomerStockAccount.TradingFee += Sale.Fee;
+
             // Add/Subtract the profit
             CustomerStockAccount.CashBalance += Sale.Profit;
 
             // Update the Database
             db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
-
+            db.SaveChanges();
 
 
             // Remove the shares from the account
