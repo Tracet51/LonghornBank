@@ -7,8 +7,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LonghornBank.Models
 {
-    public enum DisputeStatus { Submitted, Accepted, Rejected, Adjusted }
+    public enum DisputeStatus { NotDisputed, Submitted, Accepted, Rejected, Adjusted }
     public enum BankingTranactionType { Deposit, Withdrawl, Transfer, Fee}
+
+    public enum ApprovedorNeedsApproval { Approved, NeedsApproval}
     public class BankingTransaction
     {
         public Int32 BankingTransactionID { get; set; }
@@ -46,6 +48,8 @@ namespace LonghornBank.Models
         [Display(Name = "Transaction Type")]
         [Required(ErrorMessage = "Transaction Type is Required")]
         public BankingTranactionType BankingTransactionType { get; set; }
+
+        public ApprovedorNeedsApproval ApprovalStatus { get; set; }
 
         // Many to Many: A Transaction and Belong to Multiple Checking Accounts
         public virtual List<Checking> CheckingAccount { get; set; }

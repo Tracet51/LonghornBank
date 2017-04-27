@@ -3,16 +3,16 @@ namespace LonghornBank.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Gains : DbMigration
+    public partial class migrationtwo : DbMigration
     {
         public override void Up()
         {
-            DropColumn("dbo.StockAccounts", "Gains");
+            AddColumn("dbo.BankingTransactions", "ApprovalStatus", c => c.Int(nullable: false));
         }
         
         public override void Down()
         {
-            AddColumn("dbo.StockAccounts", "Gains", c => c.Decimal(nullable: false, precision: 18, scale: 2));
+            DropColumn("dbo.BankingTransactions", "ApprovalStatus");
         }
     }
 }

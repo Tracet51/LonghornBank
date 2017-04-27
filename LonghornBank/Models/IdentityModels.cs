@@ -118,5 +118,9 @@ namespace LonghornBank.Models
         public DbSet<AppRole> AppRoles { get; set; }
 
         public System.Data.Entity.DbSet<LonghornBank.Models.Manager> Managers { get; set; }
+
+        public System.Data.Entity.DbSet<LonghornBank.Models.Employee> Employees { get; set; }
+
+        
     }
 }

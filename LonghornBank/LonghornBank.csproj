@@ -161,9 +161,16 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Models\Web.config" />
+    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <Content Include="obj\Debug\LonghornBank.csproj.GenerateResource.Cache" />
+    <Content Include="obj\Debug\LonghornBank.csprojResolveAssemblyReference.cache" />
+    <Content Include="Models\IdentityModels" />
     <None Include="Properties\PublishProfiles\LonghornBank - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\LonghornBank - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="obj\Debug\LonghornBank.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\LonghornBank.dll" />
+    <Content Include="obj\Debug\LonghornBank.pdb" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
@@ -185,6 +192,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\IRAsController.cs" />
+    <Compile Include="Controllers\ManagersController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\BankingTransactionsController.cs" />
     <Compile Include="Controllers\CheckingsController.cs" />
@@ -198,38 +206,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704190022055_Test.cs" />
-    <Compile Include="Migrations\201704190022055_Test.Designer.cs">
-      <DependentUpon>201704190022055_Test.cs</DependentUpon>
+    <Compile Include="Migrations\201704231838119_first.cs" />
+    <Compile Include="Migrations\201704231838119_first.Designer.cs">
+      <DependentUpon>201704231838119_first.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704190101081_Test2.cs" />
-    <Compile Include="Migrations\201704190101081_Test2.Designer.cs">
-      <DependentUpon>201704190101081_Test2.cs</DependentUpon>
+    <Compile Include="Migrations\201704232017055_migrationtwo.cs" />
+    <Compile Include="Migrations\201704232017055_migrationtwo.Designer.cs">
+      <DependentUpon>201704232017055_migrationtwo.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704202125445_Trades.cs" />
-    <Compile Include="Migrations\201704202125445_Trades.Designer.cs">
-      <DependentUpon>201704202125445_Trades.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704210210274_Stocks.cs" />
-    <Compile Include="Migrations\201704210210274_Stocks.Designer.cs">
-      <DependentUpon>201704210210274_Stocks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704210238526_ChangeStocks.cs" />
-    <Compile Include="Migrations\201704210238526_ChangeStocks.Designer.cs">
-      <DependentUpon>201704210238526_ChangeStocks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704212351413_Gains.cs" />
-    <Compile Include="Migrations\201704212351413_Gains.Designer.cs">
-      <DependentUpon>201704212351413_Gains.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704220043307_TradeDetails.cs" />
-    <Compile Include="Migrations\201704220043307_TradeDetails.Designer.cs">
-      <DependentUpon>201704220043307_TradeDetails.cs</DependentUpon>
+    <Compile Include="Migrations\201704251629191_twentyfifth.cs" />
+    <Compile Include="Migrations\201704251629191_twentyfifth.Designer.cs">
+      <DependentUpon>201704251629191_twentyfifth.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Migrations\SeedDataCustomers.cs" />
-    <Compile Include="Migrations\SeedProfiles.cs" />
-    <Compile Include="Migrations\SeedStocks.cs" />
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DisputesViewModel.cs" />
+    <Compile Include="Models\DepositApprovalViewModel.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
@@ -246,6 +238,9 @@
     <Compile Include="Models\StockMarket.cs" />
     <Compile Include="Models\StockTradeViewModel.cs" />
     <Compile Include="Models\Trade.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -309,6 +304,23 @@
     <Content Include="Views\StockTrades\TradeDetails.cshtml" />
     <Content Include="Views\StockTrades\SellStockOptions.cshtml" />
     <Content Include="Views\StockTrades\SellStocks.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\RoleAdmin\Create.cshtml" />
+    <Content Include="Views\Account\RoleAdmin\Edit.cshtml" />
+    <Content Include="Views\Account\RoleAdmin\Index.cshtml" />
+    <Content Include="Views\Managers\Create.cshtml" />
+    <Content Include="Views\Managers\Delete.cshtml" />
+    <Content Include="Views\Managers\DepositApproval.cshtml" />
+    <Content Include="Views\Managers\Details.cshtml" />
+    <Content Include="Views\Managers\DisputeManagementDetail.cshtml" />
+    <Content Include="Views\Managers\Disputes.cshtml" />
+    <Content Include="Views\Managers\Edit.cshtml" />
+    <Content Include="Views\Managers\Index.cshtml" />
+    <Content Include="Views\Managers\FreezeEmployees.cshtml" />
+    <Content Include="Views\Managers\FreezeCustomers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -318,29 +330,19 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704190022055_Test.resx">
-      <DependentUpon>201704190022055_Test.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704231838119_first.resx">
+      <DependentUpon>201704231838119_first.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704190101081_Test2.resx">
-      <DependentUpon>201704190101081_Test2.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704232017055_migrationtwo.resx">
+      <DependentUpon>201704232017055_migrationtwo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704202125445_Trades.resx">
-      <DependentUpon>201704202125445_Trades.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704251629191_twentyfifth.resx">
+      <DependentUpon>201704251629191_twentyfifth.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704210210274_Stocks.resx">
-      <DependentUpon>201704210210274_Stocks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704210238526_ChangeStocks.resx">
-      <DependentUpon>201704210238526_ChangeStocks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704212351413_Gains.resx">
-      <DependentUpon>201704212351413_Gains.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704220043307_TradeDetails.resx">
-      <DependentUpon>201704220043307_TradeDetails.cs</DependentUpon>
-    </EmbeddedResource>
+    <EmbeddedResource Include="obj\Debug\LonghornBank.Migrations.first.resources" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

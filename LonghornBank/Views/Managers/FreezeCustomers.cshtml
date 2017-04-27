@@ -1,0 +1,84 @@
+﻿@model IEnumerable<LonghornBank.Models.AppUser>
+
+@{
+    ViewBag.Title = "Freeze Customers";
+}
+
+<h2>Freeze Customers</h2>
+<h5>A checked box in the Current Frozen Status Column indicates the customer's account is currently frozen</h5>
+@ViewBag.ConfirmationMessage
+
+    <table class="table">
+        <tr>
+            <th>
+                First Name
+            </th>
+            <th>
+                Last Name
+            </th>
+            <th>
+                EMail
+            </th>
+            <th>
+                Current Frozen Status
+            </th>
+            <th>
+                Freeze Account?
+            </th>
+            <th>
+                Unfreeze Account?
+            </th>
+            <th></th>
+            
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActiveStatus)
+                </td>
+                
+                    @using (Html.BeginForm("FreezeCustomers", "Managers", FormMethod.Post))
+                    {   @Html.HiddenFor(modelItem => item.Id, new { Name = "CustomerID" })
+                        <td>
+                            @Html.RadioButton("Freeze", true, new { @class = "form-check-input" })
+                        </td>
+                        <td>
+                            @Html.RadioButton("Freeze", false, new { @class = "form-check-input"})
+                        </td>
+                        <td>
+                            
+                            <input type="submit" value="Commit" class="btn btn-success" />
+                        </td>
+                        
+                    }
+                
+              
+            </tr>
+        }
+
+
+
+    </table>
+
+
+  
+
+
+<br />
+@Html.ActionLink("Manager Home", "Index", "Managers")
+
+
+
+
+
