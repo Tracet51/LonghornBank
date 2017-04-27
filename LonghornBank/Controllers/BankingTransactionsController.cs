@@ -831,8 +831,11 @@ namespace LonghornBank.Controllers
             return RedirectToAction("Index", "BankingTransactions", new { id = id });
         }
 
+
+        public static DateTime Today { get;}
+
         //Detailed Search function
-        public ActionResult SearchResults(String SearchDescription, BankingTranactionType SelectedType, Decimal SearchAmount, String SearchTransactionNumber, DateTime SearchDate)
+        public ActionResult SearchResults(String SearchDescription, Int32 SelectedType, Decimal SearchAmountBegin, Decimal SearchAmountEnd, Int32 SearchAmountRange, String SearchTransactionNumber, DateTime BeginSearchDate, DateTime EndSearchDate, Int32 DateRange)
         {
             var query = from c in db.BankingTransaction
                         select c;
@@ -842,22 +845,103 @@ namespace LonghornBank.Controllers
                 query = query.Where(c => c.Description.Contains(SearchDescription));
             }
 
-            if (SelectedType != BankingTranactionType.None)
+            if (SelectedType != 0)
             {
-                string BankingType = SelectedType.ToString();
-                query = query.Where(c => c.BankingTransactionType == SelectedType);
+                //Search for transactions with type deposit
+                if (SelectedType == 1)
+                {
+                                        
+                  query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Deposit);
+                }
+
+                //Search for transactions with type withdrawl
+                if (SelectedType == 2)
+                {
+                    query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Withdrawl);
+                }
+
+                //Search for transactions with type transfer
+                if (SelectedType == 3)
+                {
+                    query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Transfer);
+                }
+
+                //Search for transactions with type fees
+                if (SelectedType == 4)
+                {
+                    query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Fee);
+                }
+                
+                
             }
 
-           /*if (SearchAmount != null)
+            //Use string instead of decimal?
+            if (SearchAmountBegin >=0 && SearchAmountEnd > SearchAmountBegin && SearchAmountRange == 0)
             {
-                query = query.Where
-            }*/
+                query = query.Where(c => c.Amount >= SearchAmountBegin && c.Amount <= SearchAmountEnd);
+            }
+            
+            if (SearchAmountRange != 0)
+            {
+                //For 0 to 100
+                if (SearchAmountRange == 1)
+                {
+                    query = query.Where(c => c.Amount >= 0 && c.Amount <= 100);
+                }
+
+                //For 100 to 200
+                if (SearchAmountRange == 2)
+                {
+                    query = query.Where(c => c.Amount >=100 && c.Amount <= 200);
+                }
+
+                //For 200 to 300
+                if (SearchAmountRange == 3)
+                {
+                    query = query.Where(c => c.Amount >= 200 && c.Amount <= 300);
+                }
+
+                //For 300+
+                if (SearchAmountRange == 4)
+                {
+                    query = query.Where(c => c.Amount >= 300);
+                }
+            }
+            
+            //Custom date range - Edit for Proper date range #
+            //TODO: Edit proper date Range
+            if (BeginSearchDate < Today && EndSearchDate > BeginSearchDate && DateRange == -1)
+            {
+                query = query.Where(c => c.TransactionDate >= BeginSearchDate && c.TransactionDate <= EndSearchDate);
+            }
+
+            //0 should indicate searching for all dates
+            if (DateRange != 0)
+            {
+                //Last 15 days
+                if (DateRange == 1)
+                {
+                    query = query.Where(c => c.TransactionDate >= Today.AddDays(-15));
+                }
+
+                //Last 30 days
+                if (DateRange == 2)
+                {
+                    query = query.Where(c => c.TransactionDate <= Today.AddDays(-15) && c.TransactionDate >= Today.AddDays(-30));
+                }
+                //Last 60 days
+                if (DateRange == 3)
+                {
+                    query = query.Where(c => c.TransactionDate <= Today.AddDays(-30) && c.TransactionDate >= Today.AddDays(-60));
+                }
+
+            }
 
             if (SearchTransactionNumber != null)
             {
                 query = query.Where(c => c.Description.Contains(SearchTransactionNumber));
             }
-
+            
             ViewBag.DisplayedTransactionCount = query.ToList().Count;
             ViewBag.TotalTransactionCount = db.BankingTransaction.ToList().Count;
             List<BankingTransaction> SelectedTransactions = query.ToList();

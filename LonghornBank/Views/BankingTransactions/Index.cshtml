@@ -12,6 +12,50 @@
     @Html.ActionLink("New Deposit", "Deposit")
 </p>
 
+@using (Html.BeginForm("SearchResults", "BankingTransactions", FormMethod.Get))
+{
+    <p class= "form-group">
+        Name:@Html.TextBox("SearchDescription", null, new {@class = "form-control"})<br/>
+
+        <div class="form-group">
+            
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("SelectedType",BankingTranactionType.None, true, new {@class ="form-check-input"}) All
+                </label>
+            </div>
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("SelectedType", BankingTranactionType.Deposit, true, new { @class ="form-check-input"}) Deposit
+                </label>
+            </div>
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("SelectedType", BankingTranactionType.Withdrawl, true, new {@class ="form-check-input"}) Withdrawl
+                </label>
+            </div>
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("SelectedType", BankingTranactionType.Transfer, true, new {@class ="form-check-input"}) Transfer
+                </label>
+            </div>
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("SelectedType", BankingTranactionType.Fee, true , new {@class ="form-check-input"}) Fee
+                </label>
+            </div>
+        </div>
+        Name:@Html.TextBox("SearchTransactionNumber", null, new { @class = "form-control" })<br />
+    </p>
+}
+<p>
+    @ViewBag.DisplayedTransactionCount out of @ViewBag.TotalTransactionCount
+</p>
+
 
 <table class="table">
     <tr>
