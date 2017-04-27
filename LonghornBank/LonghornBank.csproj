@@ -199,35 +199,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704251625300_DefaultValues.cs" />
-    <Compile Include="Migrations\201704251625300_DefaultValues.Designer.cs">
-      <DependentUpon>201704251625300_DefaultValues.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704251631185_CheckingTest.cs" />
-    <Compile Include="Migrations\201704251631185_CheckingTest.Designer.cs">
-      <DependentUpon>201704251631185_CheckingTest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704251635521_LonghornChecking.cs" />
-    <Compile Include="Migrations\201704251635521_LonghornChecking.Designer.cs">
-      <DependentUpon>201704251635521_LonghornChecking.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704251643359_Checking.cs" />
-    <Compile Include="Migrations\201704251643359_Checking.Designer.cs">
-      <DependentUpon>201704251643359_Checking.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704251648486_Checking2.cs" />
-    <Compile Include="Migrations\201704251648486_Checking2.Designer.cs">
-      <DependentUpon>201704251648486_Checking2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704251659465_AutoNames.cs" />
-    <Compile Include="Migrations\201704251659465_AutoNames.Designer.cs">
-      <DependentUpon>201704251659465_AutoNames.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704252205015_Balanced.cs" />
-    <Compile Include="Migrations\201704252205015_Balanced.Designer.cs">
-      <DependentUpon>201704252205015_Balanced.cs</DependentUpon>
+    <Compile Include="Migrations\201704271717150_Test5.cs" />
+    <Compile Include="Migrations\201704271717150_Test5.Designer.cs">
+      <DependentUpon>201704271717150_Test5.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\SeedAccounts.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
     <Compile Include="Migrations\SeedProfiles.cs" />
     <Compile Include="Migrations\SeedStocks.cs" />
@@ -338,26 +315,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704251625300_DefaultValues.resx">
-      <DependentUpon>201704251625300_DefaultValues.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704251631185_CheckingTest.resx">
-      <DependentUpon>201704251631185_CheckingTest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704251635521_LonghornChecking.resx">
-      <DependentUpon>201704251635521_LonghornChecking.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704251643359_Checking.resx">
-      <DependentUpon>201704251643359_Checking.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704251648486_Checking2.resx">
-      <DependentUpon>201704251648486_Checking2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704251659465_AutoNames.resx">
-      <DependentUpon>201704251659465_AutoNames.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704252205015_Balanced.resx">
-      <DependentUpon>201704252205015_Balanced.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704271717150_Test5.resx">
+      <DependentUpon>201704271717150_Test5.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

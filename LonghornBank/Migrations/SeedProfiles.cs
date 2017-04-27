@@ -34,21 +34,7 @@ namespace LonghornBank.Migrations
             {
                 roleManager.Create(new AppRole("Employee"));
             }
-            
 
-            AppUser b3 = new AppUser() { UserName = "erice@longhornbank.neet", Email = "erice@longhornbank.neet", FName = "Eryn", LName = "Rice", MiddleInitial = Convert.ToChar("M"), StreetAddress = "3405 Rio Grande", City = "Dallas", State = "TX", Zip = "75261", PhoneNumber = "2148475583", SSN = "111111111" };
-
-
-            AppUser userToAddb3 = userManager.FindByName("e.rice@longhornbank.neet");
-            if (userToAddb3 == null)
-            {
-                userManager.Create(b3, "ricearoni");
-                userToAddb3 = userManager.FindByName("erice@longhornbank.neet");
-                if (userManager.IsInRole(userToAddb3.Id, "Employee") == false)
-                {
-                    userManager.AddToRole(userToAddb3.Id, "Employee");
-                }
-            }
 
             AppUser b2 = new AppUser() { UserName = "t.jacobs@longhornbank.neet", Email = "t.jacobs@longhornbank.neet", FName = "Todd", LName = "Jacobs", MiddleInitial = Convert.ToChar("L"), StreetAddress = "4564 Elm St.", City = "Houston", State = "TX", Zip = "77003", PhoneNumber = "8176593544", SSN = "222222222", DOB = Convert.ToDateTime("1/1/1800") };
 
@@ -65,6 +51,20 @@ namespace LonghornBank.Migrations
                 }
             }
 
+            AppUser b3 = new AppUser() { UserName = "e.rice@longhornbank.neet", Email = "e.rice@longhornbank.neet", FName = "Eryn", LName = "Rice", MiddleInitial = Convert.ToChar("M"), StreetAddress = "3405 Rio Grande", City = "Dallas", State = "TX", Zip = "75261", PhoneNumber = "2148475583", SSN = "111111111", DOB = Convert.ToDateTime("1/1/1800") };
+
+
+            AppUser userToAddb3 = userManager.FindByName("e.rice@longhornbank.neet");
+            if (userToAddb3 == null)
+            {
+                userManager.Create(b3, "ricearoni");
+                db.SaveChanges();
+                userToAddb3 = userManager.FindByName("e.rice@longhornbank.neet");
+                if (userManager.IsInRole(userToAddb3.Id, "Employee") == false)
+                {
+                    userManager.AddToRole(userToAddb3.Id, "Employee");
+                }
+            }
 
             AppUser b4 = new AppUser() { UserName = "b.ingram@longhornbank.neet", Email = "b.ingram@longhornbank.neet", FName = "Brad", LName = "Ingram", MiddleInitial = Convert.ToChar("S"), StreetAddress = "6548 La Posada Ct.", City = "Austin", State = "TX", Zip = "78705", PhoneNumber = "5126978613", SSN = "545454545", DOB = Convert.ToDateTime("1/1/1800") };
 
@@ -96,6 +96,20 @@ namespace LonghornBank.Migrations
                 }
             }
 
+            AppUser b6 = new AppUser() { UserName = "g.martinez@longhornbank.neet", Email = "g.martinez@longhornbank.neet", FName = "Gregory", LName = "Martinez", MiddleInitial = Convert.ToChar("R"), StreetAddress = "8295 Sunset Blvd.", City = "San Antonio", State = "TX", Zip = "78239", PhoneNumber = "2105788965", SSN = "574677829", DOB = Convert.ToDateTime("1/1/1800") };
+
+
+            AppUser userToAddb6 = userManager.FindByName("g.martinez@longhornbank.neet");
+            if (userToAddb6 == null)
+            {
+                userManager.Create(b6, "fungus");
+                db.SaveChanges();
+                userToAddb6 = userManager.FindByName("g.martinez@longhornbank.neet");
+                if (userManager.IsInRole(userToAddb6.Id, "Employee") == false)
+                {
+                    userManager.AddToRole(userToAddb6.Id, "Employee");
+                }
+            }
 
             AppUser b7 = new AppUser() { UserName = "m.sheffield@longhornbank.neet", Email = "m.sheffield@longhornbank.neet", FName = "Martin", LName = "Sheffield", MiddleInitial = Convert.ToChar("J"), StreetAddress = "3886 Avenue A", City = "Austin", State = "TX", Zip = "78736", PhoneNumber = "5124678821", SSN = "334557278", DOB = Convert.ToDateTime("1/1/1800") };
 
@@ -104,6 +118,7 @@ namespace LonghornBank.Migrations
             if (userToAddb7 == null)
             {
                 userManager.Create(b7, "longhorns");
+                db.SaveChanges();
                 userToAddb7 = userManager.FindByName("m.sheffield@longhornbank.neet");
                 if (userManager.IsInRole(userToAddb7.Id, "Manager") == false)
                 {
@@ -320,6 +335,8 @@ namespace LonghornBank.Migrations
                     userManager.AddToRole(userToAddb21.Id, "Employee");
                 }
             }
+
+
 
 
 

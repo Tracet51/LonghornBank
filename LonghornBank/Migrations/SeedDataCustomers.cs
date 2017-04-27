@@ -19,7 +19,7 @@ namespace LonghornBank.Migrations
             AppRoleManager roleManager = new AppRoleManager(new RoleStore<AppRole>(db));
 
             //create an admin role             
-            String roleName = "Manager";
+            String roleName = "Customer";
 
             //check to see if the role exists             
             if (roleManager.RoleExists(roleName) == false) //role doesn't exist
@@ -27,6 +27,20 @@ namespace LonghornBank.Migrations
                 roleManager.Create(new AppRole(roleName));
             }
 
+
+            AppUser a2 = new AppUser() { UserName = "cbaker@freezing.co.uk", Email = "cbaker@freezing.co.uk", FName = "Christopher", LName = "Baker", MiddleInitial = Convert.ToChar("L"), StreetAddress = "1245 Lake Austin Blvd.", City = "Austin", State = "TX", Zip = "78733", PhoneNumber = "5125571146", DOB = Convert.ToDateTime("1991-02-07 00:00:00"), ActiveStatus = true };
+
+
+            AppUser userToAdda2 = userManager.FindByName("cbaker@freezing.co.uk");
+            if (userToAdda2 == null)
+            {
+                userManager.Create(a2, "gazing");
+                userToAdda2 = userManager.FindByName("cbaker@freezing.co.uk");
+                if (userManager.IsInRole(userToAdda2.Id, "Customer") == false)
+                {
+                    userManager.AddToRole(userToAdda2.Id, "Customer");
+                }
+            }
 
             AppUser a3 = new AppUser() { UserName = "mb@aool.com", Email = "mb@aool.com", FName = "Michelle", LName = "Banks", MiddleInitial = Convert.ToChar(" "), StreetAddress = "1300 Tall Pine Lane", City = "San Antonio", State = "TX", Zip = "78261", PhoneNumber = "2102678873", DOB = Convert.ToDateTime("1990-06-23 00:00:00"), ActiveStatus = true };
 
@@ -56,6 +70,19 @@ namespace LonghornBank.Migrations
                 }
             }
 
+            AppUser a5 = new AppUser() { UserName = "wendy@ggmail.com", Email = "wendy@ggmail.com", FName = "Wendy", LName = "Chang", MiddleInitial = Convert.ToChar("L"), StreetAddress = "202 Bellmont Hall", City = "Austin", State = "TX", Zip = "78713", PhoneNumber = "5125943222", DOB = Convert.ToDateTime("1964-12-21 00:00:00"), ActiveStatus = true };
+
+
+            AppUser userToAdda5 = userManager.FindByName("wendy@ggmail.com");
+            if (userToAdda5 == null)
+            {
+                userManager.Create(a5, "clover");
+                userToAdda5 = userManager.FindByName("wendy@ggmail.com");
+                if (userManager.IsInRole(userToAdda5.Id, "Customer") == false)
+                {
+                    userManager.AddToRole(userToAdda5.Id, "Customer");
+                }
+            }
 
             AppUser a6 = new AppUser() { UserName = "limchou@yaho.com", Email = "limchou@yaho.com", FName = "Lim", LName = "Chou", MiddleInitial = Convert.ToChar(" "), StreetAddress = "1600 Teresa Lane", City = "San Antonio", State = "TX", Zip = "78266", PhoneNumber = "2107724599", DOB = Convert.ToDateTime("1950-06-14 00:00:00"), ActiveStatus = true };
 
@@ -127,6 +154,33 @@ namespace LonghornBank.Migrations
                 }
             }
 
+            AppUser a11 = new AppUser() { UserName = "chaley@thug.com", Email = "chaley@thug.com", FName = "Charles", LName = "Haley", MiddleInitial = Convert.ToChar("E"), StreetAddress = "One Cowboy Pkwy", City = "Dallas", State = "TX", Zip = "75261", PhoneNumber = "2148475583", DOB = Convert.ToDateTime("1985-09-17 00:00:00"), ActiveStatus = true };
+
+
+            AppUser userToAdda11 = userManager.FindByName("chaley@thug.com");
+            if (userToAdda11 == null)
+            {
+                userManager.Create(a11, "region");
+                userToAdda11 = userManager.FindByName("chaley@thug.com");
+                if (userManager.IsInRole(userToAdda11.Id, "Customer") == false)
+                {
+                    userManager.AddToRole(userToAdda11.Id, "Customer");
+                }
+            }
+
+            AppUser a12 = new AppUser() { UserName = "jeff@ggmail.com", Email = "jeff@ggmail.com", FName = "Jeffrey", LName = "Hampton", MiddleInitial = Convert.ToChar("T"), StreetAddress = "337 38th St.", City = "Austin", State = "TX", Zip = "78705", PhoneNumber = "5126978613", DOB = Convert.ToDateTime("1995-01-23 00:00:00"), ActiveStatus = true };
+
+
+            AppUser userToAdda12 = userManager.FindByName("jeff@ggmail.com");
+            if (userToAdda12 == null)
+            {
+                userManager.Create(a12, "hungry");
+                userToAdda12 = userManager.FindByName("jeff@ggmail.com");
+                if (userManager.IsInRole(userToAdda12.Id, "Customer") == false)
+                {
+                    userManager.AddToRole(userToAdda12.Id, "Customer");
+                }
+            }
 
             AppUser a13 = new AppUser() { UserName = "wjhearniii@umch.edu", Email = "wjhearniii@umch.edu", FName = "John", LName = "Hearn", MiddleInitial = Convert.ToChar("B"), StreetAddress = "4225 North First", City = "Dallas", State = "TX", Zip = "75237", PhoneNumber = "2148965621", DOB = Convert.ToDateTime("1994-01-08 00:00:00"), ActiveStatus = true };
 
@@ -212,6 +266,20 @@ namespace LonghornBank.Migrations
                 }
             }
 
+            AppUser a19 = new AppUser() { UserName = "elowe@netscrape.net", Email = "elowe@netscrape.net", FName = "Ernest", LName = "Lowe", MiddleInitial = Convert.ToChar("S"), StreetAddress = "3201 Pine Drive", City = "San Antonio", State = "TX", Zip = "78279", PhoneNumber = "2105344627", DOB = Convert.ToDateTime("1992-02-07 00:00:00"), ActiveStatus = true };
+
+
+            AppUser userToAdda19 = userManager.FindByName("elowe@netscrape.net");
+            if (userToAdda19 == null)
+            {
+                userManager.Create(a19, "impede");
+                userToAdda19 = userManager.FindByName("elowe@netscrape.net");
+                if (userManager.IsInRole(userToAdda19.Id, "Customer") == false)
+                {
+                    userManager.AddToRole(userToAdda19.Id, "Customer");
+                }
+            }
+
             AppUser a20 = new AppUser() { UserName = "luce_chuck@ggmail.com", Email = "luce_chuck@ggmail.com", FName = "Chuck", LName = "Luce", MiddleInitial = Convert.ToChar("B"), StreetAddress = "2345 Rolling Clouds", City = "San Antonio", State = "TX", Zip = "78268", PhoneNumber = "2106983548", DOB = Convert.ToDateTime("1942-10-25 00:00:00"), ActiveStatus = true };
 
 
@@ -274,7 +342,7 @@ namespace LonghornBank.Migrations
             AppUser userToAdda24 = userManager.FindByName("smartinmartin.Martin@aool.com");
             if (userToAdda24 == null)
             {
-                userManager.Create(a24, "grego09876");
+                userManager.Create(a24, "looter");
                 userToAdda24 = userManager.FindByName("smartinmartin.Martin@aool.com");
                 if (userManager.IsInRole(userToAdda24.Id, "Customer") == false)
                 {
@@ -408,7 +476,7 @@ namespace LonghornBank.Migrations
                 }
             }
 
-            AppUser a34 = new AppUser() { UserName = "stjean@home.com", Email = "st-jean@home.com", FName = "Olivier", LName = "Saint-Jean", MiddleInitial = Convert.ToChar("M"), StreetAddress = "255 Toncray Dr.", City = "San Antonio", State = "TX", Zip = "78292", PhoneNumber = "2104145678", DOB = Convert.ToDateTime("1950-07-08 00:00:00"), ActiveStatus = true };
+            AppUser a34 = new AppUser() { UserName = "stjean@home.com", Email = "stjean@home.com", FName = "Olivier", LName = "Saint-Jean", MiddleInitial = Convert.ToChar("M"), StreetAddress = "255 Toncray Dr.", City = "San Antonio", State = "TX", Zip = "78292", PhoneNumber = "2104145678", DOB = Convert.ToDateTime("1950-07-08 00:00:00"), ActiveStatus = true };
 
 
             AppUser userToAdda34 = userManager.FindByName("stjean@home.com");
@@ -498,7 +566,7 @@ namespace LonghornBank.Migrations
             AppUser userToAdda40 = userManager.FindByName("ericstuart@aool.com");
             if (userToAdda40 == null)
             {
-                userManager.Create(a40, "loaf");
+                userManager.Create(a40, "landus");
                 userToAdda40 = userManager.FindByName("ericstuart@aool.com");
                 if (userManager.IsInRole(userToAdda40.Id, "Customer") == false)
                 {
@@ -554,7 +622,7 @@ namespace LonghornBank.Migrations
             AppUser userToAdda44 = userManager.FindByName("TayTaylor@aool.com");
             if (userToAdda44 == null)
             {
-                userManager.Create(a44, "deep");
+                userManager.Create(a44, "arched");
                 userToAdda44 = userManager.FindByName("TayTaylor@aool.com");
                 if (userManager.IsInRole(userToAdda44.Id, "Customer") == false)
                 {
@@ -568,7 +636,7 @@ namespace LonghornBank.Migrations
             AppUser userToAdda45 = userManager.FindByName("teefrank@hootmail.com");
             if (userToAdda45 == null)
             {
-                userManager.Create(a45, "rest");
+                userManager.Create(a45, "median");
                 userToAdda45 = userManager.FindByName("teefrank@hootmail.com");
                 if (userManager.IsInRole(userToAdda45.Id, "Customer") == false)
                 {
@@ -610,7 +678,7 @@ namespace LonghornBank.Migrations
             AppUser userToAdda48 = userManager.FindByName("westj@pioneer.net");
             if (userToAdda48 == null)
             {
-                userManager.Create(a48, "geese");
+                userManager.Create(a48, "grover");
                 userToAdda48 = userManager.FindByName("westj@pioneer.net");
                 if (userManager.IsInRole(userToAdda48.Id, "Customer") == false)
                 {
@@ -645,6 +713,8 @@ namespace LonghornBank.Migrations
                     userManager.AddToRole(userToAdda50.Id, "Customer");
                 }
             }
+
+
 
 
         }
