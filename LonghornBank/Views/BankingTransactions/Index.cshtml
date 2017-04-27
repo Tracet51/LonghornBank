@@ -3,6 +3,8 @@
 
 @{
     ViewBag.Title = "Transactions";
+    SelectList Ranges = ViewBag.Ranges;
+    SelectList Dates = ViewBag.Dates;
 }
 
 <h2>Transactions Home</h2>
@@ -15,7 +17,7 @@
 @using (Html.BeginForm("SearchResults", "BankingTransactions", FormMethod.Get))
 {
     <p class= "form-group">
-        Name:@Html.TextBox("SearchDescription", null, new {@class = "form-control"})<br/>
+        Description:@Html.TextBox("SearchDescription", null, new {@class = "form-control"})<br/>
 
         <div class="form-group">
             
@@ -27,102 +29,131 @@
 
             <div class="form-check">
                 <label class="form-check-label">
-                    @Html.RadioButton("SelectedType", BankingTranactionType.Deposit, true, new { @class ="form-check-input"}) Deposit
+                    @Html.RadioButton("SelectedType", BankingTranactionType.Deposit, new { @class ="form-check-input"}) Deposit
                 </label>
             </div>
 
             <div class="form-check">
                 <label class="form-check-label">
-                    @Html.RadioButton("SelectedType", BankingTranactionType.Withdrawl, true, new {@class ="form-check-input"}) Withdrawl
+                    @Html.RadioButton("SelectedType", BankingTranactionType.Withdrawl, new {@class ="form-check-input"}) Withdrawl
                 </label>
             </div>
 
             <div class="form-check">
                 <label class="form-check-label">
-                    @Html.RadioButton("SelectedType", BankingTranactionType.Transfer, true, new {@class ="form-check-input"}) Transfer
+                    @Html.RadioButton("SelectedType", BankingTranactionType.Transfer, new {@class ="form-check-input"}) Transfer
                 </label>
             </div>
 
             <div class="form-check">
                 <label class="form-check-label">
-                    @Html.RadioButton("SelectedType", BankingTranactionType.Fee, true , new {@class ="form-check-input"}) Fee
+                    @Html.RadioButton("SelectedType", BankingTranactionType.Fee , new {@class ="form-check-input"}) Fee
                 </label>
             </div>
         </div>
-        Name:@Html.TextBox("SearchTransactionNumber", null, new { @class = "form-control" })<br />
+        Transaction Number:@Html.TextBox("SearchTransactionNumber", null, new { @class = "form-control" })<br />
     </p>
+
+    <div class="form-check">
+        @Html.DropDownList("SearchAmountRange", Ranges, new { @class = "form-control" })
+        <br><br />
+    </div>
+
+    <p class="form-group">
+        Start Range @Html.TextBox("SearchAmountBegin", null, new { @class = "form-control" }) End Range @Html.TextBox("SearchAmountEnd", null, new { @class = "form-control" }) <br />
+    </p>
+
+    <div class="form-check">
+        @Html.DropDownList("DateRange", Dates, new { @class = "form-control" })
+        <br><br />
+    </div>
+
+    <p class="form-group">
+        Start Date @Html.TextBox("BeginSearchDate", null, new { @class = "form-control" }) End Date @Html.TextBox("EndSearchDate", null, new { @class = "form-control" }) <br />
+    </p>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+
+       
+
+
 }
-<p>
-    @ViewBag.DisplayedTransactionCount out of @ViewBag.TotalTransactionCount
-</p>
+        <p>
+            @ViewBag.DisplayedTransactionCount out of @ViewBag.TotalTransactionCount
+        </p>
 
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TransactionDispute)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TransactionDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Amount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DisputeMessage)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CustomerOpinion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CorrectedAmount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BankingTransactionType)
-        </th>
-        <th></th>
-    </tr>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.TransactionDispute)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TransactionDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DisputeMessage)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CustomerOpinion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CorrectedAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BankingTransactionType)
+                </th>
+                <th></th>
+            </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.TransactionDispute)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TransactionDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Amount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DisputeMessage)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CustomerOpinion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CorrectedAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BankingTransactionType)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.BankingTransactionID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.BankingTransactionID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.BankingTransactionID })
-        </td>
-    </tr>
-}
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransactionDispute)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransactionDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisputeMessage)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CustomerOpinion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CorrectedAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BankingTransactionType)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.BankingTransactionID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.BankingTransactionID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.BankingTransactionID })
+                    </td>
+                </tr>
+            }
 
-</table>
+        </table>
 
 
-<div>
-    @Html.ActionLink("Back To All Accounts", "Portal", "Home")
-</div>
+        <div>
+            @Html.ActionLink("Back To All Accounts", "Portal", "Home")
+        </div>

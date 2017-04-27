@@ -258,21 +258,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704231837408_PaulRound2.cs" />
-    <Compile Include="Migrations\201704231837408_PaulRound2.Designer.cs">
-      <DependentUpon>201704231837408_PaulRound2.cs</DependentUpon>
+    <Compile Include="Migrations\201704270025480_Initial.cs" />
+    <Compile Include="Migrations\201704270025480_Initial.Designer.cs">
+      <DependentUpon>201704270025480_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704231810478_ManagerStuff.cs" />
-    <Compile Include="Migrations\201704231810478_ManagerStuff.Designer.cs">
-      <DependentUpon>201704231810478_ManagerStuff.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704231829164_ChangeAccountModel.cs" />
-    <Compile Include="Migrations\201704231829164_ChangeAccountModel.Designer.cs">
-      <DependentUpon>201704231829164_ChangeAccountModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704231903051_Account.cs" />
-    <Compile Include="Migrations\201704231903051_Account.Designer.cs">
-      <DependentUpon>201704231903051_Account.cs</DependentUpon>
+    <Compile Include="Migrations\201704270032523_Round2.cs" />
+    <Compile Include="Migrations\201704270032523_Round2.Designer.cs">
+      <DependentUpon>201704270032523_Round2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
@@ -285,6 +277,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Payee.cs" />
     <Compile Include="Models\IRA.cs" />
+    <Compile Include="Models\Ranges.cs" />
     <Compile Include="Models\RoleViewModels.cs" />
     <Compile Include="Models\Saving.cs" />
     <Compile Include="Models\StockAccount.cs" />
@@ -394,17 +387,11 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704231837408_PaulRound2.resx">
-      <DependentUpon>201704231837408_PaulRound2.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704270025480_Initial.resx">
+      <DependentUpon>201704270025480_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704231810478_ManagerStuff.resx">
-      <DependentUpon>201704231810478_ManagerStuff.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704231829164_ChangeAccountModel.resx">
-      <DependentUpon>201704231829164_ChangeAccountModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704231903051_Account.resx">
-      <DependentUpon>201704231903051_Account.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201704270032523_Round2.resx">
+      <DependentUpon>201704270032523_Round2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

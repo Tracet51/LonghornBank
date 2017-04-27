@@ -3,7 +3,7 @@ namespace LonghornBank.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class fixPayee : DbMigration
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {
@@ -35,6 +35,8 @@ namespace LonghornBank.Migrations
                 .Index(t => t.Payee_PayeeID)
                 .Index(t => t.AppUser_Id);
             
+            AddColumn("dbo.IRAs", "Fee", c => c.Decimal(nullable: false, precision: 18, scale: 2));
+            AddColumn("dbo.StockAccounts", "AccountNumber", c => c.String());
         }
         
         public override void Down()
@@ -43,6 +45,8 @@ namespace LonghornBank.Migrations
             DropForeignKey("dbo.PayeeAppUsers", "Payee_PayeeID", "dbo.Payees");
             DropIndex("dbo.PayeeAppUsers", new[] { "AppUser_Id" });
             DropIndex("dbo.PayeeAppUsers", new[] { "Payee_PayeeID" });
+            DropColumn("dbo.StockAccounts", "AccountNumber");
+            DropColumn("dbo.IRAs", "Fee");
             DropTable("dbo.PayeeAppUsers");
             DropTable("dbo.Payees");
         }

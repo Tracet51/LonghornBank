@@ -96,6 +96,8 @@ namespace LonghornBank.Controllers
 
             // Add the customer to the view bag
             ViewBag.Customer = customer;
+            ViewBag.Ranges = AmountRange();
+            ViewBag.Dates = DateRanges();
 
             return View("Index", CustomerTransactions);
         }
@@ -835,8 +837,9 @@ namespace LonghornBank.Controllers
         public static DateTime Today { get;}
 
         //Detailed Search function
-        public ActionResult SearchResults(String SearchDescription, Int32 SelectedType, Decimal SearchAmountBegin, Decimal SearchAmountEnd, Int32 SearchAmountRange, String SearchTransactionNumber, DateTime BeginSearchDate, DateTime EndSearchDate, Int32 DateRange)
+        public ActionResult SearchResults(String SearchDescription, BankingTranactionType SelectedType, String SearchAmountBegin, String SearchAmountEnd, Int32 SearchAmountRange, String SearchTransactionNumber, String BeginSearchDate, String EndSearchDate, Int32 DateRange)
         {
+
             var query = from c in db.BankingTransaction
                         select c;
 
@@ -845,29 +848,29 @@ namespace LonghornBank.Controllers
                 query = query.Where(c => c.Description.Contains(SearchDescription));
             }
 
-            if (SelectedType != 0)
+            if (SelectedType != BankingTranactionType.None)
             {
                 //Search for transactions with type deposit
-                if (SelectedType == 1)
+                if (SelectedType == BankingTranactionType.Deposit)
                 {
                                         
                   query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Deposit);
                 }
 
                 //Search for transactions with type withdrawl
-                if (SelectedType == 2)
+                if (SelectedType == BankingTranactionType.Withdrawl)
                 {
                     query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Withdrawl);
                 }
 
                 //Search for transactions with type transfer
-                if (SelectedType == 3)
+                if (SelectedType == BankingTranactionType.Transfer)
                 {
                     query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Transfer);
                 }
 
                 //Search for transactions with type fees
-                if (SelectedType == 4)
+                if (SelectedType == BankingTranactionType.Fee)
                 {
                     query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Fee);
                 }
@@ -875,10 +878,14 @@ namespace LonghornBank.Controllers
                 
             }
 
+            // Convert them to a string
+            Decimal AmountBegin = Convert.ToDecimal(SearchAmountBegin);
+            Decimal AmountEnd = Convert.ToDecimal(SearchAmountEnd);
+
             //Use string instead of decimal?
-            if (SearchAmountBegin >=0 && SearchAmountEnd > SearchAmountBegin && SearchAmountRange == 0)
+            if (AmountBegin >=0 && AmountEnd > AmountBegin && SearchAmountRange == 0)
             {
-                query = query.Where(c => c.Amount >= SearchAmountBegin && c.Amount <= SearchAmountEnd);
+                query = query.Where(c => c.Amount >= AmountBegin && c.Amount <= AmountEnd);
             }
             
             if (SearchAmountRange != 0)
@@ -907,12 +914,17 @@ namespace LonghornBank.Controllers
                     query = query.Where(c => c.Amount >= 300);
                 }
             }
-            
+
             //Custom date range - Edit for Proper date range #
             //TODO: Edit proper date Range
-            if (BeginSearchDate < Today && EndSearchDate > BeginSearchDate && DateRange == -1)
+
+            // Convert to Datetime 
+            DateTime BeginDate = Convert.ToDateTime(BeginSearchDate);
+            DateTime EndDate = Convert.ToDateTime(EndSearchDate);
+
+            if (BeginDate < DateTime.Today && EndDate > BeginDate && DateRange == 0)
             {
-                query = query.Where(c => c.TransactionDate >= BeginSearchDate && c.TransactionDate <= EndSearchDate);
+                query = query.Where(c => c.TransactionDate >= BeginDate && c.TransactionDate <= EndDate);
             }
 
             //0 should indicate searching for all dates
@@ -944,6 +956,8 @@ namespace LonghornBank.Controllers
             
             ViewBag.DisplayedTransactionCount = query.ToList().Count;
             ViewBag.TotalTransactionCount = db.BankingTransaction.ToList().Count;
+            ViewBag.Ranges = AmountRange();
+            ViewBag.Dates = DateRanges();
             List<BankingTransaction> SelectedTransactions = query.ToList();
             return View("Index", SelectedTransactions);
         }
@@ -955,6 +969,57 @@ namespace LonghornBank.Controllers
             SelectList BBTSelectList = new SelectList(BBT, new BankingTranactionType());
             ViewBag.AllBankingTypes = BBTSelectList;
             return BBTSelectList;
+        }
+
+        public SelectList AmountRange()
+        {
+            // Create a list of ranges
+            List<Ranges> RangesList = new List<Ranges>();
+
+            Ranges None = new Ranges { Name = "None", RangeID = 0 };
+            Ranges _100 = new Ranges { Name = "$0-100", RangeID = 1 };
+            Ranges _100_200 = new Ranges { Name = "$100-200", RangeID = 2 };
+            Ranges _200_300 = new Ranges { Name = "$200-300", RangeID = 3 };
+            Ranges _300 = new Ranges { Name = "$300+", RangeID = 4 };
+            Ranges Custom = new Ranges { Name = "Custom", RangeID = 5 };
+
+            // Add to the list 
+            RangesList.Add(_100);
+            RangesList.Add(_100_200);
+            RangesList.Add(_200_300);
+            RangesList.Add(_300);
+            RangesList.Add(Custom);
+            RangesList.Add(None);
+
+            // Convert to Select List
+
+            SelectList RangesSelect = new SelectList(RangesList, "RangeID", "Name");
+
+            return RangesSelect;
+        }
+
+        public SelectList DateRanges()
+        {
+            // Create a list for Dates
+            List<RangesDate> RangeDates = new List<RangesDate>();
+
+            RangesDate All = new RangesDate { Name = "All Available", RangeID = 0 };
+            RangesDate Last15 = new RangesDate { Name = "Last 15 Days", RangeID = 1 };
+            RangesDate Last30 = new RangesDate { Name = "Last 30", RangeID = 2 };
+            RangesDate Last60 = new RangesDate { Name = "Last 60", RangeID = 3 };
+            RangesDate Custom = new RangesDate { Name = "Custom", RangeID = 4 };
+
+            // add to the list 
+            RangeDates.Add(All);
+            RangeDates.Add(Last15);
+            RangeDates.Add(Last30);
+            RangeDates.Add(Last60);
+            RangeDates.Add(Custom);
+
+            // create a select list 
+            SelectList DateSelect = new SelectList(RangeDates, "RangeID", "Name");
+
+            return DateSelect;
         }
 
          
