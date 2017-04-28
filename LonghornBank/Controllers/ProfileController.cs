@@ -75,7 +75,7 @@ namespace LonghornBank.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("Portal","Home");
             }
 
             // This doesn't count login failures towards account lockout
