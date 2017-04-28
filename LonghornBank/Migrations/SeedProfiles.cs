@@ -337,7 +337,7 @@ namespace LonghornBank.Migrations
             }
 
 
-
+            db.SaveChanges();
 
 
 

@@ -12,9 +12,9 @@
 
 
 <h2>Stock Account Details and Transactions</h2>
-
 <div>
     <h4>Stock Account Details</h4>
+    @Html.ActionLink("Buy Stocks", "StockChoices", "StockTrades", null, new { @class = "btn btn-info" })
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -186,9 +186,7 @@
                 @Html.DisplayFor(modelItem => t.Amount)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = t.BankingTransactionID }) |
-                @Html.ActionLink("Details", "Details", new { id = t.BankingTransactionID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = t.BankingTransactionID })
+                @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = t.BankingTransactionID }, null)
             </td>
         </tr>
     }
@@ -197,5 +195,5 @@
     
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.StockAccountID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Stock Account Home", "Index")
 </p>

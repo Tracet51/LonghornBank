@@ -756,5 +756,14 @@ namespace LonghornBank.Controllers
             // Return users to the stock account details page
             return RedirectToAction("Details","StockAccounts");
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Host.SystemWeb;
 using LonghornBank.Utility;
+using System.Data.Entity.Infrastructure;
 
 namespace LonghornBank.Controllers
 {
@@ -165,22 +166,25 @@ namespace LonghornBank.Controllers
 
             // Find the stock account associated with the customer 
             // Return the Stock Account Associated with the customer
-            return View(db.StockAccount.Where(i => i.Customer.Id == customer.Id));
+            StockAccount CustomerStockAccount = db.StockAccount.Where(i => i.Customer.Id == customer.Id).FirstOrDefault();
+            return View(CustomerStockAccount);
         }
 
         // POST: StockAccounts/Edit
         // Post request to edit the account 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name")] StockAccount stockAccount)
+        public ActionResult Edit(StockAccount stockAccount)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(stockAccount).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(stockAccount);
+            // get the stock account 
+            StockAccount CustomerProtfolio = db.StockAccount.Find(stockAccount.StockAccountID);
+
+            CustomerProtfolio.Name = stockAccount.Name;
+
+            db.Entry(CustomerProtfolio).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");   
+
         }
 
         // GET: StockAccounts/Delete

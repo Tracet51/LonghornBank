@@ -148,6 +148,8 @@
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.flatly.css" />
+    <Content Include="Content\bootstrap.flatly.min.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -206,6 +208,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
+    <Compile Include="Migrations\SeedPayee.cs" />
     <Compile Include="Migrations\SeedProfiles.cs" />
     <Compile Include="Migrations\SeedStocks.cs" />
     <Compile Include="Models\DepositApprovalViewModel.cs" />

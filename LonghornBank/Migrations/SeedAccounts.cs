@@ -193,7 +193,7 @@ namespace LonghornBank.Migrations
             db.CheckingAccount.AddOrUpdate(x => x.AccountNumber, ca21);
 
 
-
+            db.SaveChanges();
         }
 
 

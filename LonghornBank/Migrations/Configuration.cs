@@ -30,7 +30,7 @@ namespace LonghornBank.Migrations
             //SeedDataCustomers.SeedCustomers(context);
             //SeedProfile.SeedEmployees(context);
             //SeedStocks.Stocks(context);
-            //SeedAccounts.Account(context);
+            SeedAccounts.Account(context);
         }
     }
 }

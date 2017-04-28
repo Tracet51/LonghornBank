@@ -96,7 +96,7 @@ namespace LonghornBank.Models
             }
         }
 
-        [Display(Name = "Balanced Portfolio Bonus Balance")]
+        [Display(Name = "Balanced Portfolio?")]
         [Column("Bounses")]
         public Boolean Balanced { get; set; }
 
