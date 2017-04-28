@@ -151,6 +151,11 @@
     <Content Include="Content\bootstrap.flatly.css" />
     <Content Include="Content\bootstrap.flatly.min.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\checking.png" />
+    <Content Include="Content\Images\checking2.png" />
+    <Content Include="Content\Images\checking3.png" />
+    <Content Include="Content\Images\savings.png" />
+    <Content Include="Content\Images\savings2.png" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
