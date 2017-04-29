@@ -9,6 +9,8 @@ namespace LonghornBank.Models
 {
     public enum DisputeStatus { Submitted, Accepted, Rejected, Adjusted, None }
     public enum BankingTranactionType {None, Deposit, Withdrawl, Transfer, Fee}
+    public enum SortingOption { TransIDAsc, TransIDDec, TransTypeAsc, TransTypeDec, TransDescriptionAsc, TransDescriptionDec, TransAmountAsc, TransAmountDec, TransDateAsc, TransDateDec }
+
     public class BankingTransaction
     {
         public Int32 BankingTransactionID { get; set; }
