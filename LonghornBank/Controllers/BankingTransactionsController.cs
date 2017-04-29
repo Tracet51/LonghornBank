@@ -647,32 +647,11 @@ namespace LonghornBank.Controllers
                                 select c;
             AppUser Customer = CustomerQuery.FirstOrDefault();
 
-            var CheckingQuery = from c in db.CheckingAccount
-                                where c.Customer.Id == Customer.Id
-                                select c;
+            // Get all of the accounts
+            Tuple<SelectList, SelectList, SelectList, SelectList> AllAcounts = GetAllAccounts(Customer.Id);
 
-            List<Checking> CustomerChecking = CheckingQuery.ToList();
-
-            // Convert into a select list 
-            SelectList CheckingSelectList = new SelectList(CustomerChecking, "CheckingID", "Name");
-
-            // TODO: ViewBag.AllAccounts 
-
-            /*
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Checking checking = db.CheckingAccount.Find(id);
-            if (checking == null)
-            {
-                return HttpNotFound();
-            }
-
-            */
-
-            // add the select list to the viewbag
-            ViewBag.CheckingAccounts = CheckingSelectList;
+            // Add the SelectList Tuple to the ViewBag
+            ViewBag.AllAccounts = AllAcounts;
 
             return View();
         }
@@ -680,8 +659,20 @@ namespace LonghornBank.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Deposit([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description")] BankingTransaction bankingTransaction, Int32 CheckingID, Int32 SavingID, Int32 IraID, Int32 StockAccountID)
+        public ActionResult Deposit([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description")] BankingTransaction bankingTransaction, Int32 CheckingID, Int32 SavingID, Int32 IraID, Int32? StockAccountID)
         {
+            var customerquery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+            AppUser Customer = customerquery.FirstOrDefault();
+
+
+            //Set status to Approved or needs approval
+            if (bankingTransaction.Amount>5000) { bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval; }
+            else { bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.Approved; }
+            db.SaveChanges();
+
             if (CheckingID != 0)
             {
                 // Find the selected Checking Account
@@ -727,7 +718,7 @@ namespace LonghornBank.Controllers
             if (SavingID != 0)
             {
                 // Find the selected saving Account
-                Saving SelectedSaving = db.SavingsAccount.Find(CheckingID);
+                Saving SelectedSaving = db.SavingsAccount.Find(SavingID);
                 List<Saving> SavingList = new List<Saving>();
                 SavingList.Add(SelectedSaving);
 
@@ -800,7 +791,42 @@ namespace LonghornBank.Controllers
                 // Redirect 
                 return RedirectToAction("Index");
             }
+            // Check to see if stock Account
+            if (StockAccountID != null)
+            {
+                // Find the Selected IRA Account
+                StockAccount SelectedStockAccount = db.StockAccount.Find(StockAccountID);
 
+                // Create a list of IRA accounts and add the one seleceted 
+                //List<StockAccount> NewStockAccounts = new List<StockAccount>();
+                //NewStockAccounts.Add(SelectedStockAccount);
+
+                bankingTransaction.StockAccount = SelectedStockAccount;
+
+                //Adds money to account if under 5000
+                if (bankingTransaction.Amount <= 5000)
+                {
+                    Decimal New_Balance = SelectedStockAccount.CashBalance + bankingTransaction.Amount;
+                    SelectedStockAccount.CashBalance = New_Balance;
+                }
+
+                //Adds to pending balance if over 5000
+                else
+                {
+                    Decimal PendingBalance = SelectedStockAccount.PendingBalance + bankingTransaction.Amount;
+                    SelectedStockAccount.PendingBalance = PendingBalance;
+                }
+
+
+
+                // Add to database
+                db.BankingTransaction.Add(bankingTransaction);
+                db.SaveChanges();
+
+                // Redirect 
+                return RedirectToAction("Index");
+            }
+            ViewBag.AllAccounts = GetAllAccounts(Customer.Id);
             return View(bankingTransaction);
         }
 
@@ -817,7 +843,7 @@ namespace LonghornBank.Controllers
             List<Checking> CheckingAccounts = CheckingQuery.ToList();
 
             // Create a None Options 
-            Checking SelectNone = new Checking() { CheckingID = 0, AccountNumber = "1000000000000", Balance = 0, Name = "None" };
+            Checking SelectNone = new Checking() { CheckingID = 0, Balance = 0, Name = "None" };
             CheckingAccounts.Add(SelectNone);
 
             // Convert the List into a select list 
@@ -847,7 +873,7 @@ namespace LonghornBank.Controllers
             List<StockAccount> StockAccounts = StockAccountQuery.ToList();
 
             // Create a None Options 
-            StockAccount SelectNoStockAccount = new StockAccount() { StockAccountID = 0, AccountNumber = "1000000000000", CashBalance = 0, Name = "None" };
+            StockAccount SelectNoStockAccount = new StockAccount() { StockAccountID = 0, CashBalance = 0, Name = "None" };
             StockAccounts.Add(SelectNoStockAccount);
 
             // Convert the List into a select list 
@@ -974,6 +1000,44 @@ namespace LonghornBank.Controllers
         //Detailed Search function
         public ActionResult SearchResults(String SearchDescription, BankingTranactionType SelectedType, String SearchAmountBegin, String SearchAmountEnd, Int32 SearchAmountRange, String SearchTransactionNumber, String BeginSearchDate, String EndSearchDate, Int32 DateRange, SortingOption SortType)
         {
+            var cq = from c in db.Users
+                     where c.Email == User.Identity.Name
+                     select c;
+
+            AppUser Customer = cq.FirstOrDefault();
+
+            var checkingquery = from c in db.CheckingAccount
+                                where c.Customer.Id == Customer.Id
+                                select c;
+            List<Checking> CustomerChecking = checkingquery.ToList();
+
+            
+            var checkingtransquery = from ct in db.BankingTransaction
+                                     from ca in ct.CheckingAccount
+                                     where ca.Customer.Id == Customer.Id
+                                     select ct;
+
+            List<BankingTransaction> CustomerTransaction = new List<BankingTransaction>();
+
+            CustomerTransaction = checkingtransquery.ToList();
+
+            var savingtransquery = from st in db.BankingTransaction
+                                   from sa in st.SavingsAccount
+                                   where sa.Customer.Id == Customer.Id
+                                   select st;
+
+            CustomerTransaction.AddRange(savingtransquery.ToList());
+
+            var iratransquery = from it in db.BankingTransaction
+                                from ia in it.IRAAccount
+                                where ia.Customer.Id == Customer.Id
+                                select it;
+
+            CustomerTransaction.AddRange(iratransquery.ToList());
+
+            var stockstransquery = from st in db.BankingTransaction
+                                   where st.StockAccount.Customer.Id == Customer.Id
+                                   select st;
 
             var query = from c in db.BankingTransaction
                         select c;
