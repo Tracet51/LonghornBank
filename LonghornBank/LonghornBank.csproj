@@ -404,15 +404,6 @@
     <Content Include="Views\Customers\AddPayee.cshtml" />
     <Content Include="Views\Payees\SuccessfulPayee.cshtml" />
     <Content Include="Views\Payees\BalanceError.cshtml" />
-    <Content Include="Views\Employees\Create.cshtml" />
-    <Content Include="Views\Employees\CustomerDetails.cshtml" />
-    <Content Include="Views\Employees\Delete.cshtml" />
-    <Content Include="Views\Employees\Details.cshtml" />
-    <Content Include="Views\Employees\Edit.cshtml" />
-    <Content Include="Views\Employees\EditCustomers.cshtml" />
-    <Content Include="Views\Employees\Index.cshtml" />
-    <Content Include="Views\Employees\Portal.cshtml" />
-    <Content Include="Views\Employees\ViewCustomers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
