@@ -271,6 +271,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Payee.cs" />
     <Compile Include="Models\IRA.cs" />
+    <Compile Include="Models\Ranges.cs" />
     <Compile Include="Models\RoleViewModels.cs" />
     <Compile Include="Models\Saving.cs" />
     <Compile Include="Models\StockAccount.cs" />
