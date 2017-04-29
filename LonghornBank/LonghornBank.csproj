@@ -270,6 +270,14 @@
     <Compile Include="Migrations\201704290159221_Inital.Designer.cs">
       <DependentUpon>201704290159221_Inital.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704290243348_IRAaccountNumber.cs" />
+    <Compile Include="Migrations\201704290243348_IRAaccountNumber.Designer.cs">
+      <DependentUpon>201704290243348_IRAaccountNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290253312_IRAName.cs" />
+    <Compile Include="Migrations\201704290253312_IRAName.Designer.cs">
+      <DependentUpon>201704290253312_IRAName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
@@ -403,6 +411,12 @@
     <Content Include="Views\Employees\Index.cshtml" />
     <Content Include="Views\Employees\Portal.cshtml" />
     <Content Include="Views\Employees\ViewCustomers.cshtml" />
+    <Content Include="Views\Profile\Details.cshtml" />
+    <Content Include="Views\Profile\Edit.cshtml" />
+    <Content Include="Views\Profile\ForgotPassword.cshtml" />
+    <Content Include="Views\Profile\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Profile\ResetPassword.cshtml" />
+    <Content Include="Views\Profile\ResetPasswordConfirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -416,6 +430,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201704290159221_Inital.resx">
       <DependentUpon>201704290159221_Inital.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290243348_IRAaccountNumber.resx">
+      <DependentUpon>201704290243348_IRAaccountNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290253312_IRAName.resx">
+      <DependentUpon>201704290253312_IRAName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

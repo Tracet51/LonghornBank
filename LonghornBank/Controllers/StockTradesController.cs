@@ -319,7 +319,8 @@ namespace LonghornBank.Controllers
                 BankingTransactionType = BankingTranactionType.Fee,
                 Description = ("Fee for purchase of " + SelectedStock.CompanyName),
                 TransactionDate = (PurchcaseTrade.TradeDate),
-                StockAccount = Customer.StockAccount.FirstOrDefault()
+                StockAccount = Customer.StockAccount.FirstOrDefault(),
+                TransactionDispute = DisputeStatus.NotDisputed
             };
 
             TradeTrans.Add(FeeTrans);
@@ -337,7 +338,7 @@ namespace LonghornBank.Controllers
                 StockMarket = SelectedStock,
                 BankingTransactions = TradeTrans,
                 DisputeMessage = "None",
-                TransactionDispute = DisputeStatus.Accepted,
+                TransactionDispute = DisputeStatus.NotDisputed,
                 Description = "None",
                 CorrectedAmount = 0 
             };
@@ -383,6 +384,7 @@ namespace LonghornBank.Controllers
                         Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().AccountNumber.ToString()),
                         TransactionDate = PurchcaseTrade.TradeDate,
                         Trade = Trade,
+                        TransactionDispute = DisputeStatus.NotDisputed
                     };
 
                     // add the stuff to the database  
@@ -445,6 +447,7 @@ namespace LonghornBank.Controllers
                         Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().AccountNumber.ToString()),
                         TransactionDate = PurchcaseTrade.TradeDate,
                         Trade = Trade,
+                        TransactionDispute = DisputeStatus.NotDisputed
                     };
 
                     // add the stuff to the database  
@@ -501,6 +504,7 @@ namespace LonghornBank.Controllers
                         Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().AccountNumber.ToString()),
                         TransactionDate = PurchcaseTrade.TradeDate,
                         Trade = Trade,
+                        TransactionDispute = DisputeStatus.NotDisputed
                     };
 
                     // add the stuff to the database  
@@ -663,7 +667,8 @@ namespace LonghornBank.Controllers
                 BankingTransactionType = BankingTranactionType.Fee,
                 Description = ("Fee for sale of " + StockSale.CompanyName),
                 StockAccount = CustomerStockAccount,
-                TransactionDate = Sale.SaleDate 
+                TransactionDate = Sale.SaleDate,
+                TransactionDispute = DisputeStatus.NotDisputed
             };
 
             // Add the transaction to the list 
@@ -682,7 +687,8 @@ namespace LonghornBank.Controllers
                 StockMarket = StockSale,
                 StockAccount = CustomerStockAccount,
                 BankingTransactions = TradeTrans,
-                
+                TransactionDispute = DisputeStatus.NotDisputed
+
             };
 
             // Create a new transaction for the actual sale 
@@ -693,7 +699,8 @@ namespace LonghornBank.Controllers
                 Description = Description,
                 StockAccount = CustomerStockAccount,
                 Trade = SaleTrade,
-                TransactionDate = Sale.SaleDate
+                TransactionDate = Sale.SaleDate,
+                TransactionDispute = DisputeStatus.NotDisputed
             };
 
             // Add the transactions and the trades the the db

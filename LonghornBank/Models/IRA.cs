@@ -17,11 +17,10 @@ namespace LonghornBank.Models
         public Decimal Balance { get; set; }
 
         [Display(Name = "Account Number")]
-        [Required(ErrorMessage = "Must Enter an Account Number!")]
         public String AccountNumber { get; set; }
 
         [Display(Name = "Account Name")]
-        [Required(ErrorMessage = "An Account Name is Required")]
+        //[Required(ErrorMessage = "An Account Name is Required")]
         public String Name { get; set; }
 
         [Display(Name = "Deposits made this year toward contribution limit")]
