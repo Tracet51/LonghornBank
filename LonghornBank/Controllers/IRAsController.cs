@@ -34,7 +34,7 @@ namespace LonghornBank.Controllers
             // Add the Customer to ViewBag to Access information 
             ViewBag.CustomerAccount = customer;
 
-            // Select The Savings Accounts Associated with this customer 
+            // Select The IRA Accounts Associated with this customer 
             var IRAAccountQuery = from IR in db.IRAAccount
                                   where IR.Customer.Id == customer.Id
                                   select IR;
@@ -70,6 +70,7 @@ namespace LonghornBank.Controllers
         // GET: IRA/Create
         public ActionResult Create()
         {
+            DateTime Restrict1 = new DateTime(1947, 5, 5, 0, 0, 0);
             var CustomerQuery = from c in db.Users
                                 where c.UserName == User.Identity.Name
                                 select c;
@@ -80,8 +81,18 @@ namespace LonghornBank.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CustomerID = customer.Id;
-            return View();
+
+            if(customer.DOB >= Restrict1)
+            {
+                if (customer.IRAAccounts.Count() == 0)
+                {
+                    ViewBag.CustomerID = customer.Id;
+                    return View();
+                }
+            }
+
+            return View("MoreThanOneError");
+
         }
 
         // POST: IRAs/Create
@@ -104,6 +115,7 @@ namespace LonghornBank.Controllers
 
             if (ModelState.IsValid)
             {
+                ira.RunningTotal = 0 + ira.Balance;
                 ira.Customer = customer;
 
                 db.IRAAccount.Add(ira);
@@ -181,6 +193,7 @@ namespace LonghornBank.Controllers
             var IRACustomerQuery = from IR in db.IRAAccount
                                       where IR.IRAID == id
                                       select IR.Customer.Id;
+           
 
             // Execute the Find
             List<String> CustomerID = IRACustomerQuery.ToList();

@@ -12,7 +12,6 @@ namespace LonghornBank.Models
         public Int32 CheckingID { get; set; }
 
         [Display(Name ="Account Number")]
-        [Required(ErrorMessage ="Must Enter an Account Number!")]
         public String AccountNumber { get; set; }
 
         [Display(Name = "Account Balance")]

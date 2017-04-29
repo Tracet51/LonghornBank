@@ -20,7 +20,7 @@ namespace LonghornBank.Models
         [Required(ErrorMessage = "Must Enter an Account Number!")]
         public String AccountNumber { get; set; }
 
-        [Display(Name = "Account Balance")]
+        [Display(Name = "Account Name")]
         [Required(ErrorMessage = "An Account Name is Required")]
         public String Name { get; set; }
 
@@ -36,10 +36,14 @@ namespace LonghornBank.Models
         [Display(Name = "Pending Balance")]
         public Decimal PendingBalance { get; set; }
 
+        [Display(Name = "Fee")]
+        public Decimal Fee { get; set; }
+
 
         // Navigation
 
         // IRA can have 1 user
+        
         public virtual AppUser Customer { get; set; }
 
         // IRA can have many transactions 

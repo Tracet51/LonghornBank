@@ -28,7 +28,7 @@ namespace LonghornBank.Models
         public String State { get; set; }
 
         [Display(Name = "Zip Code")]
-        [Required(ErrorMessage = "Zip Code is Required")]
+        [RegularExpression(@"^(?!00000)[0-9]{5,5}$", ErrorMessage = "Zip Code is Required")]
         public String Zip { get; set; }
 
 
@@ -40,5 +40,8 @@ namespace LonghornBank.Models
         [Display(Name = "Payee Type")]
         [Required(ErrorMessage = "A Payee Type is Required")]
         public PayeeType PayeeType { get; set; }
+
+        public virtual List<AppUser> Customer { get; set; }
+
     }
 }
