@@ -12,52 +12,59 @@
 <h2>Portal</h2>
 
 <p>
-    @Html.ActionLink("Add New Checking Account", "Create","Checkings") | 
-    @Html.ActionLink("Add New Savings Account", "Create", "Savings") |
-    @Html.ActionLink("Add New IRA", "Create", "IRAs") |
-    @Html.ActionLink("Add New Stock Account", "Create", "StockAccounts") | 
-    @Html.ActionLink("Add New Transaction", "Create", "BankingTransactions")
+    @Html.ActionLink("Add New Checking Account", "Create", "Checkings", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("Add New Savings Account", "Create", "Savings", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("Add New IRA", "Create", "IRAs", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("Add New Stock Account", "Create", "StockAccounts", null, new { @class = "btn btn-info" }) 
+    @Html.ActionLink("Add New Transaction", "Create", "BankingTransactions", null, new { @class = "btn btn-info" })
 
 </p>
 
 <h3> @Html.Raw(Model.FName)'s Accounts</h3>
-<h4>Checking Account(s)</h4>
-<p>@Html.ActionLink("Checking Accounts Home", "Index", "Checkings")</p>
-<table class="table">
-   <tr>
-       <th>
-           Checking Account Name
-       </th>
-       <th>
-           Checking Account Number
-       </th>
-       <th>
-           Checking Account Balance
-       </th>
-       <th>
-           Checking Account Pending Balance
-       </th>
-   </tr>
-
-    @foreach (var item in Model.CheckingAccounts)
-    {
+@if (Model.CheckingAccounts.Count > 0)
+{
+    <h4>Checking Account(s)</h4>
+    <p>@Html.ActionLink("Checking Accounts Home", "Index", "Checkings")</p>
+    <table class="table">
         <tr>
-            <td>@Html.DisplayFor(modelItem => item.Name)</td>
-            <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
-            <td>@Html.DisplayFor(modelItem => item.Balance)</td>
-            <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", "Checkings", new { id = item.CheckingID }, null) |
-                @Html.ActionLink("Details", "Details", "Checkings", new { id = item.CheckingID }, null) |
-                @Html.ActionLink("Delete", "Delete", "Checkings", new { id = item.CheckingID }, null)
-            </td>
+            <th>
+                Checking Account Name
+            </th>
+            <th>
+                Checking Account Number
+            </th>
+            <th>
+                Checking Account Balance
+            </th>
+            <th>
+                Checking Account Pending Balance
+            </th>
+            <th></th>
         </tr>
-        
-    }
 
-</table>
-    <h4>Savings Account(s)</h4>
-    <p>@Html.ActionLink("Saving Accounts Home", "Index", "Savings")</p>
+        @foreach (var item in Model.CheckingAccounts)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.Balance)</td>
+                <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Checkings", new { id = item.CheckingID }, null) |
+                    @Html.ActionLink("Details", "Details", "Checkings", new { id = item.CheckingID }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Checkings", new { id = item.CheckingID }, null)
+                </td>
+            </tr>
+
+        }
+
+    </table>
+}
+
+@if (Model.SavingAccounts.Count > 0)
+{
+<h4>Savings Account(s)</h4>
+<p>@Html.ActionLink("Saving Accounts Home", "Index", "Savings")</p>
 <table class="table">
     <tr>
         <th>
@@ -72,6 +79,7 @@
         <th>
             Savings Account Pending Balance
         </th>
+        <th></th>
     </tr>
 
     @foreach (var item in Model.SavingAccounts)
@@ -82,7 +90,7 @@
             <td>@Html.DisplayFor(modelItem => item.Balance)</td>
             <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
             <td>
-                @Html.ActionLink("Edit", "Edit", "Savings", new { id = item.SavingID}, null) |
+                @Html.ActionLink("Edit", "Edit", "Savings", new { id = item.SavingID }, null) |
                 @Html.ActionLink("Details", "Details", "Savings", new { id = item.SavingID }, null) |
                 @Html.ActionLink("Delete", "Delete", "Savings", new { id = item.SavingID }, null)
             </td>
@@ -90,42 +98,52 @@
     }
 
 </table>
-    <h4>IRA Account(s)</h4>
- <p>@Html.ActionLink("IRA Accounts Home", "Index", "IRA")</p>
-<table class="table">
-    <tr>
-        <th>
-            IRA Account Name
-        </th>
-        <th>
-            IRA Account Number
-        </th>
-        <th>
-            IRA Account Balance
-        </th>
-        <th>
-            IRA Account Pending Balance
-        </th>
-    </tr>
+}
 
-    @foreach (var item in Model.IRAAccounts)
+@{if (Model.IRAAccounts.Count > 0)
     {
+    <h4>IRA Account(s)</h4>
+    <p>@Html.ActionLink("IRA Accounts Home", "Index", "IRA")</p>
+    <table class="table">
         <tr>
-            <td>@Html.DisplayFor(modelItem => item.Name)</td>
-            <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
-            <td>@Html.DisplayFor(modelItem => item.Balance)</td>
-            <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", "IRAs", new { id = item.IRAID }, null) |
-                @Html.ActionLink("Details", "Details", "IRAs", new { id = item.IRAID }, null) |
-                @Html.ActionLink("Delete", "Delete", "IRAs", new { id = item.IRAID }, null)
-            </td>
+            <th>
+                IRA Account Name
+            </th>
+            <th>
+                IRA Account Number
+            </th>
+            <th>
+                IRA Account Balance
+            </th>
+            <th>
+                IRA Account Pending Balance
+            </th>
+            <th></th>
         </tr>
+
+        @foreach (var item in Model.IRAAccounts)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.Balance)</td>
+                <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "IRAs", new { id = item.IRAID }, null) |
+                    @Html.ActionLink("Details", "Details", "IRAs", new { id = item.IRAID }, null) |
+                    @Html.ActionLink("Delete", "Delete", "IRAs", new { id = item.IRAID }, null)
+                </td>
+            </tr>
+        }
+
+    </table>
+        }
     }
 
-</table>
-        <h4>Stock Portfolio(s)</h4>
-        <p>@Html.ActionLink("Stock Accounts Home", "Index", "StockAccounts")</p>
+@if (Model.StockAccount.Count > 0)
+{
+    <h4>Stock Portfolio</h4>
+    <p>@Html.ActionLink("Stock Accounts Home", "Index", "StockAccounts")</p>
         <table class="table">
             <tr>
                 <th>
@@ -140,6 +158,7 @@
                 <th>
                     Stock Account Gains
                 </th>
+                <th></th>
             </tr>
 
             @foreach (var item in Model.StockAccount)
@@ -158,3 +177,4 @@
             }
 
         </table>
+}

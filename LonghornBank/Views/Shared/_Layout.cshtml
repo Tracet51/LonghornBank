@@ -6,7 +6,11 @@
     <title>@ViewBag.Title - Longhorn Bank</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.flatly.min.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <style type="text/css">
+        body {background: linear-gradient(-45deg, #ffffff, #f0efef)}
+    </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -21,11 +25,15 @@
                 {
                     @Html.ActionLink("Portal", "Portal", "Manager", new { area = "" }, new { @class = "navbar-brand" })
                 }
-                else
+                @if (User.IsInRole("Customer"))
                 {
                     @Html.ActionLink("Portal", "Portal", "Home", new { area = "" }, new { @class = "navbar-brand" })
                 }
-                
+                @if (!User.IsInRole("Customer") && !User.IsInRole("Manager") && !User.IsInRole("Employee"))
+                {
+                    @Html.ActionLink("Portal", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                }
+
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
