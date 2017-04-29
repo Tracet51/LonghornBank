@@ -137,13 +137,13 @@ namespace LonghornBank.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddPayee( AppUser customer, Int32 PayeeID1)
+        public ActionResult AddPayee(AppUser customer, Int32 PayeeID1)
         {
             var CustomerQuery = from c in db.Users
                                 where c.UserName == User.Identity.Name
                                 select c;
 
-            AppUser user = CustomerQuery.FirstOrDefault(); 
+            AppUser user = CustomerQuery.FirstOrDefault();
             if (user == null)
             {
                 return HttpNotFound();
@@ -161,7 +161,7 @@ namespace LonghornBank.Controllers
 
             db.Entry(user).State = EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("Index","Payees");
+            return RedirectToAction("PayBillsPage", "Payees");
         }
 
         public SelectList GetAllPayees(Payee selectedPayee)

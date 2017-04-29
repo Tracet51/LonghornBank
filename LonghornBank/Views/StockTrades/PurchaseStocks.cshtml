@@ -58,11 +58,13 @@
             @Html.HiddenFor(model => model.CheckingAccounts.CheckingID)
 
         }
+
         @if (Model.SavingsAccount != null)
         {
             @Html.HiddenFor(model => model.SavingsAccount.SavingID)
 
         }
+
         @if (Model.AccountStock != null)
         {
             @Html.HiddenFor(model => model.AccountStock.StockAccountID)
