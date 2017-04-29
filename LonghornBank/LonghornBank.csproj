@@ -243,9 +243,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -267,18 +265,6 @@
     <Compile Include="Controllers\StockTradesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704290226559_initial2.cs" />
-    <Compile Include="Migrations\201704290226559_initial2.Designer.cs">
-      <DependentUpon>201704290226559_initial2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704290231479_initial3.cs" />
-    <Compile Include="Migrations\201704290231479_initial3.Designer.cs">
-      <DependentUpon>201704290231479_initial3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704290303465_IRA.cs" />
-    <Compile Include="Migrations\201704290303465_IRA.Designer.cs">
-      <DependentUpon>201704290303465_IRA.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
@@ -404,6 +390,21 @@
     <Content Include="Views\Customers\AddPayee.cshtml" />
     <Content Include="Views\Payees\SuccessfulPayee.cshtml" />
     <Content Include="Views\Payees\BalanceError.cshtml" />
+    <Content Include="Views\Employees\Create.cshtml" />
+    <Content Include="Views\Employees\CustomerDetails.cshtml" />
+    <Content Include="Views\Employees\Delete.cshtml" />
+    <Content Include="Views\Employees\Details.cshtml" />
+    <Content Include="Views\Employees\Edit.cshtml" />
+    <Content Include="Views\Employees\EditCustomers.cshtml" />
+    <Content Include="Views\Employees\Index.cshtml" />
+    <Content Include="Views\Employees\Portal.cshtml" />
+    <Content Include="Views\Employees\ViewCustomers.cshtml" />
+    <Content Include="Views\Profile\Details.cshtml" />
+    <Content Include="Views\Profile\Edit.cshtml" />
+    <Content Include="Views\Profile\ForgotPassword.cshtml" />
+    <Content Include="Views\Profile\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Profile\ResetPassword.cshtml" />
+    <Content Include="Views\Profile\ResetPasswordConfirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -413,17 +414,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704290226559_initial2.resx">
-      <DependentUpon>201704290226559_initial2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704290231479_initial3.resx">
-      <DependentUpon>201704290231479_initial3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704290303465_IRA.resx">
-      <DependentUpon>201704290303465_IRA.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

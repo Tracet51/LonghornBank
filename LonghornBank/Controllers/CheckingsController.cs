@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using LonghornBank.Models;
+using LonghornBank.Utility;
 
 namespace LonghornBank.Controllers
 {
@@ -92,7 +93,7 @@ namespace LonghornBank.Controllers
         // POST: Checkings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CheckingID, Balance, Name, AccountNumber")] Checking checking)
+        public ActionResult Create([Bind(Include = "CheckingID, Balance, Name")] Checking checking)
         {
 
             var CustomerQuery = from c in db.Users
@@ -109,6 +110,15 @@ namespace LonghornBank.Controllers
 
             if (ModelState.IsValid)
             {
+                // Auto incremement the number
+                checking.AccountNumber = AccountNumber.AutoNumber(db);
+
+                // change the name
+                if (checking.Name == null)
+                {
+                    checking.Name = "Longhorn Checking";
+                }
+
                 // Associate the Customer with the checking account
                 checking.Customer = customer;
 
