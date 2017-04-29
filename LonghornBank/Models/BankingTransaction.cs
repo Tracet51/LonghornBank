@@ -7,10 +7,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LonghornBank.Models
 {
-    public enum DisputeStatus { Submitted, Accepted, Rejected, Adjusted }
-    public enum BankingTranactionType { Deposit, Withdrawl, Transfer, Fee, Bonus, BillPayment, None}
-    public enum SortingOption {TransIDAsc, TransIDDec, TransTypeAsc, TransTypeDec, TransDescriptionAsc, TransDescriptionDec, TransAmountAsc, TransAmountDec, TransDateAsc, TransDateDec}
+    public enum DisputeStatus { Submitted, Accepted, Rejected, Adjusted, NotDisputed }
+
+    public enum BankingTranactionType { Deposit, Withdrawl, Transfer, Fee, Bonus, None, BillPayment}
+
     public enum ApprovedorNeedsApproval { Approved, NeedsApproval}
+
+    public enum SortingOption { TransIDAsc, TransIDDec, TransTypeAsc, TransTypeDec, TransDescriptionAsc, TransDescriptionDec, TransAmountAsc, TransAmountDec, TransDateAsc, TransDateDec}
+
     public class BankingTransaction
     {
         public Int32 BankingTransactionID { get; set; }
@@ -36,10 +40,13 @@ namespace LonghornBank.Models
         [Display(Name = "Dispute Message")]
         public String DisputeMessage { get; set; }
 
+        public ApprovedorNeedsApproval ApprovalStatus { get; set; }
+
         //[Required(ErrorMessage = "Disputed Amount is Required")]
         [Display(Name = "Disputed Amount")]
         public Decimal CustomerOpinion { get; set; }
 
+        public String ManagerDisputeMessage { get; set; }
 
         //[Required(ErrorMessage = "Corrected Transaction Amount is Required")]
         [Display(Name = "Corrected Transaction Amount")]

@@ -202,7 +202,14 @@
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.flatly.css" />
+    <Content Include="Content\bootstrap.flatly.min.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\checking.png" />
+    <Content Include="Content\Images\checking2.png" />
+    <Content Include="Content\Images\checking3.png" />
+    <Content Include="Content\Images\savings.png" />
+    <Content Include="Content\Images\savings2.png" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -292,6 +299,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\AccountNumber.cs" />
     <Compile Include="Utility\BalancedPortfolio.cs" />
+    <Compile Include="Utility\Email.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -382,15 +390,6 @@
     <Content Include="Views\Customers\AddPayee.cshtml" />
     <Content Include="Views\Payees\SuccessfulPayee.cshtml" />
     <Content Include="Views\Payees\BalanceError.cshtml" />
-    <Content Include="Views\Employees\Create.cshtml" />
-    <Content Include="Views\Employees\CustomerDetails.cshtml" />
-    <Content Include="Views\Employees\Delete.cshtml" />
-    <Content Include="Views\Employees\Details.cshtml" />
-    <Content Include="Views\Employees\Edit.cshtml" />
-    <Content Include="Views\Employees\EditCustomers.cshtml" />
-    <Content Include="Views\Employees\Index.cshtml" />
-    <Content Include="Views\Employees\Portal.cshtml" />
-    <Content Include="Views\Employees\ViewCustomers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
