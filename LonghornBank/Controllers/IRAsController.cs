@@ -100,7 +100,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IRAID, Balance, Name, AccountNumber")] IRA ira)
+        public ActionResult Create([Bind(Include = "IRAID, Balance, Name")] IRA ira)
         {
             var CustomerQuery = from c in db.Users
                                 where c.UserName == User.Identity.Name
@@ -117,6 +117,13 @@ namespace LonghornBank.Controllers
             {
                 ira.RunningTotal = 0 + ira.Balance;
                 ira.Customer = customer;
+
+                ira.AccountNumber = Utility.AccountNumber.AutoNumber(db);
+
+                if (ira.Name == null)
+                {
+                    ira.Name = "Longhorn IRA";
+                }
 
                 db.IRAAccount.Add(ira);
                 db.SaveChanges();

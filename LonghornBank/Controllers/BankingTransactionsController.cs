@@ -11,6 +11,7 @@ using System.Diagnostics;
 
 namespace LonghornBank.Controllers
 {
+    
     public class BankingTransactionsController : Controller
     {
         private AppDbContext db = new AppDbContext();
@@ -96,6 +97,10 @@ namespace LonghornBank.Controllers
 
             // Add the customer to the view bag
             ViewBag.Customer = customer;
+            ViewBag.Ranges = AmountRange();
+            ViewBag.Dates = DateRanges();
+            ViewBag.DisplayedTransactionCount =CustomerTransactions.ToList().Count;
+            ViewBag.TotalTransactionCount = db.BankingTransaction.ToList().Count;
 
             return View("Index", CustomerTransactions);
         }
@@ -637,6 +642,20 @@ namespace LonghornBank.Controllers
         // Where 5 is the CheckingID
         public ActionResult Deposit() //int? id
         {
+            var CustomerQuery = from c in db.Users
+                                where c.Email == User.Identity.Name
+                                select c;
+            AppUser Customer = CustomerQuery.FirstOrDefault();
+
+            var CheckingQuery = from c in db.CheckingAccount
+                                where c.Customer.Id == Customer.Id
+                                select c;
+
+            List<Checking> CustomerChecking = CheckingQuery.ToList();
+
+            // Convert into a select list 
+            SelectList CheckingSelectList = new SelectList(CustomerChecking, "CheckingID", "Name");
+
             // TODO: ViewBag.AllAccounts 
 
             /*
@@ -651,35 +670,54 @@ namespace LonghornBank.Controllers
             }
 
             */
-            return View(); // TODO: need to pass the checking model object in
+
+            // add the select list to the viewbag
+            ViewBag.CheckingAccounts = CheckingSelectList;
+
+            return View();
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Deposit([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description,BankingTransactionType")] BankingTransaction bankingTransaction, Int32 CheckingID)
+        public ActionResult Deposit([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description")] BankingTransaction bankingTransaction, Int32 CheckingID)
         {
             // Find the selected Checking Account
             Checking SelectedChecking = db.CheckingAccount.Find(CheckingID);
+            List<Checking> CheckingList = new List<Checking>();
+            CheckingList.Add(SelectedChecking);
 
             // Associate the transaction with the checking account
-            bankingTransaction.CheckingAccount.Add(SelectedChecking);
+            bankingTransaction.CheckingAccount = CheckingList;
 
             // Check to see if the model state if valid
-            if (ModelState.IsValid)
+            bankingTransaction.BankingTransactionType = BankingTranactionType.Deposit;
+
+            db.BankingTransaction.Add(bankingTransaction);
+            if (bankingTransaction.Amount<=5000)
             {
-                db.BankingTransaction.Add(bankingTransaction);
-                if (bankingTransaction.Amount<=5000)
-                {
-                    Decimal New_Balance = SelectedChecking.Balance + bankingTransaction.Amount;
-                    SelectedChecking.Balance = New_Balance;  
-                }
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                Decimal New_Balance = SelectedChecking.Balance + bankingTransaction.Amount;
+                SelectedChecking.Balance = New_Balance;  
             }
+            else
+            {
+                Decimal PendingBalance = SelectedChecking.PendingBalance + bankingTransaction.Amount;
+                SelectedChecking.PendingBalance = PendingBalance;
+            }
+            db.Entry(SelectedChecking).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");
 
             // Repopulate the dropdown options
-            ViewBag.AllAccounts = bankingTransaction.CheckingAccount.ToList();
+            var CheckingQuery = from c in db.CheckingAccount
+                                where c.Customer.Id == SelectedChecking.Customer.Id
+                                select c;
+
+            List<Checking> CustomerChecking = CheckingQuery.ToList();
+
+            // Convert into a select list 
+            SelectList CheckingSelectList = new SelectList(CustomerChecking, "CheckingID", "Name");
+            ViewBag.CheckingAccounts = CheckingSelectList;
             return View(bankingTransaction);
         }
 
@@ -832,9 +870,13 @@ namespace LonghornBank.Controllers
             return RedirectToAction("Index", "BankingTransactions", new { id = customer.Id });
         }
 
+
+        public static DateTime Today { get;}
+
         //Detailed Search function
-        public ActionResult SearchResults(String SearchDescription, BankingTranactionType SelectedType, Decimal SearchAmount, String SearchTransactionNumber, DateTime SearchDate)
+        public ActionResult SearchResults(String SearchDescription, BankingTranactionType SelectedType, String SearchAmountBegin, String SearchAmountEnd, Int32 SearchAmountRange, String SearchTransactionNumber, String BeginSearchDate, String EndSearchDate, Int32 DateRange, SortingOption SortType)
         {
+
             var query = from c in db.BankingTransaction
                         select c;
 
@@ -845,22 +887,177 @@ namespace LonghornBank.Controllers
 
             if (SelectedType != BankingTranactionType.None)
             {
-                string BankingType = SelectedType.ToString();
-                query = query.Where(c => c.BankingTransactionType == SelectedType);
+                //Search for transactions with type deposit
+                if (SelectedType == BankingTranactionType.Deposit)
+                {
+                                        
+                  query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Deposit);
+                }
+
+                //Search for transactions with type withdrawl
+                if (SelectedType == BankingTranactionType.Withdrawl)
+                {
+                    query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Withdrawl);
+                }
+
+                //Search for transactions with type transfer
+                if (SelectedType == BankingTranactionType.Transfer)
+                {
+                    query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Transfer);
+                }
+
+                //Search for transactions with type fees
+                if (SelectedType == BankingTranactionType.Fee)
+                {
+                    query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Fee);
+                }
+                
+                
             }
 
-           /*if (SearchAmount != null)
+            // Convert them to a string
+            if (!String.IsNullOrEmpty(SearchAmountBegin) && !String.IsNullOrEmpty(SearchAmountEnd) && (SearchAmountRange == 0 || SearchAmountRange == 5))
             {
-                query = query.Where
-            }*/
+                Decimal AmountBegin = Convert.ToDecimal(SearchAmountBegin);
+                Decimal AmountEnd = Convert.ToDecimal(SearchAmountEnd);
+
+                if (AmountBegin >= 0 && AmountEnd > AmountBegin && (SearchAmountRange == 0 || SearchAmountRange ==5))
+                {
+                    query = query.Where(c => c.Amount >= AmountBegin && c.Amount <= AmountEnd);
+                }
+            }
+            
+            if (SearchAmountRange != 0 && SearchAmountRange!=5)
+            {
+                //For 0 to 100
+                if (SearchAmountRange == 1)
+                {
+                    query = query.Where(c => c.Amount >= 0 && c.Amount <= 100);
+                }
+
+                //For 100 to 200
+                if (SearchAmountRange == 2)
+                {
+                    query = query.Where(c => c.Amount >=100 && c.Amount <= 200);
+                }
+
+                //For 200 to 300
+                if (SearchAmountRange == 3)
+                {
+                    query = query.Where(c => c.Amount >= 200 && c.Amount <= 300);
+                }
+
+                //For 300+
+                if (SearchAmountRange == 4)
+                {
+                    query = query.Where(c => c.Amount >= 300);
+                }
+            }
+
+            if (!String.IsNullOrEmpty(BeginSearchDate) && !String.IsNullOrEmpty(EndSearchDate) && (DateRange == 0 || DateRange == 4))
+            {
+                // Convert to Datetime 
+                DateTime BeginDate = Convert.ToDateTime(BeginSearchDate);
+                DateTime EndDate = Convert.ToDateTime(EndSearchDate);
+
+                if (BeginDate < DateTime.Today && EndDate > BeginDate && (DateRange == 0 || DateRange == 4))
+                {
+                    query = query.Where(c => c.TransactionDate >= BeginDate && c.TransactionDate <= EndDate);
+                }
+
+            }
+
+            //0 should indicate searching for all dates
+            if (DateRange != 0)
+            {
+                //Last 15 days
+                if (DateRange == 1)
+                {
+                    query = query.Where(c => c.TransactionDate >= Today.AddDays(-15));
+                }
+
+                //Last 30 days
+                if (DateRange == 2)
+                {
+                    query = query.Where(c => c.TransactionDate <= Today.AddDays(-15) && c.TransactionDate >= Today.AddDays(-30));
+                }
+                //Last 60 days
+                if (DateRange == 3)
+                {
+                    query = query.Where(c => c.TransactionDate <= Today.AddDays(-30) && c.TransactionDate >= Today.AddDays(-60));
+                }
+
+            }
 
             if (SearchTransactionNumber != null)
             {
                 query = query.Where(c => c.Description.Contains(SearchTransactionNumber));
             }
 
+            //Order Trans ID ascending
+            if (SortType != SortingOption.TransIDAsc)
+            {
+                //query = query.OrderBy(c => c.BankingTransactionID);
+                //Order Trans ID descending
+                if (SortType == SortingOption.TransIDDec)
+                {
+
+                    query = query.OrderByDescending(c => c.BankingTransactionID);
+                }
+
+                //Order by type ascending
+                if (SortType == SortingOption.TransTypeAsc)
+                {
+                    query = query.OrderBy(c => c.BankingTransactionType);
+                }
+
+                //Order by type descending
+                if (SortType == SortingOption.TransTypeDec)
+                {
+                    query = query.OrderByDescending(c => c.BankingTransactionType);
+                }
+
+                //Order by Description Ascending
+                if (SortType == SortingOption.TransDescriptionAsc)
+                {
+                    query = query.OrderBy(c => c.Description);
+                }
+
+                //Order by description descending
+                if (SortType == SortingOption.TransDescriptionDec)
+                {
+                    query = query.OrderByDescending(c => c.Description);
+                }
+                //Order by amount ascending
+                if (SortType == SortingOption.TransAmountAsc)
+                {
+                    query = query.OrderBy(c => c.Amount);
+                }
+
+                //Order by amount descending
+                if (SortType == SortingOption.TransAmountDec)
+                {
+                    query = query.OrderByDescending(c => c.Amount);
+                }
+
+                if (SortType == SortingOption.TransDateAsc)
+                {
+                    query = query.OrderBy(C => C.TransactionDate);
+                }
+
+                if (SortType == SortingOption.TransDateDec)
+                {
+
+                    query = query.OrderByDescending(c => c.TransactionDate);
+                }
+
+            }
+
+
             ViewBag.DisplayedTransactionCount = query.ToList().Count;
             ViewBag.TotalTransactionCount = db.BankingTransaction.ToList().Count;
+            ViewBag.Ranges = AmountRange();
+            ViewBag.Dates = DateRanges();
             List<BankingTransaction> SelectedTransactions = query.ToList();
             return View("Index", SelectedTransactions);
         }
@@ -872,6 +1069,58 @@ namespace LonghornBank.Controllers
             SelectList BBTSelectList = new SelectList(BBT, new BankingTranactionType());
             ViewBag.AllBankingTypes = BBTSelectList;
             return BBTSelectList;
+        }
+
+        public SelectList AmountRange()
+        {
+            // Create a list of ranges
+            List<Ranges> RangesList = new List<Ranges>();
+
+            Ranges None = new Ranges { Name = "None", RangeID = 0 };
+            Ranges _100 = new Ranges { Name = "$0-100", RangeID = 1 };
+            Ranges _100_200 = new Ranges { Name = "$100-200", RangeID = 2 };
+            Ranges _200_300 = new Ranges { Name = "$200-300", RangeID = 3 };
+            Ranges _300 = new Ranges { Name = "$300+", RangeID = 4 };
+            Ranges Custom = new Ranges { Name = "Custom", RangeID = 5 };
+
+            // Add to the list
+            RangesList.Add(None);
+            RangesList.Add(_100);
+            RangesList.Add(_100_200);
+            RangesList.Add(_200_300);
+            RangesList.Add(_300);
+            RangesList.Add(Custom);
+            
+
+            // Convert to Select List
+
+            SelectList RangesSelect = new SelectList(RangesList, "RangeID", "Name");
+
+            return RangesSelect;
+        }
+
+        public SelectList DateRanges()
+        {
+            // Create a list for Dates
+            List<RangesDate> RangeDates = new List<RangesDate>();
+
+            RangesDate All = new RangesDate { Name = "All Available", RangeID = 0 };
+            RangesDate Last15 = new RangesDate { Name = "Last 15 Days", RangeID = 1 };
+            RangesDate Last30 = new RangesDate { Name = "Last 30", RangeID = 2 };
+            RangesDate Last60 = new RangesDate { Name = "Last 60", RangeID = 3 };
+            RangesDate Custom = new RangesDate { Name = "Custom", RangeID = 4 };
+
+            // add to the list 
+            RangeDates.Add(All);
+            RangeDates.Add(Last15);
+            RangeDates.Add(Last30);
+            RangeDates.Add(Last60);
+            RangeDates.Add(Custom);
+
+            // create a select list 
+            SelectList DateSelect = new SelectList(RangeDates, "RangeID", "Name");
+
+            return DateSelect;
         }
 
          

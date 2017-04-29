@@ -4,10 +4,11 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>@Html.Raw(Model.FirstOrDefault().Name)</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create") | 
+    @Html.ActionLink("Buy Stocks", "StockChoices", "StockTrades")
 </p>
 <table class="table">
     <tr>
@@ -24,7 +25,7 @@
             @Html.DisplayNameFor(model => model.Gains)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Bounses)
+            @Html.DisplayNameFor(model => model.Balanced)
         </th>
         <th></th>
     </tr>
@@ -44,7 +45,7 @@
             @Html.DisplayFor(modelItem => item.Gains)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Bounses)
+            @Html.DisplayFor(modelItem => item.Balanced)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.StockAccountID }) |

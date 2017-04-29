@@ -12,7 +12,6 @@ namespace LonghornBank.Models
         public Int32 CheckingID { get; set; }
 
         [Display(Name ="Account Number")]
-        [Required(ErrorMessage ="Must Enter an Account Number!")]
         public String AccountNumber { get; set; }
 
         [Display(Name = "Account Balance")]
@@ -23,7 +22,6 @@ namespace LonghornBank.Models
         public Decimal PendingBalance { get; set; }
 
         [Display(Name = "Account Name")]
-        [Required(ErrorMessage = "Account Name is Required")]
         public String Name { get; set; }
 
         // create connection to customer account 

@@ -1,0 +1,66 @@
+﻿@model IEnumerable<LonghornBank.Models.BankingTransaction>
+@{
+    ViewBag.Title = "ViewAllDisputes";
+}
+
+<h2>View All Disputes</h2>
+<table class="table">
+<tr>
+    <th>
+        Transaction Date
+    </th>
+    <th>
+        Transaction Type
+    </th>
+    <th>
+        Original Amount
+    </th>
+    <th>
+        Description
+    </th>
+    <th>
+        Dispute Status
+    </th>
+    <th>
+        Customer's Suggested Correction
+    </th>
+    <th>
+        Manager's Comment
+    </th>
+    <th>
+        Corrected Amount
+    </th>
+</tr>
+@foreach (var item in Model)
+{
+
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransactionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BankingTransactionType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransactionDispute)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerOpinion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ManagerDisputeMessage)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem=> item.CorrectedAmount)
+        </td>
+        
+    </tr>
+}
+
+</table>

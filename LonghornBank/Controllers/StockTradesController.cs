@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using LonghornBank.Models;
+using LonghornBank.Utility;
 using System.Net;
 
 namespace LonghornBank.Controllers
@@ -54,7 +55,7 @@ namespace LonghornBank.Controllers
 
 
         // GET: / StockTrades/StockChoices/
-        // shows all of the stock choices 
+        // shows all of the stock type choices 
         public ActionResult StockChoices()
         {
             return View();
@@ -296,6 +297,12 @@ namespace LonghornBank.Controllers
                 return RedirectToAction("Portal", "Home");
             }
 
+            if (PurchcaseTrade.TradeDate < DateTime.Today)
+            {
+                ViewBag.Error = "Date cannot be before today";
+                return View("PurchaseError");
+            }
+
             // Get the stock 
             StockMarket SelectedStock = db.StockMarket.Find(PurchcaseTrade.SelectedStock.StockMarketID);
 
@@ -335,7 +342,12 @@ namespace LonghornBank.Controllers
                 CorrectedAmount = 0 
             };
 
+            // Get the customer Savings account 
+            var SAQ = from sa in db.StockAccount
+                      where sa.Customer.Id == Customer.Id
+                      select sa;
 
+            StockAccount CustomerStockAccount = SAQ.FirstOrDefault();
 
             // check the account nulls 
             if (PurchcaseTrade.CheckingAccounts != null)
@@ -384,8 +396,12 @@ namespace LonghornBank.Controllers
                     db.CheckingAccount.Find(CustomerChecking.CheckingID).Balance -= decTotal;
 
                     // take out the fee 
-                    db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance -= SelectedStock.Fee;
+                    CustomerStockAccount.CashBalance -= SelectedStock.Fee;
 
+                    // take out the fee 
+                    CustomerStockAccount.TradingFee += SelectedStock.Fee;
+
+                    db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
                     db.BankingTransaction.Add(CheckingTrans);
                     db.SaveChanges();
                 }
@@ -442,8 +458,12 @@ namespace LonghornBank.Controllers
                     db.SavingsAccount.Find(CustomerSavings.SavingID).Balance -= decTotal;
 
                     // take out the fee 
-                    db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance -= SelectedStock.Fee;
+                    CustomerStockAccount.CashBalance -= SelectedStock.Fee;
 
+                    // take out the fee 
+                    CustomerStockAccount.TradingFee += SelectedStock.Fee;
+
+                    db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
                     db.BankingTransaction.Add(SavingsTrans);
                     db.SaveChanges();
                 }
@@ -457,8 +477,6 @@ namespace LonghornBank.Controllers
             }
             else if (PurchcaseTrade.AccountStock!= null)
             {
-                // Get the customer Savings account 
-                StockAccount CustomerStockAccount = db.StockAccount.Find(PurchcaseTrade.AccountStock.StockAccountID);
 
                 // take the money from the account
                 if (CustomerStockAccount.CashBalance - decTotal >= 0)
@@ -493,11 +511,15 @@ namespace LonghornBank.Controllers
                     db.SaveChanges();
 
                     // Take the money out 
-                    db.StockAccount.Find(CustomerStockAccount.StockAccountID).CashBalance -= decTotal;
+                    CustomerStockAccount.CashBalance -= decTotal;
 
                     // take out the fee 
-                    db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance -= SelectedStock.Fee;
+                    CustomerStockAccount.CashBalance -= SelectedStock.Fee;
 
+                    // take out the fee 
+                    CustomerStockAccount.TradingFee += SelectedStock.Fee;
+
+                    db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
                     db.BankingTransaction.Add(StocksTrans);
                     db.SaveChanges();
                 }
@@ -516,6 +538,8 @@ namespace LonghornBank.Controllers
             }
 
             // Add the stuff to the database 
+            // check to see if the porfolio is balanced
+            BalancedPortfolio.CheckBalanced(db, Customer);
 
             return View("PurchaseConfirmation");
         }
@@ -547,7 +571,8 @@ namespace LonghornBank.Controllers
                 PriceChange = (CustomerTrade.PricePerShare - CustomerTrade.StockMarket.StockPrice),
                 Quantity = CustomerTrade.Quantity,
                 TradeID = CustomerTrade.TradeID,
-                Gains = ((CustomerTrade.Quantity * CustomerTrade.PricePerShare) - (CustomerTrade.Quantity * CustomerTrade.StockMarket.StockPrice))
+                Gains = ((CustomerTrade.Quantity * CustomerTrade.PricePerShare) - (CustomerTrade.Quantity * CustomerTrade.StockMarket.StockPrice)),
+                Type = CustomerTrade.TradeType
             };
 
             return View(TD);
@@ -686,12 +711,15 @@ namespace LonghornBank.Controllers
             // Take out the fee 
             CustomerStockAccount.CashBalance -= Sale.Fee;
 
+            // Add the fee to the account
+            CustomerStockAccount.TradingFee += Sale.Fee;
+
             // Add/Subtract the profit
             CustomerStockAccount.CashBalance += Sale.Profit;
 
             // Update the Database
             db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
-
+            db.SaveChanges();
 
 
             // Remove the shares from the account
@@ -721,8 +749,20 @@ namespace LonghornBank.Controllers
             // Save the changes
             db.SaveChanges();
 
+            // Check to see if the account is balanced
+            BalancedPortfolio.CheckBalanced(db, customer);
+
             // Return users to the stock account details page
             return RedirectToAction("Details","StockAccounts");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

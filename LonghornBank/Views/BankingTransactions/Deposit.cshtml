@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Make a Deposit";
+    SelectList CheckingAccount = ViewBag.CheckingAccounts; 
 }
 
 <h2>New Deposit Transaction Page</h2>
@@ -15,6 +16,8 @@
         <h4>Create a deposit by filling out the information below</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(model => model.BankingTransactionID)
 
         <div class="form-group">
             @Html.LabelFor(model => model.TransactionDate, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -39,7 +42,7 @@
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
-
+<!--
         <div class="form-group">
             @Html.LabelFor(model => model.BankingTransactionType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -47,7 +50,13 @@
                 @Html.ValidationMessageFor(model => model.BankingTransactionType, "", new { @class = "text-danger" })
             </div>
         </div>
-            
+-->            
+
+        <b class="control-label col-md-2">Checking Accounts:</b>
+        @Html.DropDownList("CheckingID", CheckingAccount, new { @class = "form-control" })
+        <br />
+        <br />
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />

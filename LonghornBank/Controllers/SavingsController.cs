@@ -107,9 +107,17 @@ namespace LonghornBank.Controllers
             {
                 saving.Customer = customer;
 
+                // Auto incremenment the account number
+                saving.AccountNumber = Utility.AccountNumber.AutoNumber(db);
+
+                if (saving.Name == null)
+                {
+                    saving.Name = "Longhorn Savings";
+                }
+
                 db.SavingsAccount.Add(saving);
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home", new { id = customer.Id });
+                return RedirectToAction("Portal", "Home");
             }
 
             return View(saving);

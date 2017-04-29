@@ -114,7 +114,7 @@ namespace LonghornBank.Controllers
 
                 db.CheckingAccount.Add(checking);
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home");
+                return RedirectToAction("Index", "Home", new { id = customer.Id});
             }
 
             return View(checking);
@@ -141,7 +141,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CheckingID,Name,Balance")] Checking checking)
+        public ActionResult Edit([Bind(Include = "CheckingID,AccountNumber,Name")] Checking checking)
         {
             if (ModelState.IsValid)
             {
