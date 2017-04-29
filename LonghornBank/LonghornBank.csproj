@@ -293,6 +293,7 @@
     <Compile Include="Models\Ranges.cs" />
     <Compile Include="Models\RoleViewModels.cs" />
     <Compile Include="Models\Saving.cs" />
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\StockAccount.cs" />
     <Compile Include="Models\StockMarket.cs" />
     <Compile Include="Models\StockTradeViewModel.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="Utility\AccountNumber.cs" />
     <Compile Include="Utility\BalancedPortfolio.cs" />
     <Compile Include="Utility\Email.cs" />
+    <Compile Include="Utility\SearchTransactions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
