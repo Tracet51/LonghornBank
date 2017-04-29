@@ -43,7 +43,7 @@
     </tr>
     @foreach (var item in Model)
     {
-       
+
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.TransactionDate)
@@ -64,23 +64,24 @@
                 @Html.DisplayFor(modelItem => item.CustomerOpinion)
             </td>
             <td>
-                @Html.ActionLink("Launch", "DisputeManagementDetail", item.BankingTransactionID)
+                @Html.ActionLink("Launch", "DisputeManagementDetail", "Managers", new {BankingTransactionID=item.BankingTransactionID}, new { @class = "btn btn-default" })
             </td>
                 @using (Html.BeginForm("Disputes", "Managers", new { BankingTransactionID = item.BankingTransactionID }, FormMethod.Post, null))
                 {
             <td>
-                @Html.DisplayFor(modelItem => item.CorrectedAmount)
+                @Html.DisplayFor(modelItem=> item.CorrectedAmount)
                 revise to
                 @Html.TextBox("ManagerApprovedAmount", item.CorrectedAmount, null, new { @class = "form-control" })
                 @Html.Hidden(Convert.ToString(item.BankingTransactionID))
+                
             </td>
             <td>
                 <input type="submit" name="Disputes" value="Revise" class="btn btn-default" />
             </td>
                 }
-        </tr>
-            }
-        
+       </tr>
+    }
+
 </table>
 @Html.ActionLink("Manager Home", "Index", "Managers")
 

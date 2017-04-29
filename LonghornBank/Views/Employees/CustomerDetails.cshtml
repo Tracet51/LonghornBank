@@ -4,7 +4,7 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Customer Details</h2>
 
 <div>
     <h4>Customer</h4>
@@ -67,7 +67,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PasswordHash)
+            Insert Button to change password
         </dt>
 
         <dd>
@@ -101,6 +101,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "EditCustomers", new { id = Model.Id }) |
+    @Html.ActionLink("Back to Portal", "Portal")
 </p>

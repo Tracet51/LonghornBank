@@ -2,14 +2,19 @@
 @model IEnumerable<LonghornBank.Models.DepositApprovalViewModel>
 
 
-<h2>DepositApproval</h2>
-<a>This is a list of deposits awaiting your approval. Check the box to approve</a>
-Html.BeginForm("DepositApproval","Managers", FormMethod.Get))
+<h2>Deposit Approval</h2>
+<h6>This is a list of deposits awaiting your approval. Check the box to approve</h6>
+
+<h5>@ViewBag.SuccessMessage</h5>
+@using (Html.BeginForm("DepositApproval", "Managers", FormMethod.Post))
 {
 <table class="table">
     <tr>
         <th>
             Deposit Date
+        </th>
+        <th>
+            Deposit Approval Status
         </th>
         <th>
             Customer First Name
@@ -27,15 +32,42 @@ Html.BeginForm("DepositApproval","Managers", FormMethod.Get))
             Approve
         </th>
     </tr>
-    @foreach (var item in Model)
-    {
-        <tr>
-           
-        </tr>
-        <tr>
-            
-        </tr>
-    }
+   
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => item.BankingTransaction.TransactionDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(model=>item.BankingTransaction.ApprovalStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.FName)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.LName)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.BankingTransaction.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.BankingTransaction.Description)
+                </td>
+                <td>
+                    @Html.CheckBox("Approve", true, new { @class = "form-check-input" })
+                    @Html.Hidden("ID", item.BankingTransaction.BankingTransactionID.ToString())
+                </td>
+            </tr>
+        }
+
+
+
 </table>
+
+
+<input type="submit" value="Submit" class="btn btn-success" />
 }
+
+<br />
 @Html.ActionLink("Manager Home", "Index", "Managers")

@@ -92,7 +92,7 @@ namespace LonghornBank.Controllers
         // POST: Checkings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CheckingID,Balance,Name")] Checking checking)
+        public ActionResult Create([Bind(Include = "CheckingID, Balance, Name, AccountNumber")] Checking checking)
         {
 
             var CustomerQuery = from c in db.Users
@@ -112,19 +112,9 @@ namespace LonghornBank.Controllers
                 // Associate the Customer with the checking account
                 checking.Customer = customer;
 
-                // add the account number 
-                checking.AccountNumber = Utility.AccountNumber.AutoNumber(db);
-
-                if (checking.Name == null)
-                {
-                    checking.Name = "Longhorn Checking";
-                }
-
                 db.CheckingAccount.Add(checking);
-
-
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home");
+                return RedirectToAction("Index", "Home", new { id = customer.Id});
             }
 
             return View(checking);
@@ -151,7 +141,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CheckingID,Name,Balance")] Checking checking)
+        public ActionResult Edit([Bind(Include = "CheckingID,AccountNumber,Name")] Checking checking)
         {
             if (ModelState.IsValid)
             {

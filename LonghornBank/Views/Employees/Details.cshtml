@@ -1,4 +1,4 @@
-﻿@model LonghornBank.Models.AppUser
+﻿@model LonghornBank.Models.Employee
 
 @{
     ViewBag.Title = "Details";
@@ -7,7 +7,7 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Customer</h4>
+    <h4>Employee</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -59,19 +59,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => model.EmailAddress)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Email)
+            @Html.DisplayFor(model => model.EmailAddress)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PasswordHash)
+            @Html.DisplayNameFor(model => model.Password)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.PasswordHash)
+            @Html.DisplayFor(model => model.Password)
         </dd>
 
         <dt>
@@ -83,11 +83,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.DOB)
+            @Html.DisplayNameFor(model => model.SSN)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.DOB)
+            @Html.DisplayFor(model => model.SSN)
         </dd>
 
         <dt>
@@ -98,9 +98,17 @@
             @Html.DisplayFor(model => model.ActiveStatus)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.FiredStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FiredStatus)
+        </dd>
+
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.EmployeeID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
