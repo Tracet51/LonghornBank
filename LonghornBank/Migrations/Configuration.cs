@@ -26,11 +26,6 @@ namespace LonghornBank.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-            SeedProfile.SeedEmployees(context);
-            SeedDataCustomers.SeedCustomers(context);
-            SeedStocks.Stocks(context);
-            SeedAccounts.Account(context); 
         }
-
     }
 }
