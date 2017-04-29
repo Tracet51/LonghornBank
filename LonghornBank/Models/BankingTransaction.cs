@@ -40,6 +40,9 @@ namespace LonghornBank.Models
         [Display(Name = "Disputed Amount")]
         public Decimal CustomerOpinion { get; set; }
 
+        [Display (Name ="Manager's Dispute Message")]
+        public String ManagerDisputeMessage { get; set; }
+
 
         //[Required(ErrorMessage = "Corrected Transaction Amount is Required")]
         [Display(Name = "Corrected Transaction Amount")]

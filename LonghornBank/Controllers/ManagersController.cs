@@ -21,6 +21,11 @@ namespace LonghornBank.Controllers
         {
             return View("Index");
         }
+        public ActionResult BalancedPortfolioSuccess()
+        {
+            //CAll function to actually to balanced portfolio here
+            return View();
+        }
         public static void SendEmail(String toEmailAddress, String emailSubject, String emailBody)
         {
             var client = new SmtpClient("smtp.gmail.com", 587)
@@ -141,12 +146,20 @@ namespace LonghornBank.Controllers
             db.SaveChanges();
             return View(SelectedDisputes);
         }
+        public ActionResult ViewAllDisputes()
+        {
+            var query = from t in db.BankingTransaction
+                        select t;
+            query = query.Where(t => t.TransactionDispute != DisputeStatus.NotDisputed);
+           List<BankingTransaction> listofdisputes = query.ToList();
+            return View(listofdisputes);
 
+        }
         [HttpPost]
        public ActionResult DisputeManagementDetail(DisputesViewModel bankingTransaction)
         {
             BankingTransaction transaction = db.BankingTransaction.Find(bankingTransaction.DisputedTransaction.BankingTransactionID);
-            
+            transaction.ManagerDisputeMessage = bankingTransaction.DisputedTransaction.ManagerDisputeMessage;
             if (bankingTransaction.DisputedTransaction.CorrectedAmount == bankingTransaction.DisputedTransaction.CustomerOpinion)
             {
                 ViewBag.ConfirmationMessage = "You have accepted a customer's dispute for transaction ID #" + bankingTransaction.DisputedTransaction.BankingTransactionID + " and the amount is now $" + bankingTransaction.DisputedTransaction.CorrectedAmount;

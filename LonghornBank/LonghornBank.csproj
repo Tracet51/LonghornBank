@@ -191,6 +191,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\IRAsController.cs" />
     <Compile Include="Controllers\ManagersController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -218,8 +219,13 @@
     <Compile Include="Migrations\201704251629191_twentyfifth.Designer.cs">
       <DependentUpon>201704251629191_twentyfifth.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704271659047_addfield.cs" />
+    <Compile Include="Migrations\201704271659047_addfield.Designer.cs">
+      <DependentUpon>201704271659047_addfield.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ForgotPasswordViewModels.cs" />
     <Compile Include="Models\DisputesViewModel.cs" />
     <Compile Include="Models\DepositApprovalViewModel.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
@@ -321,6 +327,17 @@
     <Content Include="Views\Managers\Index.cshtml" />
     <Content Include="Views\Managers\FreezeEmployees.cshtml" />
     <Content Include="Views\Managers\FreezeCustomers.cshtml" />
+    <Content Include="Views\Managers\ViewAllDisputes.cshtml" />
+    <Content Include="Views\Employees\Create.cshtml" />
+    <Content Include="Views\Employees\Delete.cshtml" />
+    <Content Include="Views\Employees\Details.cshtml" />
+    <Content Include="Views\Employees\Edit.cshtml" />
+    <Content Include="Views\Employees\Index.cshtml" />
+    <Content Include="Views\Employees\Portal.cshtml" />
+    <Content Include="Views\Employees\ViewCustomers.cshtml" />
+    <Content Include="Views\Employees\CustomerDetails.cshtml" />
+    <Content Include="Views\Employees\EditCustomers.cshtml" />
+    <Content Include="Views\Managers\BalancedPortfolioSuccess.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -341,6 +358,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704251629191_twentyfifth.resx">
       <DependentUpon>201704251629191_twentyfifth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704271659047_addfield.resx">
+      <DependentUpon>201704271659047_addfield.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="obj\Debug\LonghornBank.Migrations.first.resources" />
   </ItemGroup>
