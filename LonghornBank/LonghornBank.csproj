@@ -242,6 +242,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\IRAsController.cs" />
     <Compile Include="Controllers\ManagersController.cs" />
     <Compile Include="Controllers\PayeesController.cs" />
@@ -258,8 +259,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\SeedAccounts.cs" />
+    <Compile Include="Migrations\SeedDataCustomers.cs" />
+    <Compile Include="Migrations\SeedPayee.cs" />
+    <Compile Include="Migrations\SeedProfiles.cs" />
+    <Compile Include="Migrations\SeedStocks.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\DepositApprovalViewModel.cs" />
+    <Compile Include="Models\DisputesViewModel.cs" />
+    <Compile Include="Models\ForgotPasswordViewModels.cs" />
     <Compile Include="Models\PayeeViewModel.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
@@ -271,6 +279,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Payee.cs" />
     <Compile Include="Models\IRA.cs" />
+    <Compile Include="Models\Ranges.cs" />
     <Compile Include="Models\RoleViewModels.cs" />
     <Compile Include="Models\Saving.cs" />
     <Compile Include="Models\StockAccount.cs" />
@@ -281,6 +290,8 @@
     <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\AccountNumber.cs" />
+    <Compile Include="Utility\BalancedPortfolio.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -371,6 +382,15 @@
     <Content Include="Views\Customers\AddPayee.cshtml" />
     <Content Include="Views\Payees\SuccessfulPayee.cshtml" />
     <Content Include="Views\Payees\BalanceError.cshtml" />
+    <Content Include="Views\Employees\Create.cshtml" />
+    <Content Include="Views\Employees\CustomerDetails.cshtml" />
+    <Content Include="Views\Employees\Delete.cshtml" />
+    <Content Include="Views\Employees\Details.cshtml" />
+    <Content Include="Views\Employees\Edit.cshtml" />
+    <Content Include="Views\Employees\EditCustomers.cshtml" />
+    <Content Include="Views\Employees\Index.cshtml" />
+    <Content Include="Views\Employees\Portal.cshtml" />
+    <Content Include="Views\Employees\ViewCustomers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
