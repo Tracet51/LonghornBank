@@ -78,9 +78,42 @@ namespace LonghornBank.Controllers
             // Add to view bag
             ViewBag.Trades = Trades;
             ViewBag.Transactions = Trans;
+            ViewBag.Ranges = SearchTransactions.AmountRange();
+            ViewBag.Dates = SearchTransactions.DateRanges();
             ViewBag.Customer = Customer;
 
             return View(CustomerStockAccount);
+        }
+
+        public ActionResult Search(SearchViewModel TheSearch, Int32 StockAccountID)
+        {
+            // get the stock account 
+            StockAccount CustomerStockAccount = db.StockAccount.Find(StockAccountID);
+
+            // make a list to hold the transactions 
+            List<BankingTransaction> StockTransaction = SearchTransactions.Search(db, TheSearch, 4, StockAccountID);
+
+            // Get the customer 
+            var CustomerQuery = from u in db.Users
+                                where u.UserName == User.Identity.Name
+                                select u;
+
+            AppUser Customer = CustomerQuery.FirstOrDefault();
+
+            // Get all of the trades for the customer 
+            var TradesQuery = from t in db.Trades
+                              where t.StockAccount.StockAccountID == CustomerStockAccount.StockAccountID
+                              select t;
+
+            List<Trade> Trades = TradesQuery.ToList();
+
+            // add the stuff to view bag 
+            ViewBag.Trades = Trades;
+            ViewBag.Customer = Customer;
+            ViewBag.Transactions = StockTransaction;
+            ViewBag.Ranges = SearchTransactions.AmountRange();
+            ViewBag.Dates = SearchTransactions.DateRanges();
+            return View("Details", CustomerStockAccount);
         }
 
         // GET: StockAccounts/Create

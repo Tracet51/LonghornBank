@@ -5,7 +5,7 @@
     ViewBag.Title = "New Transaction";
 
     // Grab the Tuple from ViewBag
-    Tuple<SelectList, SelectList, SelectList> AllAccounts = ViewBag.AllAccounts;
+    Tuple<SelectList, SelectList, SelectList, SelectList> AllAccounts = ViewBag.AllAccounts;
 
     // Create a SelectList for Checking Accounts
     SelectList CheckingAccounts = AllAccounts.Item1;
@@ -15,6 +15,9 @@
 
     // Create a SelectList for IRA
     SelectList IraAccounts = AllAccounts.Item3;
+
+    // Create a selectlist for Stocks 
+    SelectList StockAccounts = AllAccounts.Item4;
     
 
 }

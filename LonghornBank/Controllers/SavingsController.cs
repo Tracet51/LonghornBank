@@ -61,9 +61,22 @@ namespace LonghornBank.Controllers
             List<BankingTransaction> SavingTransactions = saving.BankingTransactions.ToList();
 
             // Pass the List to the ViewBag
-            ViewBag.SavingTransactions = SavingTransactions;
-
+            ViewBag.SavingsTransactions = SavingTransactions;
+            ViewBag.Ranges = SearchTransactions.AmountRange();
+            ViewBag.Dates = SearchTransactions.DateRanges();
             return View(saving);
+        }
+
+        public ActionResult Search(SearchViewModel TheSearch, Int32 SavingID)
+        {
+            Saving saving = db.SavingsAccount.Find(SavingID);
+            List<BankingTransaction> Transactions = SearchTransactions.Search(db, TheSearch, 2, SavingID);
+
+            // Add the list to the view bag
+            ViewBag.SavingsTransactions = Transactions;
+            ViewBag.Ranges = SearchTransactions.AmountRange();
+            ViewBag.Dates = SearchTransactions.DateRanges();
+            return View("Details", saving);
         }
 
         // GET: Savings/Create

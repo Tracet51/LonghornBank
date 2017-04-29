@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using LonghornBank.Models;
+using LonghornBank.Utility;
 
 namespace LonghornBank.Controllers
 {
@@ -62,9 +63,23 @@ namespace LonghornBank.Controllers
             List<BankingTransaction> IRATransactions = ira.BankingTransactions.ToList();
 
             // Pass the List to the ViewBag
-            ViewBag.IRATransactions = IRATransactions;
-
+            ViewBag.IraTransactions = IRATransactions;
+            ViewBag.Ranges = SearchTransactions.AmountRange();
+            ViewBag.Dates = SearchTransactions.DateRanges();
             return View(ira);
+        }
+
+        public ActionResult Search(SearchViewModel TheSearch, Int32 IRAID)
+        {
+            // get the ira 
+            IRA ira = db.IRAAccount.Find(IRAID);
+
+            List<BankingTransaction> IraTransactions = SearchTransactions.Search(db, TheSearch, 3, IRAID);
+
+            ViewBag.IraTransactions = IraTransactions;
+            ViewBag.Ranges = SearchTransactions.AmountRange();
+            ViewBag.Dates = SearchTransactions.DateRanges();
+            return View("Details", ira);
         }
 
         // GET: IRA/Create

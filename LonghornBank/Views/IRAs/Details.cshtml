@@ -3,7 +3,9 @@
 
 @{
     ViewBag.Title = "Details";
-    List<BankingTransaction> IRATransactions = ViewBag.IRATransactions;
+    List<BankingTransaction> IraTransactions = ViewBag.IraTransactions;
+    SelectList Ranges = ViewBag.Ranges;
+    SelectList Dates = ViewBag.Dates;
 }
 
 <h2>Details</h2>
@@ -39,6 +41,146 @@
 
     </dl>
 </div>
+
+
+
+
+@using (Html.BeginForm("Search", "IRAs", FormMethod.Get))
+{
+    @Html.HiddenFor(model => model.IRAID);
+
+    <p class="form-group">
+        Transaction Description:@Html.TextBox("SearchDescription", null, new { @class = "form-control" })<br />
+
+        <div class="form-group">
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("SelectedType", BankingTranactionType.None, true, new { @class = "form-check-input" }) All
+                </label>
+            </div>
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("SelectedType", BankingTranactionType.Deposit, new { @class = "form-check-input" }) Deposit
+                </label>
+            </div>
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("SelectedType", BankingTranactionType.Withdrawl, new { @class = "form-check-input" }) Withdrawl
+                </label>
+            </div>
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("SelectedType", BankingTranactionType.Transfer, new { @class = "form-check-input" }) Transfer
+                </label>
+            </div>
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("SelectedType", BankingTranactionType.Fee, new { @class = "form-check-input" }) Fee
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("SelectedType", BankingTranactionType.BillPayment, new { @class = "form-check-input" }) Bill Payment
+                </label>
+            </div>
+        </div>
+        Transaction Number:@Html.TextBox("SearchTransactionNumber", null, new { @class = "form-control" })<br />
+    </p>
+
+    <div class="form-check">
+        Amount Range @Html.DropDownList("SearchAmountRange", Ranges, new { @class = "form-control" })
+        <br><br />
+    </div>
+
+    <p class="form-group">
+        Start Amount Custom Range @Html.TextBox("SearchAmountBegin", null, new { @class = "form-control" }) End Amount Custom Range @Html.TextBox("SearchAmountEnd", null, new { @class = "form-control" }) <br />
+    </p>
+
+    <div class="form-check">
+        Date Range @Html.DropDownList("DateRange", Dates, new { @class = "form-control" })
+        <br><br />
+    </div>
+
+    <p class="form-group">
+        Start Date @Html.TextBox("BeginSearchDate", null, new { @class = "form-control" }) End Date @Html.TextBox("EndSearchDate", null, new { @class = "form-control" }) <br />
+    </p>
+
+    <div class="form-group">
+
+        <div class="form-check">
+            <label class="form-check-label">
+                @Html.RadioButton("SortType", SortingOption.TransIDAsc, true, new { @class = "form-check-input" }) Transaction ID Ascending
+            </label>
+        </div>
+
+        <div class="form-check">
+            <label class="form-check-label">
+                @Html.RadioButton("SortType", SortingOption.TransIDDec, new { @class = "form-check-input" }) Transaction ID Decending
+            </label>
+        </div>
+
+        <div class="form-check">
+            <label class="form-check-label">
+                @Html.RadioButton("SortType", SortingOption.TransTypeAsc, new { @class = "form-check-input" }) Transaction Type Ascending
+            </label>
+        </div>
+
+        <div class="form-check">
+            <label class="form-check-label">
+                @Html.RadioButton("SortType", SortingOption.TransTypeDec, new { @class = "form-check-input" }) Transaction Type Decending
+            </label>
+        </div>
+
+        <div class="form-check">
+            <label class="form-check-label">
+                @Html.RadioButton("SortType", SortingOption.TransDescriptionAsc, new { @class = "form-check-input" }) Transaction Description Ascending
+            </label>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                @Html.RadioButton("SortType", SortingOption.TransDescriptionDec, new { @class = "form-check-input" }) Transaction Description Descending
+            </label>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                @Html.RadioButton("SortType", SortingOption.TransAmountAsc, new { @class = "form-check-input" }) Transaction Amount Ascending
+            </label>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                @Html.RadioButton("SortType", SortingOption.TransAmountDec, new { @class = "form-check-input" }) Transaction Amount Descending
+            </label>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                @Html.RadioButton("SortType", SortingOption.TransDateAsc, new { @class = "form-check-input" }) Transaction Date Ascending
+            </label>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                @Html.RadioButton("SortType", SortingOption.TransDateDec, new { @class = "form-check-input" }) Transaction Date Descending
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Search" class="btn btn-default" />
+        </div>
+    </div>
+
+
+
+
+}
+
+
+
+
 <table class="table">
     <tr>
         <th>
@@ -55,7 +197,7 @@
         </th>
     </tr>
 
-    @foreach (var item in IRATransactions)
+    @foreach (var item in IraTransactions)
     {
         <tr>
             <td>@Html.DisplayFor(modelItem => item.BankingTransactionID)</td>
