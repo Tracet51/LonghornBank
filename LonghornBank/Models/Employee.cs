@@ -9,7 +9,8 @@ namespace LonghornBank.Models
     public class Employee
     {
         public Int32 EmployeeID { get; set; }
-
+        [Required(ErrorMessage = "A First Name is Required")]
+        [Display(Name = "First Name")]
         public String FName { get; set; }
         [Required(ErrorMessage = "A Last Name is Required")]
         [Display(Name = "Last Name")]

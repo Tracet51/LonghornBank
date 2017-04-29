@@ -113,9 +113,10 @@ namespace LonghornBank.Controllers
         {
             if (ModelState.IsValid)
             {
+                ViewBag.Confirmation = "You have successfully created an employee.";
                 db.Employees.Add(employee);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Managers");
             }
 
             return View(employee);

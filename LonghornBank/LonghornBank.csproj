@@ -270,6 +270,18 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704290331184_InitialSetup.cs" />
+    <Compile Include="Migrations\201704290331184_InitialSetup.Designer.cs">
+      <DependentUpon>201704290331184_InitialSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290403482_AddApprovedFieldToStockAccount.cs" />
+    <Compile Include="Migrations\201704290403482_AddApprovedFieldToStockAccount.Designer.cs">
+      <DependentUpon>201704290403482_AddApprovedFieldToStockAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290538373_fnamedisplayname.cs" />
+    <Compile Include="Migrations\201704290538373_fnamedisplayname.Designer.cs">
+      <DependentUpon>201704290538373_fnamedisplayname.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
@@ -413,6 +425,8 @@
     <Content Include="Views\Profile\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Profile\ResetPassword.cshtml" />
     <Content Include="Views\Profile\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Managers\ApproveStockAccounts.cshtml" />
+    <Content Include="Views\Managers\FireEmployees.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -422,6 +436,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201704290331184_InitialSetup.resx">
+      <DependentUpon>201704290331184_InitialSetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290403482_AddApprovedFieldToStockAccount.resx">
+      <DependentUpon>201704290403482_AddApprovedFieldToStockAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290538373_fnamedisplayname.resx">
+      <DependentUpon>201704290538373_fnamedisplayname.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
