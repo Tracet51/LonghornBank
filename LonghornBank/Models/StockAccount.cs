@@ -30,6 +30,9 @@ namespace LonghornBank.Models
         [Column("AccountNumber")]
         public String AccountNumber { get; set; }
 
+        [Display(Name ="Pending Balance")]
+        public Decimal PendingBalance { get; set; }
+
 
         private Decimal _decStockBalance;
 

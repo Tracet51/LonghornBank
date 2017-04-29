@@ -3,7 +3,7 @@ namespace LonghornBank.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class IRAaccountNumber : DbMigration
+    public partial class IRA : DbMigration
     {
         public override void Up()
         {

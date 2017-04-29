@@ -274,8 +274,8 @@ namespace LonghornBank.Controllers
                 var callbackUrl = Url.Action("ResetPassword", "Profile", new { userId = user.Id}, protocol: Request.Url.Scheme);
                 //await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
                
-                Email.PasswordEmail(user.Email, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                Email.PasswordEmail(user.Email, "Reset Password", "Please reset your password by clicking " + callbackUrl);
+                return RedirectToAction("ForgotPasswordConfirmation", "Profile");
             }
 
             // If we got this far, something failed, redisplay form
@@ -291,7 +291,7 @@ namespace LonghornBank.Controllers
         }
 
         //
-        // GET: /Account/ResetPassword
+        // GET: /Profile/ResetPassword
         [AllowAnonymous]
         public ActionResult ResetPassword()
         {
@@ -299,7 +299,7 @@ namespace LonghornBank.Controllers
         }
 
         //
-        // POST: /Account/ResetPassword
+        // POST: /Profile/ResetPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -315,12 +315,16 @@ namespace LonghornBank.Controllers
                 // Don't reveal that the user does not exist
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
-            if (result.Succeeded)
+            // remove the password
+            var PasswordRemove = await UserManager.RemovePasswordAsync(user.Id);
+
+            var PasswordUpdate = await UserManager.AddPasswordAsync(user.Id, model.Password);
+            if (PasswordUpdate.Succeeded)
             {
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                
+                return RedirectToAction("ResetPasswordConfirmation", "Profile");
             }
-            AddErrors(result);
+            AddErrors(PasswordUpdate);
             return View();
         }
 

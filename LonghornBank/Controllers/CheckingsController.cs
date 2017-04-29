@@ -49,7 +49,7 @@ namespace LonghornBank.Controllers
 
         // GET: Checkings/Details/5
         // ID = checkingID
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id )
         {
             if (id == null)
             {
@@ -66,8 +66,22 @@ namespace LonghornBank.Controllers
 
             // Pass the List to the ViewBag
             ViewBag.CheckingTransactions = CheckingTransactions;
+            ViewBag.Ranges = SearchTransactions.AmountRange();
+            ViewBag.Dates = SearchTransactions.DateRanges();
 
             return View(checking);
+        }
+
+        public ActionResult Search(SearchViewModel TheSearch, Int32 CheckingID)
+        {
+            Checking checking = db.CheckingAccount.Find(CheckingID);
+            List<BankingTransaction> Transactions = SearchTransactions.Search(db, TheSearch, 1 , CheckingID);
+
+            // Add the list to the view bag
+            ViewBag.CheckingTransactions = Transactions;
+            ViewBag.Ranges = SearchTransactions.AmountRange();
+            ViewBag.Dates = SearchTransactions.DateRanges();
+            return View("Details", checking);
         }
 
         // GET: Checkings/Create

@@ -121,13 +121,13 @@ namespace LonghornBank.Migrations
             db.CheckingAccount.AddOrUpdate(x => x.AccountNumber, ca13);
 
 
-            var ca14query = from c in db.Users where c.Email == "mackcloud@pimpdaddy.com" select c;
+            //var ca14query = from c in db.Users where c.Email == "mackcloud@pimpdaddy.com" select c;
 
-            AppUser Customerca14 = ca14query.FirstOrDefault();
+            //AppUser Customerca14 = ca14query.FirstOrDefault();
 
-            IRA ca14 = new IRA { AccountNumber = "1000000012", Customer = Customerca14, Name = "Jennifer's IRA", Balance = 53177.21m };
+            //IRA ca14 = new IRA { AccountNumber = "1000000012", Customer = Customerca14, Name = "Jennifer's IRA", Balance = 53177.21m };
 
-            db.IRAAccount.AddOrUpdate(x => x.AccountNumber, ca14);
+            //addb.IRAAccount.AddOrUpdate(x => x.AccountNumber, ca14);
 
 
             var ca15query = from c in db.Users where c.Email == "ss34@ggmail.com" select c;
@@ -157,13 +157,13 @@ namespace LonghornBank.Migrations
             db.SavingsAccount.AddOrUpdate(x => x.AccountNumber, ca17);
 
 
-            var ca18query = from c in db.Users where c.Email == "ra@aoo.com" select c;
+            //var ca18query = from c in db.Users where c.Email == "ra@aoo.com" select c;
 
-            AppUser Customerca18 = ca18query.FirstOrDefault();
+            //AppUser Customerca18 = ca18query.FirstOrDefault();
 
-            IRA ca18 = new IRA { AccountNumber = "1000000016", Customer = Customerca18, Name = "Allen's IRA", Balance = 75866.69m };
+            //IRA ca18 = new IRA { AccountNumber = "1000000016", Customer = Customerca18, Name = "Allen's IRA", Balance = 75866.69m };
 
-            db.IRAAccount.AddOrUpdate(x => x.AccountNumber, ca18);
+            //db.IRAAccount.AddOrUpdate(x => x.AccountNumber, ca18);
 
 
             var ca19query = from c in db.Users where c.Email == "johnsmith187@aool.com" select c;
