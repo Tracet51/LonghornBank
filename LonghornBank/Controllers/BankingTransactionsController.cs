@@ -139,7 +139,7 @@ namespace LonghornBank.Controllers
             }
 
             // Get all of the accounts
-            Tuple<SelectList, SelectList, SelectList> AllAcounts = GetAllAccounts(customer.Id);
+            Tuple<SelectList, SelectList, SelectList, SelectList> AllAcounts = GetAllAccounts(customer.Id);
 
             // Add the SelectList Tuple to the ViewBag
             ViewBag.AllAccounts = AllAcounts;
@@ -680,50 +680,133 @@ namespace LonghornBank.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Deposit([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description")] BankingTransaction bankingTransaction, Int32 CheckingID)
+        public ActionResult Deposit([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description")] BankingTransaction bankingTransaction, Int32 CheckingID, Int32 SavingID, Int32 IraID, Int32 StockAccountID)
         {
-            // Find the selected Checking Account
-            Checking SelectedChecking = db.CheckingAccount.Find(CheckingID);
-            List<Checking> CheckingList = new List<Checking>();
-            CheckingList.Add(SelectedChecking);
-
-            // Associate the transaction with the checking account
-            bankingTransaction.CheckingAccount = CheckingList;
-
-            // Check to see if the model state if valid
-            bankingTransaction.BankingTransactionType = BankingTranactionType.Deposit;
-
-            db.BankingTransaction.Add(bankingTransaction);
-            if (bankingTransaction.Amount<=5000)
+            if (CheckingID != 0)
             {
-                Decimal New_Balance = SelectedChecking.Balance + bankingTransaction.Amount;
-                SelectedChecking.Balance = New_Balance;  
+                // Find the selected Checking Account
+                Checking SelectedChecking = db.CheckingAccount.Find(CheckingID);
+                List<Checking> CheckingList = new List<Checking>();
+                CheckingList.Add(SelectedChecking);
+
+                // Associate the transaction with the checking account
+                bankingTransaction.CheckingAccount = CheckingList;
+
+                // Check to see if the model state if valid
+                bankingTransaction.BankingTransactionType = BankingTranactionType.Deposit;
+
+                db.BankingTransaction.Add(bankingTransaction);
+                if (bankingTransaction.Amount <= 5000)
+                {
+                    Decimal New_Balance = SelectedChecking.Balance + bankingTransaction.Amount;
+                    SelectedChecking.Balance = New_Balance;
+                }
+                else
+                {
+                    Decimal PendingBalance = SelectedChecking.PendingBalance + bankingTransaction.Amount;
+                    SelectedChecking.PendingBalance = PendingBalance;
+                }
+
+                // Repopulate the dropdown options
+                var CheckingQuery = from c in db.CheckingAccount
+                                    where c.Customer.Id == SelectedChecking.Customer.Id
+                                    select c;
+
+                List<Checking> CustomerChecking = CheckingQuery.ToList();
+
+                // Convert into a select list 
+                SelectList CheckingSelectList = new SelectList(CustomerChecking, "CheckingID", "Name");
+                ViewBag.CheckingAccounts = CheckingSelectList;
+
+                db.Entry(SelectedChecking).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            else
+
+            // Check to see if Savings Account
+            if (SavingID != 0)
             {
-                Decimal PendingBalance = SelectedChecking.PendingBalance + bankingTransaction.Amount;
-                SelectedChecking.PendingBalance = PendingBalance;
+                // Find the selected saving Account
+                Saving SelectedSaving = db.SavingsAccount.Find(CheckingID);
+                List<Saving> SavingList = new List<Saving>();
+                SavingList.Add(SelectedSaving);
+
+                // Associate the transaction with the saving account
+                bankingTransaction.SavingsAccount = SavingList;
+
+                // Check to see if the model state if valid
+                bankingTransaction.BankingTransactionType = BankingTranactionType.Deposit;
+
+                db.BankingTransaction.Add(bankingTransaction);
+                if (bankingTransaction.Amount <= 5000)
+                {
+                    Decimal New_Balance = SelectedSaving.Balance + bankingTransaction.Amount;
+                    SelectedSaving.Balance = New_Balance;
+                }
+                else
+                {
+                    Decimal PendingBalance = SelectedSaving.PendingBalance + bankingTransaction.Amount;
+                    SelectedSaving.PendingBalance = PendingBalance;
+                }
+
+                // Repopulate the dropdown options
+                var SavingQuery = from c in db.SavingsAccount
+                                    where c.Customer.Id == SelectedSaving.Customer.Id
+                                    select c;
+
+                List<Saving> CustomerSaving = SavingQuery.ToList();
+
+                // Convert into a select list 
+                SelectList SavingSelectList = new SelectList(CustomerSaving, "SavingID", "Name");
+                ViewBag.SavingAccounts = SavingSelectList;
+
+                db.Entry(SelectedSaving).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            db.Entry(SelectedChecking).State = EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            //Check to see if depositing into IRRA
+            if (IraID != 0)
+            {
+                // Find the Selected IRA Account
+                IRA SelectedIra = db.IRAAccount.Find(IraID);
 
-            // Repopulate the dropdown options
-            var CheckingQuery = from c in db.CheckingAccount
-                                where c.Customer.Id == SelectedChecking.Customer.Id
-                                select c;
+                // Create a list of IRA accounts and add the one seleceted 
+                List<IRA> NewIraAccounts = new List<IRA> { SelectedIra };
 
-            List<Checking> CustomerChecking = CheckingQuery.ToList();
+                bankingTransaction.IRAAccount = NewIraAccounts;
 
-            // Convert into a select list 
-            SelectList CheckingSelectList = new SelectList(CustomerChecking, "CheckingID", "Name");
-            ViewBag.CheckingAccounts = CheckingSelectList;
+                //Adds money to account if under 5000
+                if (bankingTransaction.Amount + SelectedIra.RunningTotal <= 5000)
+                {
+                    SelectedIra.RunningTotal = SelectedIra.RunningTotal + bankingTransaction.Amount;
+                    Decimal New_Balance = SelectedIra.Balance + bankingTransaction.Amount;
+                    SelectedIra.Balance = New_Balance;
+                }
+
+                //Adds to pending balance if over 5000
+                else
+                {
+                    ViewBag.CorrectIra = "Would you like to automatically deposit " + (bankingTransaction.Amount - SelectedIra.RunningTotal) + " To make the transaction valid, or would you like to do it yourself";
+                    decimal CorrectAmount = 5000 - SelectedIra.RunningTotal;
+                    return RedirectToAction("IRAError", "BankingTransactions", new { CorrectAmount, bankingTransaction.BankingTransactionID, bankingTransaction.BankingTransactionType, bankingTransaction.Description, bankingTransaction.TransactionDate, IraID });
+                }
+
+
+
+                // Add to database
+                db.BankingTransaction.Add(bankingTransaction);
+                db.SaveChanges();
+
+                // Redirect 
+                return RedirectToAction("Index");
+            }
+
             return View(bankingTransaction);
         }
 
         // Get all of the customer's account 
         // id == customer's id
-        public Tuple<SelectList, SelectList, SelectList> GetAllAccounts(string id)
+        public Tuple<SelectList, SelectList, SelectList, SelectList> GetAllAccounts(string id)
         {
             // Populate a list of Checking Accounts
             var CheckingQuery = from ca in db.CheckingAccount
@@ -756,9 +839,24 @@ namespace LonghornBank.Controllers
             SelectList SavingsSelectList = new SelectList(SavingsAccounts.OrderBy(a => a.SavingID), "SavingID", "Name");
 
             // Grab the IRA account
+            var StockAccountQuery = from stock in db.StockAccount
+                               where stock.Customer.Id == id
+                               select stock;
+
+            // Get the IRA account
+            List<StockAccount> StockAccounts = StockAccountQuery.ToList();
+
+            // Create a None Options 
+            StockAccount SelectNoStockAccount = new StockAccount() { StockAccountID = 0, AccountNumber = "1000000000000", CashBalance = 0, Name = "None" };
+            StockAccounts.Add(SelectNoStockAccount);
+
+            // Convert the List into a select list 
+            SelectList StockSelectList = new SelectList(StockAccounts.OrderBy(a => a.StockAccountID), "StockAccountID", "Name");
+
+            // Grab the IRA account
             var IraQuery = from ira in db.IRAAccount
-                               where ira.Customer.Id == id
-                               select ira;
+                           where ira.Customer.Id == id
+                           select ira;
 
             // Get the IRA account
             List<IRA> IRAAccounts = IraQuery.ToList();
@@ -771,7 +869,7 @@ namespace LonghornBank.Controllers
             SelectList IRASelectList = new SelectList(IRAAccounts.OrderBy(a => a.IRAID), "IRAID", "Name");
 
             // Add the Accounts to the Tuple of Accounts 
-            Tuple<SelectList, SelectList, SelectList> Accounts = new Tuple<SelectList, SelectList, SelectList>(CheckingSelectList, SavingsSelectList, IRASelectList);
+            Tuple<SelectList, SelectList, SelectList, SelectList> Accounts = new Tuple<SelectList, SelectList, SelectList, SelectList>(CheckingSelectList, SavingsSelectList, StockSelectList, IRASelectList);
 
             return Accounts;
 
@@ -794,7 +892,7 @@ namespace LonghornBank.Controllers
             }
 
             // Get all of the accounts
-            Tuple<SelectList, SelectList, SelectList> AllAcounts = GetAllAccounts(customer.Id);
+            Tuple<SelectList, SelectList, SelectList, SelectList> AllAcounts = GetAllAccounts(customer.Id);
 
             // Add the SelectList Tuple to the ViewBag
             ViewBag.AllAccounts = AllAcounts;
@@ -910,6 +1008,11 @@ namespace LonghornBank.Controllers
                 if (SelectedType == BankingTranactionType.Fee)
                 {
                     query = query.Where(c => c.BankingTransactionType == BankingTranactionType.Fee);
+                }
+
+                if (SelectedType == BankingTranactionType.BillPayment)
+                {
+                    query = query.Where(c => c.BankingTransactionType == BankingTranactionType.BillPayment);
                 }
                 
                 

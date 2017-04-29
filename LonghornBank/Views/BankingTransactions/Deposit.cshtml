@@ -1,9 +1,28 @@
-﻿@model LonghornBank.Models.BankingTransaction
+﻿@using LonghornBank.Models
+@model LonghornBank.Models.BankingTransaction
 
 @{
-    ViewBag.Title = "Make a Deposit";
-    SelectList CheckingAccount = ViewBag.CheckingAccounts; 
+    ViewBag.Title = "Make A Deposit";
+
+    // Grab the Tuple from ViewBag
+    Tuple<SelectList, SelectList, SelectList, SelectList> AllAccounts = ViewBag.AllAccounts;
+
+    // Create a SelectList for Checking Accounts
+    SelectList CheckingAccounts = AllAccounts.Item1;
+
+    // Create a SelectList for Savings Accounts
+    SelectList SavingsAccounts = AllAccounts.Item2;
+
+    // Create a SelectList for IRA
+    SelectList IraAccounts = AllAccounts.Item3;
+
+    SelectList StockAccounts = AllAccounts.Item4;
+
+
 }
+
+
+
 
 <h2>New Deposit Transaction Page</h2>
 
@@ -53,9 +72,25 @@
 -->            
 
         <b class="control-label col-md-2">Checking Accounts:</b>
-        @Html.DropDownList("CheckingID", CheckingAccount, new { @class = "form-control" })
+        @Html.DropDownList("CheckingID", CheckingAccounts, new { @class = "form-control" })
         <br />
         <br />
+
+        <b class="control-label col-md-2">Savings Accounts:</b>
+        @Html.DropDownList("SavingID", SavingsAccounts, new { @class = "form-control" })
+        <br />
+        <br />
+
+        <b class="control-label col-md-2">IRA Accounts:</b>
+        @Html.DropDownList("IraID", IraAccounts, new { @class = "form-control" })
+        <br />
+        <br />
+
+        <b class="control-label col-md-2">Stock Accounts:</b>
+        @Html.DropDownList("StockID", StockAccounts, new { @class = "form-control" })
+        <br />
+        <br />
+
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

@@ -153,6 +153,9 @@
     <Content Include="bin\EntityFramework.xml" />
     <Content Include="bin\LonghornBank.dll" />
     <Content Include="bin\LonghornBank.pdb" />
+    <Content Include="bin\LumenWorks.Framework.IO.dll" />
+    <Content Include="bin\LumenWorks.Framework.IO.pdb" />
+    <Content Include="bin\LumenWorks.Framework.IO.xml" />
     <Content Include="bin\Microsoft.AspNet.Identity.Core.dll" />
     <Content Include="bin\Microsoft.AspNet.Identity.Core.xml" />
     <Content Include="bin\Microsoft.AspNet.Identity.EntityFramework.dll" />
@@ -199,6 +202,7 @@
     <Content Include="bin\System.Web.Webpages.Razor.xml" />
     <Content Include="bin\System.Web.Webpages.xml" />
     <Content Include="bin\WebGrease.dll" />
+    <Content Include="bin\YSQ.core.dll" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -265,18 +269,6 @@
     <Compile Include="Controllers\StockTradesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704290159221_Inital.cs" />
-    <Compile Include="Migrations\201704290159221_Inital.Designer.cs">
-      <DependentUpon>201704290159221_Inital.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704290243348_IRAaccountNumber.cs" />
-    <Compile Include="Migrations\201704290243348_IRAaccountNumber.Designer.cs">
-      <DependentUpon>201704290243348_IRAaccountNumber.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704290253312_IRAName.cs" />
-    <Compile Include="Migrations\201704290253312_IRAName.Designer.cs">
-      <DependentUpon>201704290253312_IRAName.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
@@ -402,6 +394,10 @@
     <Content Include="Views\Customers\AddPayee.cshtml" />
     <Content Include="Views\Payees\SuccessfulPayee.cshtml" />
     <Content Include="Views\Payees\BalanceError.cshtml" />
+    <Content Include="Views\Managers\BalancedPortfolioSuccess.cshtml" />
+    <Content Include="Views\Managers\FreezeCustomers.cshtml" />
+    <Content Include="Views\Managers\FreezeEmployees.cshtml" />
+    <Content Include="Views\Managers\ViewAllDisputes.cshtml" />
     <Content Include="Views\Employees\Create.cshtml" />
     <Content Include="Views\Employees\CustomerDetails.cshtml" />
     <Content Include="Views\Employees\Delete.cshtml" />
@@ -426,17 +422,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704290159221_Inital.resx">
-      <DependentUpon>201704290159221_Inital.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704290243348_IRAaccountNumber.resx">
-      <DependentUpon>201704290243348_IRAaccountNumber.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704290253312_IRAName.resx">
-      <DependentUpon>201704290253312_IRAName.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

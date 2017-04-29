@@ -50,6 +50,11 @@
                     @Html.RadioButton("SelectedType", BankingTranactionType.Fee , new {@class ="form-check-input"}) Fee
                 </label>
             </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    @Html.RadioButton("SelectedType", BankingTranactionType.BillPayment, new { @class = "form-check-input" }) Bill Payment
+                </label>
+            </div>
         </div>
         Transaction Number:@Html.TextBox("SearchTransactionNumber", null, new { @class = "form-control" })<br />
     </p>
