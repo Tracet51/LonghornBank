@@ -1106,8 +1106,8 @@ namespace LonghornBank.Controllers
 
             RangesDate All = new RangesDate { Name = "All Available", RangeID = 0 };
             RangesDate Last15 = new RangesDate { Name = "Last 15 Days", RangeID = 1 };
-            RangesDate Last30 = new RangesDate { Name = "Last 30", RangeID = 2 };
-            RangesDate Last60 = new RangesDate { Name = "Last 60", RangeID = 3 };
+            RangesDate Last30 = new RangesDate { Name = "Last 30 Days", RangeID = 2 };
+            RangesDate Last60 = new RangesDate { Name = "Last 60 Days", RangeID = 3 };
             RangesDate Custom = new RangesDate { Name = "Custom", RangeID = 4 };
 
             // add to the list 
