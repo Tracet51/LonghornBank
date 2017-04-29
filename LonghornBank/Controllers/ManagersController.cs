@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using LonghornBank.Models;
 using System.Net.Mail;
+using LonghornBank.Utility;
 
 
 namespace LonghornBank.Controllers
@@ -23,7 +24,7 @@ namespace LonghornBank.Controllers
         }
         public ActionResult BalancedPortfolioSuccess()
         {
-            //CAll function to actually to balanced portfolio here
+            BalancedPortfolio.AddBounus(db);
             return View();
         }
         public static void SendEmail(String toEmailAddress, String emailSubject, String emailBody)
@@ -143,7 +144,7 @@ namespace LonghornBank.Controllers
             List<BankingTransaction> SelectedDisputes = new List<BankingTransaction>();
             SelectedDisputes = db.BankingTransaction.Where(b => b.TransactionDispute == DisputeStatus.Submitted).ToList();
             SelectedDisputes.OrderBy(b => b.TransactionDate);
-            db.SaveChanges();
+            
             return View(SelectedDisputes);
         }
         public ActionResult ViewAllDisputes()
@@ -285,7 +286,30 @@ namespace LonghornBank.Controllers
                 BankingTransaction bankingtransactionobject = db.BankingTransaction.Find(id);
                 bankingtransactionobject.ApprovalStatus = ApprovedorNeedsApproval.Approved;
                 ViewBag.SuccessMessage = "You have successfully approved deposits.";
-
+                if (bankingtransactionobject.CheckingAccount.First() != null)
+                {
+                    Checking checking= bankingtransactionobject.CheckingAccount.First();
+                    Decimal pendingbalance= checking.PendingBalance;
+                    checking.PendingBalance = 0;
+                    checking.Balance = pendingbalance+checking.Balance;
+                    db.SaveChanges();
+                }
+                if (bankingtransactionobject.SavingsAccount.First() != null)
+                {
+                    Saving saving = bankingtransactionobject.SavingsAccount.First();
+                    Decimal pendingbalance = saving.PendingBalance;
+                    saving.PendingBalance = 0;
+                    saving.Balance = pendingbalance + saving.Balance;
+                    db.SaveChanges();
+                }
+                if (bankingtransactionobject.IRAAccount.First() != null)
+                {
+                    IRA ira = bankingtransactionobject.IRAAccount.First();
+                    Decimal pendingbalance = ira.PendingBalance;
+                    ira.PendingBalance = 0;
+                    ira.Balance = pendingbalance + ira.Balance;
+                    db.SaveChanges();
+                }
                 //SendEmail()
                 String emailsubject = "A message from Longhorn Bank";
                 String emailbody= "Your deposit of $" + bankingtransactionobject.Amount + " has been approved! You may now use your funds. \n\n Thank you for banking with Longhorn Bank";
