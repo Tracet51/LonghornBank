@@ -247,7 +247,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -283,6 +285,7 @@
     <Compile Include="Models\DepositApprovalViewModel.cs" />
     <Compile Include="Models\DisputesViewModel.cs" />
     <Compile Include="Models\ForgotPasswordViewModels.cs" />
+    <Compile Include="Models\IRAViewModel.cs" />
     <Compile Include="Models\PayeeViewModel.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
@@ -419,6 +422,7 @@
     <Content Include="Views\Profile\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Profile\ResetPassword.cshtml" />
     <Content Include="Views\Profile\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\BankingTransactions\Transfer.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
