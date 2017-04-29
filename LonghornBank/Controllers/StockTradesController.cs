@@ -277,7 +277,6 @@ namespace LonghornBank.Controllers
                     break;
                 default:
                     return HttpNotFound();
-                    break;
             }
 
             return View(StockTrade);

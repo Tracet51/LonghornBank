@@ -1,4 +1,4 @@
-﻿@model LonghornBank.Models.Customer
+﻿@model LonghornBank.Models.AppUser
 
 @{
     ViewBag.Title = "Delete";
@@ -60,19 +60,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EmailAddress)
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EmailAddress)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Password)
+            @Html.DisplayFor(model => model.Email)
         </dd>
 
         <dt>

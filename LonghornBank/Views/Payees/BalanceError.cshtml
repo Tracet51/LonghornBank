@@ -1,15 +1,13 @@
 ﻿
 @{
-    ViewBag.Title = "WithDrawlError";
+    ViewBag.Title = "BalanceError";
 }
 
-<h2>WithDrawlError</h2>
-
+<h2>BalanceError</h2>
 <div class="alert alert-danger">
-    You cannot overdraw more than 50 dollars from your account
+    You cannot make a payment with a balance of zero or less
 </div>
 
 <div>
     @Html.ActionLink("Back To All Accounts", "Portal", "Home")
 </div>
-

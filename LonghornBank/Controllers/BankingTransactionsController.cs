@@ -256,9 +256,9 @@ namespace LonghornBank.Controllers
                         //Adds to pending balance if over 5000
                         else
                         {
-                            ViewBag.CorrectIra = "Would you like to automatically deposit " + (bankingTransaction.Amount - SelectedIra.RunningTotal) + " To make the transaction valid";
+                            ViewBag.CorrectIra = "Would you like to automatically deposit " + (bankingTransaction.Amount - SelectedIra.RunningTotal) + " To make the transaction valid, or would you like to do it yourself";
                             decimal CorrectAmount = 5000 - SelectedIra.RunningTotal;
-                            return RedirectToAction("IRAError", "BankingTransactions", new { CorrectAmount, bankingTransaction.BankingTransactionID, bankingTransaction.BankingTransactionType, bankingTransaction.Description, bankingTransaction.TransactionDate, IraID, IraIDTrans });
+                            return RedirectToAction("IRAError", "BankingTransactions", new { CorrectAmount, bankingTransaction.BankingTransactionID, bankingTransaction.BankingTransactionType, bankingTransaction.Description, bankingTransaction.TransactionDate, customer.Id, IraID, IraIDTrans });
                         }
 
 
@@ -766,7 +766,7 @@ namespace LonghornBank.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult IRAError([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description,BankingTransactionType")]BankingTransaction bankingTransaction, Decimal CorrectAmount, Int32 BankingTransactionID, String Description, DateTime TransactionDate, int IraID, int IraIDTrans, String submit)
+        public ActionResult IRAError([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description,BankingTransactionType")]BankingTransaction bankingTransaction, Decimal CorrectAmount, Int32 BankingTransactionID, String Description, DateTime TransactionDate, string ID, int IraID, int IraIDTrans, String submit)
         {
             var CustomerQuery = from c in db.Users
                                 where c.UserName == User.Identity.Name
@@ -774,11 +774,12 @@ namespace LonghornBank.Controllers
 
 
             // Get the Customer 
-            AppUser customer = CustomerQuery.FirstOrDefault();
-
-            string id = customer.Id;
-            if (ModelState.IsValid)
+            AppUser customer = db.Users.Find(ID);
+            
+            if(customer == null)
             {
+                return RedirectToAction("Portal", "Home");
+            }
                 bankingTransaction.Description = Description;
                 bankingTransaction.TransactionDate = TransactionDate;
                 bankingTransaction.BankingTransactionID = BankingTransactionID;
@@ -803,7 +804,10 @@ namespace LonghornBank.Controllers
                                 bankingTransaction.Amount = New_Balance;
                                 SelectedIra.RunningTotal = New_Balance;
                                 SelectedIra.Balance = 0 + New_Balance;
+                                db.BankingTransaction.Add(bankingTransaction);
+                                db.SaveChanges();
                                 break;
+
                             case "User":
                                 if (bankingTransaction.Amount + SelectedIra.RunningTotal <= 5000)
                                 {
@@ -811,7 +815,10 @@ namespace LonghornBank.Controllers
                                     Decimal New_Balance2 = SelectedIra.Balance + bankingTransaction.Amount;
                                     SelectedIra.RunningTotal = 0 + New_Balance2;
                                     SelectedIra.Balance = New_Balance2;
+                                    db.BankingTransaction.Add(bankingTransaction);
+                                    db.SaveChanges();
                                 }
+
                                 else
                                 {
                                     return RedirectToAction("IRAError", "BankingTransactions", new { CorrectAmount, bankingTransaction.BankingTransactionID, bankingTransaction.BankingTransactionType, bankingTransaction.Description, bankingTransaction.TransactionDate, IraID, IraIDTrans });
@@ -821,14 +828,8 @@ namespace LonghornBank.Controllers
                     }
 
                 }
-
-            }
-            // Add to database
-            db.BankingTransaction.Add(bankingTransaction);
-            db.SaveChanges();
-
             // Redirect 
-            return RedirectToAction("Index", "BankingTransactions", new { id = id });
+            return RedirectToAction("Index", "BankingTransactions", new { id = customer.Id });
         }
 
         //Detailed Search function

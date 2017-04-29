@@ -258,21 +258,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704251618162_Payee.cs" />
-    <Compile Include="Migrations\201704251618162_Payee.Designer.cs">
-      <DependentUpon>201704251618162_Payee.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704251650502_fixPayee.cs" />
-    <Compile Include="Migrations\201704251650502_fixPayee.Designer.cs">
-      <DependentUpon>201704251650502_fixPayee.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704251657137_payeefix2.cs" />
-    <Compile Include="Migrations\201704251657137_payeefix2.Designer.cs">
-      <DependentUpon>201704251657137_payeefix2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\DepositApprovalViewModel.cs" />
+    <Compile Include="Models\PayeeViewModel.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
     <Compile Include="Models\Checking.cs" />
@@ -362,7 +350,6 @@
     <Content Include="Views\Payees\EditOwnPayee.cshtml" />
     <Content Include="Views\Payees\Index.cshtml" />
     <Content Include="Views\Payees\PayBillsPage.cshtml" />
-    <Content Include="Views\Payees\PayPayee.cshtml" />
     <Content Include="Views\Payees\WithDrawlError.cshtml" />
     <Content Include="Views\Managers\Create.cshtml" />
     <Content Include="Views\Managers\Delete.cshtml" />
@@ -381,6 +368,9 @@
     <Content Include="Views\Account\RoleAdmin\Index.cshtml" />
     <Content Include="Views\BankingTransactions\IRAError.cshtml" />
     <Content Include="Views\IRAs\MoreThanOneError.cshtml" />
+    <Content Include="Views\Customers\AddPayee.cshtml" />
+    <Content Include="Views\Payees\SuccessfulPayee.cshtml" />
+    <Content Include="Views\Payees\BalanceError.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -390,17 +380,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704251618162_Payee.resx">
-      <DependentUpon>201704251618162_Payee.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704251650502_fixPayee.resx">
-      <DependentUpon>201704251650502_fixPayee.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704251657137_payeefix2.resx">
-      <DependentUpon>201704251657137_payeefix2.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

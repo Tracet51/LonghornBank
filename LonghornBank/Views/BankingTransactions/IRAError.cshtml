@@ -16,8 +16,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        @ViewBag.CorrectIra
-        <h4>Or enter your own amount</h4>
+        <h4>@Html.ViewBag.CorrectIRA</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
