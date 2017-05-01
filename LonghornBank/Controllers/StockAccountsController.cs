@@ -136,7 +136,7 @@ namespace LonghornBank.Controllers
             // HACK
             if (customer.StockAccount.FirstOrDefault() != null)
             {
-                return RedirectToAction("Portal", "Home");
+                return View("AccountError");
             }
 
             return View();

@@ -44,7 +44,7 @@
                 @Html.DisplayFor(modelItem => item.Fee)
             </td>
             <td>
-                @Html.ActionLink("Buy", "ChooseAccount", "StockTrades", new { StockID = item.StockMarketID }, null)
+                @Html.ActionLink("Buy", "ChooseAccount", "StockTrades", new { id = item.StockMarketID }, null)
             </td>
         </tr>
     }

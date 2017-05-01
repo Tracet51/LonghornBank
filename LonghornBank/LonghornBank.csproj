@@ -272,9 +272,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704290559350_Round1.cs" />
-    <Compile Include="Migrations\201704290559350_Round1.Designer.cs">
-      <DependentUpon>201704290559350_Round1.cs</DependentUpon>
+    <Compile Include="Migrations\201705011426290_TestPayeeSeed.cs" />
+    <Compile Include="Migrations\201705011426290_TestPayeeSeed.Designer.cs">
+      <DependentUpon>201705011426290_TestPayeeSeed.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
@@ -423,6 +423,7 @@
     <Content Include="Views\Profile\ResetPassword.cshtml" />
     <Content Include="Views\Profile\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\BankingTransactions\Transfer.cshtml" />
+    <Content Include="Views\StockAccounts\AccountError.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -434,8 +435,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704290559350_Round1.resx">
-      <DependentUpon>201704290559350_Round1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201705011426290_TestPayeeSeed.resx">
+      <DependentUpon>201705011426290_TestPayeeSeed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
