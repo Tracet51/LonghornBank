@@ -175,7 +175,44 @@ namespace LonghornBank.Controllers
 
                 db.StockAccount.Add(stockAccount);
                 db.SaveChanges();
-                return RedirectToAction("Portal", "Home");
+
+                // Add the inital deposit to the account 
+
+                // Get the StockAccount
+                var StockAccountQuery = from sa in db.StockAccount
+                                    where sa.Customer.Id == customer.Id
+                                    select sa;
+
+                StockAccount CustomerStockAccount = StockAccountQuery.FirstOrDefault();
+
+                // check to see if the deposit amount is over $5000
+                ApprovedorNeedsApproval FirstDeposit;
+                if (stockAccount.CashBalance > 5000m)
+                {
+                    FirstDeposit = ApprovedorNeedsApproval.NeedsApproval;
+                }
+                else
+                {
+                    FirstDeposit = ApprovedorNeedsApproval.Approved;
+                }
+
+                // Create a new transaction 
+                BankingTransaction InitialDeposit = new BankingTransaction
+                {
+                    Amount = stockAccount.CashBalance,
+                    ApprovalStatus = FirstDeposit,
+                    BankingTransactionType = BankingTranactionType.Deposit,
+                    Description = "Initial Deposit to Cash Balance",
+                    TransactionDate = DateTime.Today,
+                    TransactionDispute = DisputeStatus.NotDisputed,
+                    StockAccount = CustomerStockAccount
+                };
+
+                // Add the transaction to the database
+                db.BankingTransaction.Add(InitialDeposit);
+                db.SaveChanges();
+
+                return View("AccountConfirmation");
             }
 
             return View(stockAccount);

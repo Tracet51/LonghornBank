@@ -424,6 +424,7 @@
     <Content Include="Views\Profile\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\BankingTransactions\Transfer.cshtml" />
     <Content Include="Views\StockAccounts\AccountError.cshtml" />
+    <Content Include="Views\Shared\AccountConfirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
