@@ -29,7 +29,7 @@ namespace LonghornBank
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
 
                 //TODO:  This should point to wherever your login page is so that the app will redirect to login
-                LoginPath = new PathString("/Account/Login"),
+                LoginPath = new PathString("/Profile/Login"),
                 Provider = new CookieAuthenticationProvider
                 {
                     // Enables the application to validate the security stamp when the user logs in.
