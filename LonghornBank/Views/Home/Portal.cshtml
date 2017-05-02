@@ -90,7 +90,7 @@
             <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
             <td>
                 @Html.ActionLink("Change Account Name", "Edit", "Savings", new { id = item.SavingID }, null) |
-                @Html.ActionLink("Transaction Search", "Details", "Savings", new { id = item.SavingID }, null) |
+                @Html.ActionLink("Transaction Search", "Details", "Savings", new { id = item.SavingID }, null)
                 
             </td>
         </tr>
@@ -129,7 +129,7 @@
                 <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
                 <td>
                     @Html.ActionLink("Change Account Name", "Edit", "IRAs", new { id = item.IRAID }, null) |
-                    @Html.ActionLink("Transaction Search", "Details", "IRAs", new { id = item.IRAID }, null) |
+                    @Html.ActionLink("Transaction Search", "Details", "IRAs", new { id = item.IRAID }, null)
                     
                 </td>
             </tr>
@@ -168,9 +168,8 @@
                     <td>@Html.Raw(StockValue)</td>
                     <td>@Html.DisplayFor(modelItem => item.Gains)</td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", "StockAccounts") |
-                        @Html.ActionLink("Details", "Details", "StockAccounts") |
-                        @Html.ActionLink("Delete", "Delete", "StockAccounts")
+                        @Html.ActionLink("Change Account Settings", "Edit", "StockAccounts") |
+                        @Html.ActionLink("Transaction Search", "Details", "StockAccounts")
                     </td>
                 </tr>
             }

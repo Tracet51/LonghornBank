@@ -284,14 +284,13 @@
             <td>@Html.DisplayFor(modelItem => item.Amount)</td>
             <td>
                 @Html.ActionLink("Edit", "Edit", "BankingTransactions", new { id = item.BankingTransactionID }, null) |
-                @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = item.BankingTransactionID }, null) |
-                @Html.ActionLink("Delete", "Delete", "BankingTransactions", new { id = item.BankingTransactionID }, null)
+                @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = item.BankingTransactionID, choice = 2, AccountId = Model.SavingID }, null)
             </td>
         </tr>
     }
 </table>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.SavingID }) |
-    @Html.ActionLink("Back Saving Home", "Index", "Savings", new { id = Model.SavingID }, null)
+    @Html.ActionLink("Back Saving Home", "Index", "Savings", new { id = Model.SavingID, choice = 2 }, null)
 </p>
 

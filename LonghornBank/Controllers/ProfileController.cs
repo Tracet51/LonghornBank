@@ -124,7 +124,9 @@ namespace LonghornBank.Controllers
                     State = model.State,
                     StreetAddress = model.StreetAddress,
                     Zip = model.Zip,
-                    PhoneNumber = model.PhoneNumber
+                    PhoneNumber = model.PhoneNumber,
+                    ActiveStatus = true,
+                    FiredStatus = false
                     
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);

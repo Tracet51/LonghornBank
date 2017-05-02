@@ -401,7 +401,7 @@
                 @Html.DisplayFor(modelItem => t.Amount)
             </td>
             <td>
-                @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = t.BankingTransactionID }, null)
+                @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = t.BankingTransactionID, choice = 4, AccountId = Model.StockAccountID }, null)
             </td>
         </tr>
     }

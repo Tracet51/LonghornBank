@@ -288,13 +288,12 @@
             <td>@Html.DisplayFor(modelItem => item.Amount)</td>
             <td>
                 @Html.ActionLink("Edit", "Edit", "BankingTransactions", new { id = item.BankingTransactionID }, null) |
-                @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = item.BankingTransactionID }, null) |
-                @Html.ActionLink("Delete", "Delete", "BankingTransactions", new { id = item.BankingTransactionID }, null)
+                @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = item.BankingTransactionID, choice = 3, AccountId = Model.IRAID }, null)
             </td>
         </tr>
     }
 </table>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.IRAID }) |
-    @Html.ActionLink("Back To IRA Home", "Index", "IRA", new { id = Model.IRAID }, null)
+    @Html.ActionLink("Back To IRA Home", "Index", "IRA", new { id = Model.IRAID, choice = 3 }, null)
 </p>

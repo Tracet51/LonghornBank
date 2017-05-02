@@ -107,7 +107,7 @@ namespace LonghornBank.Controllers
 
         // GET: BankingTransactions/Details/5
         // id == BankingTransactionID
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, Int32 choice, Int32 AccountId)
         {
             if (id == null)
             {
@@ -118,7 +118,130 @@ namespace LonghornBank.Controllers
             {
                 return HttpNotFound();
             }
-            return View(bankingTransaction);
+
+            // Check to see the account related to the details
+            // Checking Accounts
+            if (choice == 1)
+            {
+                var QueryTrans = from t in db.BankingTransaction
+                                 from c in t.CheckingAccount
+                                 where c.CheckingID == AccountId && t.BankingTransactionType == bankingTransaction.BankingTransactionType && t.BankingTransactionID != bankingTransaction.BankingTransactionID
+                                 orderby t.TransactionDate
+                                 select t;
+                List<BankingTransaction> TransactionsList = QueryTrans.ToList();
+
+                // Check the length of the Transactions List
+                Int32 Length = TransactionsList.Count;
+
+                // Set the Range for return to max out at 5 
+                if (Length > 5)
+                {
+                    Length = 5;
+                }
+
+                TransactionsList = TransactionsList.GetRange(0, Length);
+
+                // Add Transactions and Id to the ViewBag
+                ViewBag.OtherTransactions = TransactionsList;
+
+                // Add the account ids to the ViewBag
+                ViewBag.AccountId = AccountId;
+
+                return View(bankingTransaction);
+                                 
+            }
+
+            // Savings Accounts
+            else if (choice == 2)
+            {
+                var QueryTrans = from t in db.BankingTransaction
+                                 from c in t.SavingsAccount
+                                 where c.SavingID == AccountId && t.BankingTransactionType == bankingTransaction.BankingTransactionType && t.BankingTransactionID != bankingTransaction.BankingTransactionID
+                                 orderby t.TransactionDate
+                                 select t;
+                List<BankingTransaction> TransactionsList = QueryTrans.ToList();
+
+                // Check the length of the Transactions List
+                Int32 Length = TransactionsList.Count;
+
+                // Set the Range for return to max out at 5 
+                if (Length > 5)
+                {
+                    Length = 5;
+                }
+
+                TransactionsList = TransactionsList.GetRange(0, Length);
+
+                // Add Transactions and Id to the ViewBag
+                ViewBag.OtherTransactions = TransactionsList;
+
+                // Add the account ids to the ViewBag
+                ViewBag.AccountId = AccountId;
+
+                return View(bankingTransaction);
+            }
+
+            // IRAs
+            else if (choice == 3)
+            {
+                var QueryTrans = from t in db.BankingTransaction
+                                 from c in t.IRAAccount
+                                 where c.IRAID == AccountId && t.BankingTransactionType == bankingTransaction.BankingTransactionType && t.BankingTransactionID != bankingTransaction.BankingTransactionID
+                                 orderby t.TransactionDate
+                                 select t;
+                List<BankingTransaction> TransactionsList = QueryTrans.ToList();
+
+                // Check the length of the Transactions List
+                Int32 Length = TransactionsList.Count;
+
+                // Set the Range for return to max out at 5 
+                if (Length > 5)
+                {
+                    Length = 5;
+                }
+
+                TransactionsList = TransactionsList.GetRange(0, Length);
+
+                // Add Transactions and Id to the ViewBag
+                ViewBag.OtherTransactions = TransactionsList;
+
+                // Add the account ids to the ViewBag
+                ViewBag.AccountId = AccountId;
+
+                return View(bankingTransaction);
+            }
+            else if (choice == 4)
+            {
+                var QueryTrans = from t in db.BankingTransaction
+                                 where t.StockAccount.StockAccountID == AccountId && t.BankingTransactionType == bankingTransaction.BankingTransactionType && t.BankingTransactionID != bankingTransaction.BankingTransactionID
+                                 orderby t.TransactionDate
+                                 select t;
+                List<BankingTransaction> TransactionsList = QueryTrans.ToList();
+
+                // Check the length of the Transactions List
+                Int32 Length = TransactionsList.Count;
+
+                // Set the Range for return to max out at 5 
+                if (Length > 5)
+                {
+                    Length = 5;
+                }
+
+                TransactionsList = TransactionsList.GetRange(0, 5);
+
+                // Add Transactions and Id to the ViewBag
+                ViewBag.OtherTransactions = TransactionsList;
+
+                // Add the account ids to the ViewBag
+                ViewBag.AccountId = AccountId;
+
+                return View(bankingTransaction);
+            }
+
+            else
+            {
+                return View("Error");
+            }
         }
 
         // GET: BankingTransactions/Create/?id
