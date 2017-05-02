@@ -30,6 +30,7 @@ namespace LonghornBank.Controllers
 
 
         // GET: Home/Portal
+        [Authorize]
         public ActionResult Portal()
         {
             var CustomerQuery = from c in db.Users

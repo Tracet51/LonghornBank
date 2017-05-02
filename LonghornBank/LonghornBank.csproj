@@ -247,9 +247,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -280,6 +278,7 @@
     <Compile Include="Migrations\SeedStocks.cs" />
     <Compile Include="Models\DepositApprovalViewModel.cs" />
     <Compile Include="Models\DisputesViewModel.cs" />
+    <Compile Include="Models\EditViewModel.cs" />
     <Compile Include="Models\ForgotPasswordViewModels.cs" />
     <Compile Include="Models\IRAViewModel.cs" />
     <Compile Include="Models\PayeeViewModel.cs" />
@@ -321,7 +320,7 @@
     <Content Include="Views\Checkings\Edit.cshtml" />
     <Content Include="Views\Checkings\Index.cshtml" />
     <Content Include="Views\BankingTransactions\Deposit.cshtml" />
-    <Content Include="Views\BankingTransactions\WithDrawal.cshtml" />
+    <Content Include="Views\BankingTransactions\Create.cshtml" />
     <Content Include="Views\BankingTransactions\Delete.cshtml" />
     <Content Include="Views\BankingTransactions\Details.cshtml" />
     <Content Include="Views\BankingTransactions\Edit.cshtml" />
@@ -378,7 +377,7 @@
     <Content Include="Views\Payees\EditOwnPayee.cshtml" />
     <Content Include="Views\Payees\Index.cshtml" />
     <Content Include="Views\Payees\PayBillsPage.cshtml" />
-    <Content Include="Views\Shared\WithDrawalError.cshtml" />
+    <Content Include="Views\Payees\WithDrawlError.cshtml" />
     <Content Include="Views\Managers\Create.cshtml" />
     <Content Include="Views\Managers\Delete.cshtml" />
     <Content Include="Views\Managers\DepositApproval.cshtml" />
@@ -418,10 +417,9 @@
     <Content Include="Views\Profile\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Profile\ResetPassword.cshtml" />
     <Content Include="Views\Profile\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\BankingTransactions\Transfer.cshtml" />
-    <Content Include="Views\BankingTransactions\IRAWithDrawalError.cshtml" />
-    <Content Include="Views\BankingTransactions\NoMoreDeposits.cshtml" />
-    <Content Include="Views\BankingTransactions\UnqualifiedMax.cshtml" />
+    <Content Include="Views\Managers\ApproveStockAccounts.cshtml" />
+    <Content Include="Views\Managers\FireEmployees.cshtml" />
+    <Content Include="Views\Employees\ChangePassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

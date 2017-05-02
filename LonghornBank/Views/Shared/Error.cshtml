@@ -15,7 +15,7 @@
             @Model.First();
             break;
         default:
-            @: The following errors were encountered:
+            @: Your account is not authorized to view this page and may be frozen. Please contact a manager.
             <ul>
                 @foreach (string error in Model) 
                 {
@@ -25,4 +25,4 @@
             break;
     }
 </div>
-@Html.ActionLink("OK", "Index", null, new { @class = "btn btn-success"})
+@Html.ActionLink("OK", "Portal", "Home", null, new { @class = "btn btn-success"})

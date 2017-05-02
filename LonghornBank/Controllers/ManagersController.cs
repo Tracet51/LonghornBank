@@ -84,6 +84,66 @@ namespace LonghornBank.Controllers
             }
             return emailstring;
         }
+        //Get for Fire Employees
+        public ActionResult FireEmployees()
+        {
+            var query = from e in db.Employees
+                        select e;
+            List<Employee> employeelist = query.ToList();
+            return View(employeelist);
+        }
+        //Post for Fire Employees
+        [HttpPost]
+        public ActionResult FireEmployees(Int32 EmployeeID, Boolean Fire)
+        {
+            if (Fire)
+            {
+                Employee employee = db.Employees.Find(EmployeeID);
+                employee.FiredStatus = true;
+                db.SaveChanges();
+                ViewBag.SuccessMessage = "You have successfully fired an employee.";
+            }
+            if (Fire == false)
+            {
+                Employee employee = db.Employees.Find(EmployeeID);
+                employee.FiredStatus = false;
+                db.SaveChanges();
+                ViewBag.SuccessMessage = "You have successfully rehired an employee.";
+            }
+
+            var query = from e in db.Employees
+                        select e;
+            List<Employee> employeelist = query.ToList();
+            return View(employeelist);
+        }
+        //GET for approve stock accounts
+        public ActionResult ApproveStockAccounts()
+        {
+            var query = from a in db.StockAccount
+                        select a;
+            query = query.Where(a => a.ApprovalStatus == ApprovedorNeedsApproval.NeedsApproval);
+            List<StockAccount> stockaccountlist = query.ToList();
+            return View(stockaccountlist);
+        }
+        //POST for approve 
+        [HttpPost]
+        public ActionResult ApproveStockAccounts(Int32 StockAccountID, Boolean Approve)
+        {
+            ViewBag.SuccessMessage = "Your approval failed.";
+            if (Approve)
+            {
+                StockAccount stockaccount = db.StockAccount.Find(StockAccountID);
+                stockaccount.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                ViewBag.SuccessMessage = "You have successfully approved a stock account";
+                db.SaveChanges();
+            }
+            var query = from a in db.StockAccount
+                        select a;
+            query = query.Where(a => a.ApprovalStatus == ApprovedorNeedsApproval.NeedsApproval);
+            List<StockAccount> stockaccountlist = query.ToList();
+            return View(stockaccountlist);
+        }
+
         // Post Index To revise disputed amounts
         [HttpPost]
         public ActionResult Disputes(string BankingTransactionID, string ManagerApprovedAmount)
@@ -237,7 +297,7 @@ namespace LonghornBank.Controllers
         public ActionResult DepositApproval()
         {
             List<BankingTransaction> SelectedDepositsOrig = new List<BankingTransaction>();
-            SelectedDepositsOrig = db.BankingTransaction.Where(b=>b.ApprovalStatus == ApprovedorNeedsApproval.Approved).ToList();
+            SelectedDepositsOrig = db.BankingTransaction.Where(b=>b.ApprovalStatus == ApprovedorNeedsApproval.NeedsApproval).ToList();
             List<BankingTransaction> SelectedDeposits = new List<BankingTransaction>();
 
             foreach (BankingTransaction depo in SelectedDepositsOrig)
@@ -510,6 +570,17 @@ namespace LonghornBank.Controllers
             return View(CustomerList);
 
         }
+
+        // GET: Managers/
+        public ActionResult DisplayAllEmployees()
+        {
+            var QueryEmployee = from e in db.Users
+                                      where e.Roles== new AppRole("Employee")
+                                      select e;
+
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

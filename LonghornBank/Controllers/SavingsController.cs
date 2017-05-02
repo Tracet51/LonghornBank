@@ -131,6 +131,40 @@ namespace LonghornBank.Controllers
 
                 db.SavingsAccount.Add(saving);
                 db.SaveChanges();
+
+                // check to see if the deposit amount is over $5000
+                ApprovedorNeedsApproval FirstDeposit;
+                if (saving.Balance > 5000m)
+                {
+                    FirstDeposit = ApprovedorNeedsApproval.NeedsApproval;
+                }
+                else
+                {
+                    FirstDeposit = ApprovedorNeedsApproval.Approved;
+                }
+                var SavingQuery = from sa in db.SavingsAccount
+                                    where sa.AccountNumber == saving.AccountNumber
+                                    select sa;
+
+                Saving CustomerSavingAccount = SavingQuery.FirstOrDefault();
+                List<Saving> CustomerSavingList = new List<Saving>();
+                CustomerSavingList.Add(CustomerSavingAccount);
+
+                // Create a new transaction 
+                BankingTransaction InitialDeposit = new BankingTransaction
+                {
+                    Amount = saving.Balance,
+                    ApprovalStatus = FirstDeposit,
+                    BankingTransactionType = BankingTranactionType.Deposit,
+                    Description = "Initial Deposit to Cash Balance",
+                    TransactionDate = DateTime.Today,
+                    TransactionDispute = DisputeStatus.NotDisputed,
+                    SavingsAccount = CustomerSavingList
+                };
+
+                // Add the transaction to the database
+                db.BankingTransaction.Add(InitialDeposit);
+                db.SaveChanges();
                 return RedirectToAction("Portal", "Home");
             }
 

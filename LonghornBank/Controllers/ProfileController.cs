@@ -76,7 +76,7 @@ namespace LonghornBank.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Portal","Home");
+                return RedirectToAction("Index","Home");
             }
 
             // This doesn't count login failures towards account lockout
@@ -85,7 +85,7 @@ namespace LonghornBank.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Portal","Home");
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
