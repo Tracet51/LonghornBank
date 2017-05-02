@@ -766,8 +766,6 @@ namespace LonghornBank.Controllers
 
             var UpdatePassword = await UserManager.AddPasswordAsync(Employee.Id, TheChange.Password);
 
-            db.Entry(Employee).State = EntityState.Modified;
-
             await db.SaveChangesAsync();
 
             return RedirectToAction("Index", "Managers");
