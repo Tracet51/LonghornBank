@@ -289,264 +289,278 @@ namespace LonghornBank.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PurchaseStocks(PurchaseStockTrade PurchcaseTrade)
         {
-            // get the customer 
-            AppUser Customer = db.Users.Find(PurchcaseTrade.CustomerProfile.Id);
-
-            if (Customer == null)
+            try
             {
-                return RedirectToAction("Portal", "Home");
-            }
+                // get the customer 
+                AppUser Customer = db.Users.Find(PurchcaseTrade.CustomerProfile.Id);
 
-            if (PurchcaseTrade.TradeDate < DateTime.Today)
-            {
-                ViewBag.Error = "Date cannot be before today";
-                return View("PurchaseError");
-            }
-
-            // Get the stock 
-            StockMarket SelectedStock = db.StockMarket.Find(PurchcaseTrade.SelectedStock.StockMarketID);
-
-            // Get the total amount 
-            Decimal decTotal = (PurchcaseTrade.Quantity * SelectedStock.StockPrice);
-
-            // create a new transaction list for the trade 
-            List<BankingTransaction> TradeTrans = new List<BankingTransaction>();
-
-            // Create a new fee transaction and add it to the list 
-            BankingTransaction FeeTrans = new BankingTransaction
-            {
-                Amount = SelectedStock.Fee,
-                BankingTransactionType = BankingTranactionType.Fee,
-                Description = ("Fee for purchase of " + SelectedStock.CompanyName),
-                TransactionDate = (PurchcaseTrade.TradeDate),
-                StockAccount = Customer.StockAccount.FirstOrDefault(),
-                TransactionDispute = DisputeStatus.NotDisputed
-            };
-
-            TradeTrans.Add(FeeTrans);
-
-            // Make the trade happen
-            Trade Trade = new Trade()
-            {
-                Amount = decTotal,
-                Quantity = PurchcaseTrade.Quantity,
-                Ticker = SelectedStock.Ticker,
-                TransactionDate = PurchcaseTrade.TradeDate,
-                PricePerShare = SelectedStock.StockPrice,
-                TradeType = TradeType.Buy,
-                StockAccount = Customer.StockAccount.FirstOrDefault(),
-                StockMarket = SelectedStock,
-                BankingTransactions = TradeTrans,
-                DisputeMessage = "None",
-                TransactionDispute = DisputeStatus.NotDisputed,
-                Description = "None",
-                CorrectedAmount = 0 
-            };
-
-            // Get the customer Savings account 
-            var SAQ = from sa in db.StockAccount
-                      where sa.Customer.Id == Customer.Id
-                      select sa;
-
-            StockAccount CustomerStockAccount = SAQ.FirstOrDefault();
-
-            // check the account nulls 
-            if (PurchcaseTrade.CheckingAccounts != null)
-            {
-                // find the account
-                Checking CustomerChecking = db.CheckingAccount.Find(PurchcaseTrade.CheckingAccounts.CheckingID);
-
-                if (CustomerChecking == null)
+                if (Customer == null)
                 {
                     return RedirectToAction("Portal", "Home");
                 }
 
-                // take the money from the account
-                if (CustomerChecking.Balance - decTotal >= 0)
+                if (PurchcaseTrade.TradeDate < DateTime.Today || PurchcaseTrade.TradeDate == null)
                 {
-                    // Check to see if the cash balance is enough for the fee
-                    if (db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance < SelectedStock.Fee)
-                    {
-                        ViewBag.Error = "Fee was greater than Stock Cash Balance";
-                        return View("PurchaseError");
-                    }
-
-                    // create a list to hold the checking account
-                    List<Checking> CheckingList = new List<Checking>();
-                    CheckingList.Add(CustomerChecking);
-
-                    //Create a new transaction 
-                    BankingTransaction CheckingTrans = new BankingTransaction
-                    {
-                        Amount = decTotal,
-                        BankingTransactionType = BankingTranactionType.Withdrawl,
-                        CheckingAccount = CheckingList,
-                        Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().AccountNumber.ToString()),
-                        TransactionDate = PurchcaseTrade.TradeDate,
-                        Trade = Trade,
-                        TransactionDispute = DisputeStatus.NotDisputed
-                    };
-
-                    // add the stuff to the database  
-                    db.BankingTransaction.Add(FeeTrans);
-                    db.SaveChanges();
-
-                    db.Trades.Add(Trade);
-                    db.SaveChanges();
-
-                    // Take the money out 
-                    db.CheckingAccount.Find(CustomerChecking.CheckingID).Balance -= decTotal;
-
-                    // take out the fee 
-                    CustomerStockAccount.CashBalance -= SelectedStock.Fee;
-
-                    // take out the fee 
-                    CustomerStockAccount.TradingFee += SelectedStock.Fee;
-
-                    db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
-                    db.BankingTransaction.Add(CheckingTrans);
-                    db.SaveChanges();
-                }
-
-                // HACK
-                else
-                {
-                    ViewBag.Error = "Not Enough Money in Account to Purchase the Stocks";
+                    ViewBag.Error = "Date cannot be before today";
                     return View("PurchaseError");
                 }
 
+                if (PurchcaseTrade.Quantity == 0)
+                {
+                    ViewBag.Error = "Quantity cannot be 0";
+                    return View("PurchaseError");
+                }
+                // Get the stock 
+                StockMarket SelectedStock = db.StockMarket.Find(PurchcaseTrade.SelectedStock.StockMarketID);
 
-                // Any further changes
-            }
-            else if (PurchcaseTrade.SavingsAccount != null)
-            {
+                // Get the total amount 
+                Decimal decTotal = (PurchcaseTrade.Quantity * SelectedStock.StockPrice);
+
+                // create a new transaction list for the trade 
+                List<BankingTransaction> TradeTrans = new List<BankingTransaction>();
+
+                // Create a new fee transaction and add it to the list 
+                BankingTransaction FeeTrans = new BankingTransaction
+                {
+                    Amount = SelectedStock.Fee,
+                    BankingTransactionType = BankingTranactionType.Fee,
+                    Description = ("Fee for purchase of " + SelectedStock.CompanyName),
+                    TransactionDate = (PurchcaseTrade.TradeDate),
+                    StockAccount = Customer.StockAccount.FirstOrDefault(),
+                    TransactionDispute = DisputeStatus.NotDisputed
+                };
+
+                TradeTrans.Add(FeeTrans);
+
+                // Make the trade happen
+                Trade Trade = new Trade()
+                {
+                    Amount = decTotal,
+                    Quantity = PurchcaseTrade.Quantity,
+                    Ticker = SelectedStock.Ticker,
+                    TransactionDate = PurchcaseTrade.TradeDate,
+                    PricePerShare = SelectedStock.StockPrice,
+                    TradeType = TradeType.Buy,
+                    StockAccount = Customer.StockAccount.FirstOrDefault(),
+                    StockMarket = SelectedStock,
+                    BankingTransactions = TradeTrans,
+                    DisputeMessage = "None",
+                    TransactionDispute = DisputeStatus.NotDisputed,
+                    Description = "None",
+                    CorrectedAmount = 0
+                };
+
                 // Get the customer Savings account 
-                Saving CustomerSavings = db.SavingsAccount.Find(PurchcaseTrade.SavingsAccount.SavingID);
+                var SAQ = from sa in db.StockAccount
+                          where sa.Customer.Id == Customer.Id
+                          select sa;
 
-                // take the money from the account
-                if (CustomerSavings.Balance - decTotal >= 0)
+                StockAccount CustomerStockAccount = SAQ.FirstOrDefault();
+
+                // check the account nulls 
+                if (PurchcaseTrade.CheckingAccounts != null)
                 {
+                    // find the account
+                    Checking CustomerChecking = db.CheckingAccount.Find(PurchcaseTrade.CheckingAccounts.CheckingID);
 
-                    // Check to see if the cash balance is enough for the fee
-                    if (db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance < SelectedStock.Fee)
+                    if (CustomerChecking == null)
                     {
-                        ViewBag.Error = "Fee was greater than Stock Cash Balance";
+                        return RedirectToAction("Portal", "Home");
+                    }
+
+                    // take the money from the account
+                    if (CustomerChecking.Balance - decTotal >= 0)
+                    {
+                        // Check to see if the cash balance is enough for the fee
+                        if (db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance < SelectedStock.Fee)
+                        {
+                            ViewBag.Error = "Fee was greater than Stock Cash Balance";
+                            return View("PurchaseError");
+                        }
+
+                        // create a list to hold the checking account
+                        List<Checking> CheckingList = new List<Checking>();
+                        CheckingList.Add(CustomerChecking);
+
+                        //Create a new transaction 
+                        BankingTransaction CheckingTrans = new BankingTransaction
+                        {
+                            Amount = decTotal,
+                            BankingTransactionType = BankingTranactionType.Withdrawl,
+                            CheckingAccount = CheckingList,
+                            Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().AccountNumber.ToString()),
+                            TransactionDate = PurchcaseTrade.TradeDate,
+                            Trade = Trade,
+                            TransactionDispute = DisputeStatus.NotDisputed
+                        };
+
+                        // add the stuff to the database  
+                        db.BankingTransaction.Add(FeeTrans);
+                        db.SaveChanges();
+
+                        db.Trades.Add(Trade);
+                        db.SaveChanges();
+
+                        // Take the money out 
+                        db.CheckingAccount.Find(CustomerChecking.CheckingID).Balance -= decTotal;
+
+                        // take out the fee 
+                        CustomerStockAccount.CashBalance -= SelectedStock.Fee;
+
+                        // take out the fee 
+                        CustomerStockAccount.TradingFee += SelectedStock.Fee;
+
+                        db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
+                        db.BankingTransaction.Add(CheckingTrans);
+                        db.SaveChanges();
+                    }
+
+                    // HACK
+                    else
+                    {
+                        ViewBag.Error = "Not Enough Money in Account to Purchase the Stocks";
                         return View("PurchaseError");
                     }
 
-                    // create a list to hold the checking account
-                    List<Saving> SavingsList = new List<Saving>();
-                    SavingsList.Add(CustomerSavings);
 
-                    //Create a new transaction 
-                    BankingTransaction SavingsTrans = new BankingTransaction
-                    {
-                        Amount = decTotal,
-                        BankingTransactionType = BankingTranactionType.Withdrawl,
-                        SavingsAccount = SavingsList,
-                        Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().AccountNumber.ToString()),
-                        TransactionDate = PurchcaseTrade.TradeDate,
-                        Trade = Trade,
-                        TransactionDispute = DisputeStatus.NotDisputed
-                    };
-
-                    // add the stuff to the database  
-                    db.BankingTransaction.Add(FeeTrans);
-                    db.SaveChanges();
-
-                    db.Trades.Add(Trade);
-                    db.SaveChanges();
-
-                    // Take the money out 
-                    db.SavingsAccount.Find(CustomerSavings.SavingID).Balance -= decTotal;
-
-                    // take out the fee 
-                    CustomerStockAccount.CashBalance -= SelectedStock.Fee;
-
-                    // take out the fee 
-                    CustomerStockAccount.TradingFee += SelectedStock.Fee;
-
-                    db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
-                    db.BankingTransaction.Add(SavingsTrans);
-                    db.SaveChanges();
+                    // Any further changes
                 }
-
-                // HACK
-                else
+                else if (PurchcaseTrade.SavingsAccount != null)
                 {
-                    ViewBag.Error = "Not Enough Money in Account to Purchase the Stocks";
-                    return View("PurchaseError");
-                }
-            }
-            else if (PurchcaseTrade.AccountStock!= null)
-            {
+                    // Get the customer Savings account 
+                    Saving CustomerSavings = db.SavingsAccount.Find(PurchcaseTrade.SavingsAccount.SavingID);
 
-                // take the money from the account
-                if (CustomerStockAccount.CashBalance - decTotal >= 0)
-                {
-                    // Check to see if the cash balance is enough for the fee
-                    if (db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance < SelectedStock.Fee)
+                    // take the money from the account
+                    if (CustomerSavings.Balance - decTotal >= 0)
                     {
-                        ViewBag.Error = "Fee was greater than Stock Cash Balance";
-                        return View("PurchaseError");
+
+                        // Check to see if the cash balance is enough for the fee
+                        if (db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance < SelectedStock.Fee)
+                        {
+                            ViewBag.Error = "Fee was greater than Stock Cash Balance";
+                            return View("PurchaseError");
+                        }
+
+                        // create a list to hold the checking account
+                        List<Saving> SavingsList = new List<Saving>();
+                        SavingsList.Add(CustomerSavings);
+
+                        //Create a new transaction 
+                        BankingTransaction SavingsTrans = new BankingTransaction
+                        {
+                            Amount = decTotal,
+                            BankingTransactionType = BankingTranactionType.Withdrawl,
+                            SavingsAccount = SavingsList,
+                            Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().AccountNumber.ToString()),
+                            TransactionDate = PurchcaseTrade.TradeDate,
+                            Trade = Trade,
+                            TransactionDispute = DisputeStatus.NotDisputed
+                        };
+
+                        // add the stuff to the database  
+                        db.BankingTransaction.Add(FeeTrans);
+                        db.SaveChanges();
+
+                        db.Trades.Add(Trade);
+                        db.SaveChanges();
+
+                        // Take the money out 
+                        db.SavingsAccount.Find(CustomerSavings.SavingID).Balance -= decTotal;
+
+                        // take out the fee 
+                        CustomerStockAccount.CashBalance -= SelectedStock.Fee;
+
+                        // take out the fee 
+                        CustomerStockAccount.TradingFee += SelectedStock.Fee;
+
+                        db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
+                        db.BankingTransaction.Add(SavingsTrans);
+                        db.SaveChanges();
                     }
 
-                    // create a list to hold the checking account
-                    List<StockAccount> StockAccountList = new List<StockAccount>();
-                    StockAccountList.Add(CustomerStockAccount);
-
-                    //Create a new transaction 
-                    BankingTransaction StocksTrans = new BankingTransaction()
+                    // HACK
+                    else
                     {
-                        Amount = decTotal,
-                        BankingTransactionType = BankingTranactionType.Withdrawl,
-                        StockAccount = CustomerStockAccount,
-                        Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().AccountNumber.ToString()),
-                        TransactionDate = PurchcaseTrade.TradeDate,
-                        Trade = Trade,
-                        TransactionDispute = DisputeStatus.NotDisputed
-                    };
+                        ViewBag.Error = "Not Enough Money in Account to Purchase the Stocks";
+                        return View("PurchaseError");
+                    }
+                }
+                else if (PurchcaseTrade.AccountStock != null)
+                {
 
-                    // add the stuff to the database  
-                    db.BankingTransaction.Add(FeeTrans);
-                    db.SaveChanges();
+                    // take the money from the account
+                    if (CustomerStockAccount.CashBalance - decTotal >= 0)
+                    {
+                        // Check to see if the cash balance is enough for the fee
+                        if (db.StockAccount.Find(Customer.StockAccount.FirstOrDefault().StockAccountID).CashBalance < SelectedStock.Fee)
+                        {
+                            ViewBag.Error = "Fee was greater than Stock Cash Balance";
+                            return View("PurchaseError");
+                        }
 
-                    db.Trades.Add(Trade);
-                    db.SaveChanges();
+                        // create a list to hold the checking account
+                        List<StockAccount> StockAccountList = new List<StockAccount>();
+                        StockAccountList.Add(CustomerStockAccount);
 
-                    // Take the money out 
-                    CustomerStockAccount.CashBalance -= decTotal;
+                        //Create a new transaction 
+                        BankingTransaction StocksTrans = new BankingTransaction()
+                        {
+                            Amount = decTotal,
+                            BankingTransactionType = BankingTranactionType.Withdrawl,
+                            StockAccount = CustomerStockAccount,
+                            Description = ("Stock Purchase - Stock Account " + Customer.StockAccount.FirstOrDefault().AccountNumber.ToString()),
+                            TransactionDate = PurchcaseTrade.TradeDate,
+                            Trade = Trade,
+                            TransactionDispute = DisputeStatus.NotDisputed
+                        };
 
-                    // take out the fee 
-                    CustomerStockAccount.CashBalance -= SelectedStock.Fee;
+                        // add the stuff to the database  
+                        db.BankingTransaction.Add(FeeTrans);
+                        db.SaveChanges();
 
-                    // take out the fee 
-                    CustomerStockAccount.TradingFee += SelectedStock.Fee;
+                        db.Trades.Add(Trade);
+                        db.SaveChanges();
 
-                    db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
-                    db.BankingTransaction.Add(StocksTrans);
-                    db.SaveChanges();
+                        // Take the money out 
+                        CustomerStockAccount.CashBalance -= decTotal;
+
+                        // take out the fee 
+                        CustomerStockAccount.CashBalance -= SelectedStock.Fee;
+
+                        // take out the fee 
+                        CustomerStockAccount.TradingFee += SelectedStock.Fee;
+
+                        db.Entry(CustomerStockAccount).State = System.Data.Entity.EntityState.Modified;
+                        db.BankingTransaction.Add(StocksTrans);
+                        db.SaveChanges();
+                    }
+
+                    // HACK
+                    else
+                    {
+                        ViewBag.Error = "Not Enough Money in Account to Purchase the Stocks";
+                        return View("PurchaseError");
+                    }
                 }
 
-                // HACK
                 else
                 {
-                    ViewBag.Error = "Not Enough Money in Account to Purchase the Stocks";
-                    return View("PurchaseError");
+                    return HttpNotFound();
                 }
-            }
 
-            else
+                // Add the stuff to the database 
+                // check to see if the porfolio is balanced
+                BalancedPortfolio.CheckBalanced(db, Customer);
+
+                return View("PurchaseConfirmation");
+            }
+            catch (Exception e)
             {
-                return HttpNotFound();
+                ViewBag.Error = "An unknown error occured";
+                return View("PurchaseError");
             }
-
-            // Add the stuff to the database 
-            // check to see if the porfolio is balanced
-            BalancedPortfolio.CheckBalanced(db, Customer);
-
-            return View("PurchaseConfirmation");
         }
+            
 
         // GET: Trades
         // The individual details for each stock trade

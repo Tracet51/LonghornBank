@@ -44,10 +44,9 @@ namespace LonghornBank.Models
         public Int32 Quantity { get; set; }
 
         // Date of the Purchase 
-        [Required(ErrorMessage = "Trade Date is Required")]
-        [Display(Name ="Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Required(ErrorMessage = "DOB is Required")]
         public DateTime TradeDate { get; set; }
 
 
@@ -115,9 +114,9 @@ namespace LonghornBank.Models
         public Decimal Profit { get; set; }
 
         // Date of the Purchase 
-        [Display(Name = "Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Required(ErrorMessage = "DOB is Required")]
         public DateTime SaleDate { get; set; }
         public Int32 StockMarketID { get; set; }
 

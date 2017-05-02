@@ -173,6 +173,9 @@ namespace LonghornBank.Controllers
                     stockAccount.Name = "Longhorn Stock Portfolio";
                 }
 
+                // set the stock account to needs approval
+                stockAccount.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval;
+
                 db.StockAccount.Add(stockAccount);
                 db.SaveChanges();
 
