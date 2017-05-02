@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LonghornBank.Models.Employee>
+﻿@model IEnumerable<LonghornBank.Models.AppUser>
 
 @{
     ViewBag.Title = "FireEmployees";
@@ -16,7 +16,7 @@
             @Html.DisplayNameFor(model => model.LName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EmailAddress)
+            @Html.DisplayNameFor(model => model.Email)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.PhoneNumber)
@@ -48,7 +48,7 @@
             @Html.DisplayFor(modelItem => item.LName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.EmailAddress)
+            @Html.DisplayFor(modelItem => item.Email)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.PhoneNumber)
@@ -64,7 +64,7 @@
         </td>
         
             @using (Html.BeginForm("FireEmployees", "Managers", FormMethod.Post))
-            {   @Html.HiddenFor(modelItem => item.EmployeeID, new { Name = "EmployeeID" })
+            {   @Html.HiddenFor(modelItem => item.Id, new { Name = "EmployeeID" })
             <td>
                 @Html.RadioButton("Fire", true, new { @class = "form-check-input" })             
             </td>

@@ -149,9 +149,10 @@ namespace LonghornBank.Controllers
             {
                 AppUser employee = db.Users.Find(EmployeeID);
                 employee.FiredStatus = true;
-
+                // Update the account 
+                //db.Entry(employee).State = EntityState.Modified;
                 // Update the Database
-                var update = UserManager.Update(employee);
+                //var update = UserManager.Update(employee);
 
                 // Save the databse and set the view
                 db.SaveChanges();
@@ -163,7 +164,7 @@ namespace LonghornBank.Controllers
                 employee.FiredStatus = false;
 
                 // Update the database 
-                var update = UserManager.Update(employee);
+                //var update = UserManager.Update(employee);
 
                 // Save the changes and update the database
                 db.SaveChanges();
@@ -592,7 +593,7 @@ namespace LonghornBank.Controllers
             FreezingEmployee.ActiveStatus = Freeze;
 
             // Update the account 
-            var update = UserManager.Update(FreezingEmployee);
+            db.Entry(FreezingEmployee).State = EntityState.Modified;
 
             // Save the changes and set the confirmation message
             db.SaveChanges();

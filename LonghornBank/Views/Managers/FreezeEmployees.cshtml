@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LonghornBank.Models.Employee>
+﻿@model IEnumerable<LonghornBank.Models.AppUser>
 
 
 @{
@@ -42,13 +42,13 @@
                     @Html.DisplayFor(modelItem => item.LName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.EmailAddress)
+                    @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ActiveStatus)
                 </td>
                 @using (Html.BeginForm("FreezeEmployees", "Managers", FormMethod.Post))
-                    {   @Html.HiddenFor(modelItem => item.EmployeeID, new { Name = "EmployeeID" })
+                    {   @Html.HiddenFor(modelItem => item.Id, new { Name = "EmployeeID" })
                     <td>
                         @Html.RadioButton("Freeze", true, new { @class = "form-check-input" })
                     </td>
