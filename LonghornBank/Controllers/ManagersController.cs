@@ -570,6 +570,17 @@ namespace LonghornBank.Controllers
             return View(CustomerList);
 
         }
+
+        // GET: Managers/
+        public ActionResult DisplayAllEmployees()
+        {
+            var QueryEmployee = from e in db.Users
+                                      where e.Roles== new AppRole("Employee")
+                                      select e;
+
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

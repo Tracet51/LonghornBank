@@ -109,12 +109,34 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EmployeeID,FName,LName,StreetAddress,City,State,Zip,EmailAddress,Password,PhoneNumber,SSN,ActiveStatus,FiredStatus")] Employee employee)
+        public async Task<ActionResult> Create([Bind(Include = "EmployeeID,FName,LName,StreetAddress,City,State,Zip,EmailAddress,Password,PhoneNumber,SSN,ActiveStatus,FiredStatus")] Employee employee)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid || !ModelState.IsValid)
             {
                 ViewBag.Confirmation = "You have successfully created an employee.";
-                db.Employees.Add(employee);
+                var user = new AppUser
+                {
+                    UserName = employee.EmailAddress,
+                    Email = employee.EmailAddress,
+                    FName = employee.FName,
+                    LName = employee.LName,
+                    City = employee.City,
+                    DOB = Convert.ToDateTime("1/1/1800"),
+                    MiddleInitial = employee.MiddleInitial,
+                    State = employee.State,
+                    StreetAddress = employee.StreetAddress,
+                    Zip = employee.Zip,
+                    PhoneNumber = employee.PhoneNumber,
+                    FiredStatus = false,
+                    ActiveStatus = true
+                };
+
+                // Create the user
+                var result = await UserManager.CreateAsync(user, employee.Password);
+
+                // Add the user to the employee role 
+                await UserManager.AddToRoleAsync(user.Id, "Employee");
+
                 db.SaveChanges();
                 return RedirectToAction("Index", "Managers");
             }
@@ -169,25 +191,31 @@ namespace LonghornBank.Controllers
             }
             return View(customer);
           }
-        //chnge password get
-        public ActionResult ChangePassword()
-        {
-            return View();
-        }
         
         // GET: Employees/Edit/5
-        public ActionResult Edit(String id)
+        public ActionResult Edit()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
+            var employeequery = from e in db.Users
+                               where e.UserName == User.Identity.Name
+                               select e;
+
+            AppUser Employee = employeequery.FirstOrDefault();
+
+            if (Employee == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+
+            // set the view model 
+            EmployeeEditEmployee EditEmployee = new EmployeeEditEmployee
+            {
+                City = Employee.City,
+                PhoneNumber = Employee.PhoneNumber,
+                State = Employee.State,
+                StreetAddress = Employee.StreetAddress,
+                Zip = Employee.Zip
+            };
+            return View();
         }
 
         // POST: Employees/Edit/5
@@ -195,15 +223,72 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EmployeeID,FName,LName,StreetAddress,City,State,Zip,EmailAddress,Password,PhoneNumber,SSN,ActiveStatus,FiredStatus")] Employee employee)
+        public async Task<ActionResult> Edit(EmployeeEditEmployee employee)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                db.Entry(employee).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return View(employee);
             }
-            return View(employee);
+
+            // Get the Employee 
+            var Employee = await UserManager.FindByNameAsync(User.Identity.Name);
+
+            // Update the Employee
+            Employee.City = employee.City;
+            Employee.PhoneNumber = employee.PhoneNumber;
+            Employee.State = employee.State;
+            Employee.StreetAddress = employee.StreetAddress;
+            Employee.Zip = employee.Zip;
+
+            // Update the employee 
+            var update = await UserManager.UpdateAsync(Employee);
+
+            return View("Portal", "Employees");
+        }
+
+        // GET: Employees/ChangePassword
+        // return page to edit the employee password
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        // POST: Employees/ChangePassword
+        // Post method to change the password 
+        public async Task<ActionResult> ChangePassword(EmployeeChangePassword NewPassword)
+        {
+            // Check to make sure the passwords are the same
+            if (NewPassword.Password != NewPassword.ConfirmPassword)
+            {
+                return View();
+            }
+
+            // Get the user 
+            var QueryEmployee = from e in db.Users
+                               where e.UserName == User.Identity.Name
+                               select e;
+
+            AppUser Employee = QueryEmployee.FirstOrDefault();
+
+            if (!ModelState.IsValid)
+            {
+                return View(NewPassword);
+            }
+
+            // Remove the old password
+            var PasswordRemove = await UserManager.RemovePasswordAsync(Employee.Id);
+
+            // update the new password
+            var PasswordUpdate = await UserManager.AddPasswordAsync(Employee.Id, NewPassword.Password);
+
+            // Check to see if successful 
+            if (PasswordUpdate.Succeeded)
+            {
+                return RedirectToAction("Portal", "Employees");
+            }
+
+            // If the password failed
+            return View();
         }
 
         // GET: Employees/Delete/5

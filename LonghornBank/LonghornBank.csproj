@@ -282,6 +282,10 @@
     <Compile Include="Migrations\201704290538373_fnamedisplayname.Designer.cs">
       <DependentUpon>201704290538373_fnamedisplayname.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704292251300_saturday.cs" />
+    <Compile Include="Migrations\201704292251300_saturday.Designer.cs">
+      <DependentUpon>201704292251300_saturday.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
@@ -290,7 +294,9 @@
     <Compile Include="Migrations\SeedStocks.cs" />
     <Compile Include="Models\DepositApprovalViewModel.cs" />
     <Compile Include="Models\DisputesViewModel.cs" />
+    <Compile Include="Models\EditViewModel.cs" />
     <Compile Include="Models\ForgotPasswordViewModels.cs" />
+    <Compile Include="Models\IRAViewModel.cs" />
     <Compile Include="Models\PayeeViewModel.cs" />
     <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\BankingTransaction.cs" />
@@ -305,6 +311,7 @@
     <Compile Include="Models\Ranges.cs" />
     <Compile Include="Models\RoleViewModels.cs" />
     <Compile Include="Models\Saving.cs" />
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\StockAccount.cs" />
     <Compile Include="Models\StockMarket.cs" />
     <Compile Include="Models\StockTradeViewModel.cs" />
@@ -316,6 +323,7 @@
     <Compile Include="Utility\AccountNumber.cs" />
     <Compile Include="Utility\BalancedPortfolio.cs" />
     <Compile Include="Utility\Email.cs" />
+    <Compile Include="Utility\SearchTransactions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -427,6 +435,7 @@
     <Content Include="Views\Profile\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Managers\ApproveStockAccounts.cshtml" />
     <Content Include="Views\Managers\FireEmployees.cshtml" />
+    <Content Include="Views\Employees\ChangePassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -446,6 +455,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704290538373_fnamedisplayname.resx">
       <DependentUpon>201704290538373_fnamedisplayname.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704292251300_saturday.resx">
+      <DependentUpon>201704292251300_saturday.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
