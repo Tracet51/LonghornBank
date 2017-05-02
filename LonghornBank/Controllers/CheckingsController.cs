@@ -136,10 +136,46 @@ namespace LonghornBank.Controllers
                 // Associate the Customer with the checking account
                 checking.Customer = customer;
 
+
                 db.CheckingAccount.Add(checking);
                 db.SaveChanges();
-                return RedirectToAction("Index", "Home", new { id = customer.Id});
+
+                // check to see if the deposit amount is over $5000
+                ApprovedorNeedsApproval FirstDeposit;
+                if (checking.Balance > 5000m)
+                {
+                    FirstDeposit = ApprovedorNeedsApproval.NeedsApproval;
+                }
+                else
+                {
+                    FirstDeposit = ApprovedorNeedsApproval.Approved;
+                }
+                var CheckingQuery = from ca in db.CheckingAccount
+                                    where ca.AccountNumber == checking.AccountNumber
+                                    select ca;
+
+                Checking CustomerCheckingAccount = CheckingQuery.FirstOrDefault();
+                List<Checking> CustomerCheckingList = new List<Checking>();
+                CustomerCheckingList.Add(CustomerCheckingAccount);
+
+                // Create a new transaction 
+                BankingTransaction InitialDeposit = new BankingTransaction
+                {
+                    Amount = checking.Balance,
+                    ApprovalStatus = FirstDeposit,
+                    BankingTransactionType = BankingTranactionType.Deposit,
+                    Description = "Initial Deposit to Cash Balance",
+                    TransactionDate = DateTime.Today,
+                    TransactionDispute = DisputeStatus.NotDisputed,
+                    CheckingAccount = CustomerCheckingList
+            };
+
+            // Add the transaction to the database
+            db.BankingTransaction.Add(InitialDeposit);
+            db.SaveChanges();
+            return RedirectToAction("Index", "Home", new { id = customer.Id});
             }
+        
 
             return View(checking);
         }

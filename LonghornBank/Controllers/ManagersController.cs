@@ -237,7 +237,7 @@ namespace LonghornBank.Controllers
         public ActionResult DepositApproval()
         {
             List<BankingTransaction> SelectedDepositsOrig = new List<BankingTransaction>();
-            SelectedDepositsOrig = db.BankingTransaction.Where(b=>b.ApprovalStatus == ApprovedorNeedsApproval.Approved).ToList();
+            SelectedDepositsOrig = db.BankingTransaction.Where(b=>b.ApprovalStatus == ApprovedorNeedsApproval.NeedsApproval).ToList();
             List<BankingTransaction> SelectedDeposits = new List<BankingTransaction>();
 
             foreach (BankingTransaction depo in SelectedDepositsOrig)

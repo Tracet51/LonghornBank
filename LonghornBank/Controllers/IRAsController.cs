@@ -142,6 +142,41 @@ namespace LonghornBank.Controllers
 
                 db.IRAAccount.Add(ira);
                 db.SaveChanges();
+
+                // check to see if the deposit amount is over $5000
+                ApprovedorNeedsApproval FirstDeposit;
+                if (ira.Balance > 5000m)
+                {
+                    FirstDeposit = ApprovedorNeedsApproval.NeedsApproval;
+                }
+                else
+                {
+                    FirstDeposit = ApprovedorNeedsApproval.Approved;
+                }
+                var IRAQuery = from ia in db.IRAAccount
+                                  where ia.AccountNumber == ira.AccountNumber
+                                  select ia;
+
+                IRA CustomerIRAAccount = IRAQuery.FirstOrDefault();
+                List<IRA> CustomerIRAList = new List<IRA>();
+                CustomerIRAList.Add(CustomerIRAAccount);
+
+                // Create a new transaction 
+                BankingTransaction InitialDeposit = new BankingTransaction
+                {
+                    Amount = ira.Balance,
+                    ApprovalStatus = FirstDeposit,
+                    BankingTransactionType = BankingTranactionType.Deposit,
+                    Description = "Initial Deposit to Cash Balance",
+                    TransactionDate = DateTime.Today,
+                    TransactionDispute = DisputeStatus.NotDisputed,
+                    IRAAccount = CustomerIRAList
+                };
+
+                // Add the transaction to the database
+                db.BankingTransaction.Add(InitialDeposit);
+                db.SaveChanges();
+
                 return RedirectToAction("Portal", "Home", new { id = customer.Id });
             }
 
