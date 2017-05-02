@@ -272,10 +272,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704290559350_Round1.cs" />
-    <Compile Include="Migrations\201704290559350_Round1.Designer.cs">
-      <DependentUpon>201704290559350_Round1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
@@ -325,7 +321,7 @@
     <Content Include="Views\Checkings\Edit.cshtml" />
     <Content Include="Views\Checkings\Index.cshtml" />
     <Content Include="Views\BankingTransactions\Deposit.cshtml" />
-    <Content Include="Views\BankingTransactions\Create.cshtml" />
+    <Content Include="Views\BankingTransactions\WithDrawal.cshtml" />
     <Content Include="Views\BankingTransactions\Delete.cshtml" />
     <Content Include="Views\BankingTransactions\Details.cshtml" />
     <Content Include="Views\BankingTransactions\Edit.cshtml" />
@@ -382,7 +378,7 @@
     <Content Include="Views\Payees\EditOwnPayee.cshtml" />
     <Content Include="Views\Payees\Index.cshtml" />
     <Content Include="Views\Payees\PayBillsPage.cshtml" />
-    <Content Include="Views\Payees\WithDrawlError.cshtml" />
+    <Content Include="Views\Shared\WithDrawalError.cshtml" />
     <Content Include="Views\Managers\Create.cshtml" />
     <Content Include="Views\Managers\Delete.cshtml" />
     <Content Include="Views\Managers\DepositApproval.cshtml" />
@@ -423,6 +419,9 @@
     <Content Include="Views\Profile\ResetPassword.cshtml" />
     <Content Include="Views\Profile\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\BankingTransactions\Transfer.cshtml" />
+    <Content Include="Views\BankingTransactions\IRAWithDrawalError.cshtml" />
+    <Content Include="Views\BankingTransactions\NoMoreDeposits.cshtml" />
+    <Content Include="Views\BankingTransactions\UnqualifiedMax.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -432,11 +431,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704290559350_Round1.resx">
-      <DependentUpon>201704290559350_Round1.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
