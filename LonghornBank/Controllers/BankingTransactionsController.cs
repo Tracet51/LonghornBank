@@ -133,6 +133,12 @@ namespace LonghornBank.Controllers
             // Get the Customer 
             AppUser customer = CustomerQuery.FirstOrDefault();
 
+            //Return frozen view if no go
+            if (customer.ActiveStatus == false)
+            {
+                return View("Frozen");
+            }
+
             if (customer == null)
             {
                 return HttpNotFound();
@@ -399,6 +405,12 @@ namespace LonghornBank.Controllers
 
             AppUser Customer = CustomerQuery.FirstOrDefault();
 
+            //Return frozen view if no go
+            if (Customer.ActiveStatus == false)
+            {
+                return View("Frozen");
+            }
+
             // Get all of the accounts
             Tuple<SelectList, SelectList, SelectList, SelectList> AllAcounts = GetAllAccounts(Customer.Id);
 
@@ -566,6 +578,12 @@ namespace LonghornBank.Controllers
                                 where c.Email == User.Identity.Name
                                 select c;
             AppUser Customer = CustomerQuery.FirstOrDefault();
+
+            //Return frozen view if no go
+            if (Customer.ActiveStatus == false)
+            {
+                return View("Frozen");
+            }
 
             // Populate a list of Checking Accounts
             var CheckingQuery = from ca in db.CheckingAccount
