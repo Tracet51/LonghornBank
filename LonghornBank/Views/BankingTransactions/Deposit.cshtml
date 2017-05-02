@@ -16,8 +16,6 @@
     // Create a SelectList for IRA
     SelectList IraAccounts = AllAccounts.Item4;
 
-    SelectList StockAccounts = AllAccounts.Item3;
-
 
 }
 
@@ -83,11 +81,6 @@
 
         <b class="control-label col-md-2">IRA Accounts:</b>
         @Html.DropDownList("IraID", IraAccounts, new { @class = "form-control" })
-        <br />
-        <br />
-
-        <b class="control-label col-md-2">Stock Accounts:</b>
-        @Html.DropDownList("StockAccountID", StockAccounts, new { @class = "form-control" })
         <br />
         <br />
 

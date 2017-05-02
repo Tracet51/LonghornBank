@@ -219,7 +219,7 @@ namespace LonghornBank.Controllers
 
              if(CustomerChecking != null)
              {
-                if (CustomerChecking.Balance >= 1)
+                if (CustomerChecking.Balance >= 0)
                 {
                     List<Checking> CheckingList = new List<Checking>();
 
@@ -227,7 +227,7 @@ namespace LonghornBank.Controllers
 
                     if (CustomerChecking.Balance - Pay.PayeeTransaction.Amount >= -50)
                     {
-                        if (CustomerChecking.Balance - Pay.PayeeTransaction.Amount <= 0 && CustomerChecking.Balance - Pay.PayeeTransaction.Amount >= -50)
+                        if (CustomerChecking.Balance - Pay.PayeeTransaction.Amount < 0 && CustomerChecking.Balance - Pay.PayeeTransaction.Amount >= -50)
                         {
                             BankingTransaction OverDrawn = new BankingTransaction
                             {
@@ -247,7 +247,7 @@ namespace LonghornBank.Controllers
                         BankingTransaction CheckingWithdrawl = new BankingTransaction
                         {
                             Amount = Pay.PayeeTransaction.Amount,
-                            BankingTransactionType = BankingTranactionType.Withdrawl,
+                            BankingTransactionType = BankingTranactionType.BillPayment,
                             TransactionDate = Pay.PayeeTransaction.TransactionDate,
                             CheckingAccount = CheckingList,
                             Description = "Payment of bill to "
@@ -273,7 +273,7 @@ namespace LonghornBank.Controllers
 
             if(CustomerSaving != null)
             {
-                if (CustomerSaving.Balance >= 1)
+                if (CustomerSaving.Balance >= 0)
                 {
                     List<Saving> SavingList = new List<Saving>();
 
@@ -281,7 +281,7 @@ namespace LonghornBank.Controllers
 
                     if (CustomerSaving.Balance - Pay.PayeeTransaction.Amount >= -50)
                     {
-                        if (CustomerSaving.Balance - Pay.PayeeTransaction.Amount <= 0 && CustomerSaving.Balance - Pay.PayeeTransaction.Amount >= -50)
+                        if (CustomerSaving.Balance - Pay.PayeeTransaction.Amount < 0 && CustomerSaving.Balance - Pay.PayeeTransaction.Amount >= -50)
                         {
                             BankingTransaction OverDrawn = new BankingTransaction
                             {
@@ -301,7 +301,7 @@ namespace LonghornBank.Controllers
                         BankingTransaction CheckingWithdrawl = new BankingTransaction
                         {
                             Amount = Pay.PayeeTransaction.Amount,
-                            BankingTransactionType = BankingTranactionType.Withdrawl,
+                            BankingTransactionType = BankingTranactionType.BillPayment,
                             TransactionDate = Pay.PayeeTransaction.TransactionDate,
                             SavingsAccount = SavingList,
                             Description = "Payment of bill to "
