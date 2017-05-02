@@ -50,9 +50,8 @@
                 <td>@Html.DisplayFor(modelItem => item.Balance)</td>
                 <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", "Checkings", new { id = item.CheckingID }, null) |
-                    @Html.ActionLink("Details", "Details", "Checkings", new { id = item.CheckingID }, null) |
-                    @Html.ActionLink("Delete", "Delete", "Checkings", new { id = item.CheckingID }, null)
+                    @Html.ActionLink("Change Account Name", "Edit", "Checkings", new { id = item.CheckingID }, null) |
+                    @Html.ActionLink("Transaction Search", "Details", "Checkings", new { id = item.CheckingID }, null) 
                 </td>
             </tr>
 
@@ -90,9 +89,9 @@
             <td>@Html.DisplayFor(modelItem => item.Balance)</td>
             <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
             <td>
-                @Html.ActionLink("Edit", "Edit", "Savings", new { id = item.SavingID }, null) |
-                @Html.ActionLink("Details", "Details", "Savings", new { id = item.SavingID }, null) |
-                @Html.ActionLink("Delete", "Delete", "Savings", new { id = item.SavingID }, null)
+                @Html.ActionLink("Change Account Name", "Edit", "Savings", new { id = item.SavingID }, null) |
+                @Html.ActionLink("Transaction Search", "Details", "Savings", new { id = item.SavingID }, null) |
+                
             </td>
         </tr>
     }
@@ -129,9 +128,9 @@
                 <td>@Html.DisplayFor(modelItem => item.Balance)</td>
                 <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", "IRAs", new { id = item.IRAID }, null) |
-                    @Html.ActionLink("Details", "Details", "IRAs", new { id = item.IRAID }, null) |
-                    @Html.ActionLink("Delete", "Delete", "IRAs", new { id = item.IRAID }, null)
+                    @Html.ActionLink("Change Account Name", "Edit", "IRAs", new { id = item.IRAID }, null) |
+                    @Html.ActionLink("Transaction Search", "Details", "IRAs", new { id = item.IRAID }, null) |
+                    
                 </td>
             </tr>
         }
