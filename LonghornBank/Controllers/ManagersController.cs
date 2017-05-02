@@ -338,36 +338,36 @@ namespace LonghornBank.Controllers
         }
         //DEPO Approval POST
         [HttpPost]
-        public ActionResult DepositApproval(Boolean Approve, string ID)
+        public ActionResult DepositApproval(Int32 BankingTransactionID)
         {
-            Int32 id = Convert.ToInt32(ID);
-            if (Approve)
+            Int32 id =Convert.ToInt32(BankingTransactionID);
+            if (true)
             {
                 BankingTransaction bankingtransactionobject = db.BankingTransaction.Find(id);
                 bankingtransactionobject.ApprovalStatus = ApprovedorNeedsApproval.Approved;
                 ViewBag.SuccessMessage = "You have successfully approved deposits.";
-                if (bankingtransactionobject.CheckingAccount.First() != null)
+                if (bankingtransactionobject.CheckingAccount.FirstOrDefault() != null)
                 {
                     Checking checking= bankingtransactionobject.CheckingAccount.First();
                     Decimal pendingbalance= checking.PendingBalance;
-                    checking.PendingBalance = 0;
-                    checking.Balance = pendingbalance+checking.Balance;
+                    checking.PendingBalance = pendingbalance-bankingtransactionobject.Amount;
+                    checking.Balance = bankingtransactionobject.Amount+checking.Balance;
                     db.SaveChanges();
                 }
-                if (bankingtransactionobject.SavingsAccount.First() != null)
+                if (bankingtransactionobject.SavingsAccount.FirstOrDefault() != null)
                 {
                     Saving saving = bankingtransactionobject.SavingsAccount.First();
                     Decimal pendingbalance = saving.PendingBalance;
-                    saving.PendingBalance = 0;
-                    saving.Balance = pendingbalance + saving.Balance;
+                    saving.PendingBalance = pendingbalance - bankingtransactionobject.Amount;
+                    saving.Balance = bankingtransactionobject.Amount + saving.Balance;
                     db.SaveChanges();
                 }
-                if (bankingtransactionobject.IRAAccount.First() != null)
+                if (bankingtransactionobject.IRAAccount.FirstOrDefault() != null)
                 {
                     IRA ira = bankingtransactionobject.IRAAccount.First();
                     Decimal pendingbalance = ira.PendingBalance;
-                    ira.PendingBalance = 0;
-                    ira.Balance = pendingbalance + ira.Balance;
+                    ira.PendingBalance = pendingbalance - bankingtransactionobject.Amount;
+                    ira.Balance = bankingtransactionobject.Amount + ira.Balance;
                     db.SaveChanges();
                 }
                 //SendEmail()
@@ -377,9 +377,10 @@ namespace LonghornBank.Controllers
                 SendEmail(emailstring, emailsubject, emailbody);
             }
             db.SaveChanges();
-            //Begin Copied Code
+
+            //Begin Copied Get 
             List<BankingTransaction> SelectedDepositsOrig = new List<BankingTransaction>();
-            SelectedDepositsOrig = db.BankingTransaction.Where(b => b.ApprovalStatus == ApprovedorNeedsApproval.Approved).ToList();
+            SelectedDepositsOrig = db.BankingTransaction.Where(b => b.ApprovalStatus == ApprovedorNeedsApproval.NeedsApproval).ToList();
             List<BankingTransaction> SelectedDeposits = new List<BankingTransaction>();
 
             foreach (BankingTransaction depo in SelectedDepositsOrig)
@@ -416,8 +417,8 @@ namespace LonghornBank.Controllers
                 }
                 ListOfDepositApprovalViewModels.Add(depoviewmodel);
             }
-            //End Copied Code
-            return View(ListOfDepositApprovalViewModels);
+            return RedirectToAction("DepositApproval", "Managers");
+            //End Copied Get
         }
         // GET: Managers/Details/5
         public ActionResult Details(int? id)
