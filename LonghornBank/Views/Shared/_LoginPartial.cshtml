@@ -11,9 +11,13 @@
             {
                 @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Details", "Profile", routeValues: null, htmlAttributes: new { title = "Details" })
             }
-            else
+            @if (User.IsInRole("Manager"))
             {
                 @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Details", "Managers", routeValues: null, htmlAttributes: new { title = "Details" })
+            }
+            @if (User.IsInRole("Employee") && !User.IsInRole("Manager"))
+            {
+                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Details", "Employees", routeValues: null, htmlAttributes: new { title = "Details" })
             }
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>

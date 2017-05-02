@@ -561,7 +561,7 @@ namespace LonghornBank.Controllers
 
             db.SaveChanges();
 
-            return View("Portal", "Employees");
+            return View("Index", "Managers");
         }
 
 
@@ -669,14 +669,14 @@ namespace LonghornBank.Controllers
         {
             if (id == null)
             {
-                return View("Portal", "Employees");
+                return View("Index", "Managers");
             }
             // Get the employee 
             AppUser Employee = db.Users.Find(id);
 
             if (Employee == null)
             {
-                return View("Portal", "Employees");
+                return View("Index", "Managers");
             }
 
             return View(Employee);

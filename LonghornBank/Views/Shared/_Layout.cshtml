@@ -23,11 +23,15 @@
                 </button>
                 @if (User.IsInRole("Manager"))
                 {
-                    @Html.ActionLink("Portal", "Portal", "Manager", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Portal", "Index", "Managers", new { area = "" }, new { @class = "navbar-brand" })
                 }
                 @if (User.IsInRole("Customer"))
                 {
                     @Html.ActionLink("Portal", "Portal", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                }
+                @if (User.IsInRole("Employee") && !User.IsInRole("Manager"))
+                {
+                    @Html.ActionLink("Portal", "Portal", "Employees", new { area = "" }, new { @class = "navbar-brand" })
                 }
                 @if (!User.IsInRole("Customer") && !User.IsInRole("Manager") && !User.IsInRole("Employee"))
                 {

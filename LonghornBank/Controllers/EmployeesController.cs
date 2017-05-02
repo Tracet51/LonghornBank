@@ -241,7 +241,7 @@ namespace LonghornBank.Controllers
             // Update the employee 
             var update = await UserManager.UpdateAsync(Employee);
 
-            return View("Portal", "Employees");
+            return RedirectToAction("Portal", "Employees");
         }
 
         // GET: Employees/ChangePassword
