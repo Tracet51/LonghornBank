@@ -1,0 +1,66 @@
+﻿@model IEnumerable<LonghornBank.Models.StockAccount>
+
+
+<h2>Approve Stock Accounts</h2>
+@ViewBag.SuccessMessage
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CashBalance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TradingFee)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Balanced)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CashBalance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TradingFee)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Balanced)
+        </td>
+        <td>
+            @using (Html.BeginForm("ApproveStockAccounts", "Managers", FormMethod.Post))
+            {   @Html.HiddenFor(modelItem => item.StockAccountID, new { Name = "StockAccountID" })
+            <td>
+                @Html.RadioButton("Approve", true, new { @class = "form-check-input" })
+            </td>
+                    
+            <td>
+
+            <input type="submit" value="Approve" class="btn btn-success" />
+            </td>
+
+            }
+        </td>
+    </tr>
+}
+
+</table>
+<br />
+<br />
+@Html.ActionLink("Manager Home", "Index", "Managers")

@@ -247,9 +247,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -272,10 +270,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201705020014570_Round1.cs" />
-    <Compile Include="Migrations\201705020014570_Round1.Designer.cs">
-      <DependentUpon>201705020014570_Round1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
@@ -284,6 +278,7 @@
     <Compile Include="Migrations\SeedStocks.cs" />
     <Compile Include="Models\DepositApprovalViewModel.cs" />
     <Compile Include="Models\DisputesViewModel.cs" />
+    <Compile Include="Models\EditViewModel.cs" />
     <Compile Include="Models\ForgotPasswordViewModels.cs" />
     <Compile Include="Models\IRAViewModel.cs" />
     <Compile Include="Models\PayeeViewModel.cs" />
@@ -422,9 +417,9 @@
     <Content Include="Views\Profile\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Profile\ResetPassword.cshtml" />
     <Content Include="Views\Profile\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\BankingTransactions\Transfer.cshtml" />
-    <Content Include="Views\StockAccounts\AccountError.cshtml" />
-    <Content Include="Views\Shared\AccountConfirmation.cshtml" />
+    <Content Include="Views\Managers\ApproveStockAccounts.cshtml" />
+    <Content Include="Views\Managers\FireEmployees.cshtml" />
+    <Content Include="Views\Employees\ChangePassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -434,11 +429,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201705020014570_Round1.resx">
-      <DependentUpon>201705020014570_Round1.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

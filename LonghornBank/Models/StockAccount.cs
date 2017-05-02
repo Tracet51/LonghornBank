@@ -13,6 +13,9 @@ namespace LonghornBank.Models
         private AppDbContext db = new AppDbContext();
 
         public Int32 StockAccountID { get; set; }
+        [Display(Name= "Approved or Needs Approval")]
+        public ApprovedorNeedsApproval ApprovalStatus { get; set; }
+
 
         public ApprovedorNeedsApproval ApprovalStatus { get; set; }
 

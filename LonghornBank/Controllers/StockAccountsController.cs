@@ -156,7 +156,8 @@ namespace LonghornBank.Controllers
                                     select c;
                 // Get the Customer 
                 AppUser customer = CustomerQuery.FirstOrDefault();
-
+                //Change field to needs approval
+                stockAccount.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval;
                 if (customer == null)
                 {
                     return HttpNotFound();
