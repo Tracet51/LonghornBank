@@ -270,6 +270,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705020203359_Init.cs" />
+    <Compile Include="Migrations\201705020203359_Init.Designer.cs">
+      <DependentUpon>201705020203359_Init.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
@@ -386,13 +390,6 @@
     <Content Include="Views\Managers\Disputes.cshtml" />
     <Content Include="Views\Managers\Edit.cshtml" />
     <Content Include="Views\Managers\Index.cshtml" />
-    <Content Include="Views\Account\ChangePassword.cshtml" />
-    <Content Include="Views\Account\Index.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\RoleAdmin\Create.cshtml" />
-    <Content Include="Views\Account\RoleAdmin\Edit.cshtml" />
-    <Content Include="Views\Account\RoleAdmin\Index.cshtml" />
     <Content Include="Views\BankingTransactions\IRAError.cshtml" />
     <Content Include="Views\IRAs\MoreThanOneError.cshtml" />
     <Content Include="Views\Customers\AddPayee.cshtml" />
@@ -420,6 +417,10 @@
     <Content Include="Views\Managers\ApproveStockAccounts.cshtml" />
     <Content Include="Views\Managers\FireEmployees.cshtml" />
     <Content Include="Views\Employees\ChangePassword.cshtml" />
+    <Content Include="Views\Managers\DisplayAllEmployees.cshtml" />
+    <Content Include="Views\Managers\EditEmployee.cshtml" />
+    <Content Include="Views\Shared\AccountConfirmation.cshtml" />
+    <Content Include="Views\Shared\WithDrawalError.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -429,6 +430,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201705020203359_Init.resx">
+      <DependentUpon>201705020203359_Init.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

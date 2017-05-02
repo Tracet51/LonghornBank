@@ -13,7 +13,7 @@
             }
             else
             {
-                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Details", "Manager", routeValues: null, htmlAttributes: new { title = "Details" })
+                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Details", "Managers", routeValues: null, htmlAttributes: new { title = "Details" })
             }
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>

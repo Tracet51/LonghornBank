@@ -17,8 +17,6 @@ namespace LonghornBank.Models
         public ApprovedorNeedsApproval ApprovalStatus { get; set; }
 
 
-        public ApprovedorNeedsApproval ApprovalStatus { get; set; }
-
         [Display(Name = "Cash Balance")]
         [Required(ErrorMessage = "A Cash Balance is Required")]
         [Column("CashBalance")]

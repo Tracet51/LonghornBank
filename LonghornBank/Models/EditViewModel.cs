@@ -53,4 +53,28 @@ namespace LonghornBank.Models
     {
         
     }
+
+    public class ManagerEditManager
+    {
+        [Required(ErrorMessage = "A Street Address is Required")]
+        [Display(Name = "Street Address")]
+
+        public String StreetAddress { get; set; }
+        [Required(ErrorMessage = "City is Required")]
+        [Display(Name = "City")]
+
+        public String City { get; set; }
+        [Required(ErrorMessage = "State is Required")]
+        [Display(Name = "State")]
+        public String State { get; set; }
+
+        [Display(Name = "Zip Code")]
+        [Required(ErrorMessage = "Zip Code is Required")]
+        public String Zip { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
+        [Required(ErrorMessage = "Phone Number is required")]
+        [Display(Name = "Phone Number")]
+        public String PhoneNumber { get; set; }
+    }
 }
