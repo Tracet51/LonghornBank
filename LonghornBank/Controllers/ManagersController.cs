@@ -153,6 +153,10 @@ namespace LonghornBank.Controllers
                 // Update the Database
                 var update = UserManager.Update(employee);
 
+                var roleRemove = UserManager.RemoveFromRole(employee.Id, "Employee");
+
+                var roleAdd = UserManager.AddToRole(employee.Id, "Fired");
+
                 // Save the databse and set the view
                 db.SaveChanges();
                 ViewBag.SuccessMessage = "You have successfully fired an employee.";
@@ -164,6 +168,10 @@ namespace LonghornBank.Controllers
 
                 // Update the database 
                 var update = UserManager.Update(employee);
+
+                var roleRemove = UserManager.RemoveFromRole(employee.Id, "Fired");
+
+                var roleAdd = UserManager.AddToRole(employee.Id, "Employee");
 
                 // Save the changes and update the database
                 db.SaveChanges();
@@ -719,6 +727,49 @@ namespace LonghornBank.Controllers
             }
 
             return RedirectToAction("DisplayAllEmployees", "Managers");
+        }
+
+        // GET: Managers/ChangeEmployeePassword
+        public ActionResult ChangeEmployeePassword(String id)
+        {
+            // Get the employee 
+            AppUser Employee = db.Users.Find(id);
+
+            // Set the View Model
+            ChangeEmployeePassword CEP = new Models.ChangeEmployeePassword
+            {
+                EmployeeID = Employee.Id,
+                EmployeeFName = Employee.FName,
+                EmployeeLName = Employee.LName
+            };
+
+            return View(CEP);
+        }
+
+        // POST: Managers/ChangeEmployeePassword
+        // Allows the manager to change an employee password
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeEmployeePassword(ChangeEmployeePassword TheChange)
+        {
+            // Get the employee
+            AppUser Employee = db.Users.Find(TheChange.EmployeeID);
+
+            // Check to see if the passwords are the same 
+            if (TheChange.Password != TheChange.ConfirmPassword)
+            {
+                return View(TheChange);
+            }
+
+            var Remove = await UserManager.RemovePasswordAsync(Employee.Id);
+
+            var UpdatePassword = await UserManager.AddPasswordAsync(Employee.Id, TheChange.Password);
+
+            db.Entry(Employee).State = EntityState.Modified;
+
+            await db.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Managers");
         }
 
         protected override void Dispose(bool disposing)

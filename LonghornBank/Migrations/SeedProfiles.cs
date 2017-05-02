@@ -35,6 +35,12 @@ namespace LonghornBank.Migrations
                 roleManager.Create(new AppRole("Employee"));
             }
 
+            // Check if Fired Role Exists 
+            if (roleManager.RoleExists("Fired") == false)
+            {
+                roleManager.Create(new AppRole("Fired"));
+            }
+
 
             AppUser b2 = new AppUser() { UserName = "t.jacobs@longhornbank.neet", Email = "t.jacobs@longhornbank.neet", FName = "Todd", LName = "Jacobs", MiddleInitial = Convert.ToChar("L"), StreetAddress = "4564 Elm St.", City = "Houston", State = "TX", Zip = "77003", PhoneNumber = "8176593544", SSN = "222222222", DOB = Convert.ToDateTime("1/1/1800") };
 

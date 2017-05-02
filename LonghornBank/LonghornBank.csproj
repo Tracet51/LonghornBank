@@ -417,6 +417,7 @@
     <Content Include="Views\Managers\EditEmployee.cshtml" />
     <Content Include="Views\Shared\AccountConfirmation.cshtml" />
     <Content Include="Views\Shared\WithDrawalError.cshtml" />
+    <Content Include="Views\Managers\ChangeEmployeePassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
