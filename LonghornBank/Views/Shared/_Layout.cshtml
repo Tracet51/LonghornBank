@@ -28,6 +28,10 @@
                 @if (User.IsInRole("Customer"))
                 {
                     @Html.ActionLink("Portal", "Portal", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink( "Deposit", "Deposit", "BankingTransactions", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink( "WithDrawal", "WithDrawal", "BankingTransactions", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Transfer", "Transfer", "BankingTransactions", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Transactions Home", "Index", "BankingTransactions", new { area = "" }, new { @class = "navbar-brand" })
                 }
                 @if (!User.IsInRole("Customer") && !User.IsInRole("Manager") && !User.IsInRole("Employee"))
                 {
