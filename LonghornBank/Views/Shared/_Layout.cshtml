@@ -23,7 +23,7 @@
                 </button>
                 @if (User.IsInRole("Manager"))
                 {
-                    @Html.ActionLink("Portal", "Portal", "Manager", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Portal", "Index", "Managers", new { area = "" }, new { @class = "navbar-brand" })
                 }
                 @if (User.IsInRole("Customer"))
                 {
@@ -32,6 +32,10 @@
                     @Html.ActionLink( "WithDrawal", "WithDrawal", "BankingTransactions", new { area = "" }, new { @class = "navbar-brand" })
                     @Html.ActionLink("Transfer", "Transfer", "BankingTransactions", new { area = "" }, new { @class = "navbar-brand" })
                     @Html.ActionLink("Transactions Home", "Index", "BankingTransactions", new { area = "" }, new { @class = "navbar-brand" })
+                }
+                @if (User.IsInRole("Employee") && !User.IsInRole("Manager"))
+                {
+                    @Html.ActionLink("Portal", "Portal", "Employees", new { area = "" }, new { @class = "navbar-brand" })
                 }
                 @if (!User.IsInRole("Customer") && !User.IsInRole("Manager") && !User.IsInRole("Employee"))
                 {

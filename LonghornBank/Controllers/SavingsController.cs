@@ -137,6 +137,9 @@ namespace LonghornBank.Controllers
                 if (saving.Balance > 5000m)
                 {
                     FirstDeposit = ApprovedorNeedsApproval.NeedsApproval;
+                    //Added by Carson 5/2
+                    saving.PendingBalance = saving.Balance;
+                    saving.Balance = 0;
                 }
                 else
                 {

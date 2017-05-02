@@ -6,8 +6,7 @@
 <h6>This is a list of deposits awaiting your approval. Check the box to approve</h6>
 
 <h5>@ViewBag.SuccessMessage</h5>
-@using (Html.BeginForm("DepositApproval", "Managers", FormMethod.Post))
-{
+
 <table class="table">
     <tr>
         <th>
@@ -31,6 +30,7 @@
         <th>
             Approve
         </th>
+        <th></th>
     </tr>
    
         @foreach (var item in Model)
@@ -54,20 +54,26 @@
                 <td>
                     @Html.DisplayFor(model => item.BankingTransaction.Description)
                 </td>
-                <td>
-                    @Html.CheckBox("Approve", true, new { @class = "form-check-input" })
-                    @Html.Hidden("ID", item.BankingTransaction.BankingTransactionID.ToString())
-                </td>
+                @using (Html.BeginForm("DepositApproval", "Managers", FormMethod.Post))
+                {
+                    <td>
+                        @Html.Hidden("BankingTransactionID", item.BankingTransaction.BankingTransactionID)
+                        
+                    </td>
+                    <td>
+                        <input type="submit" value="Submit" class="btn btn-success" />
+                    </td>
+                }
+                
             </tr>
         }
-
+    
 
 
 </table>
 
 
-<input type="submit" value="Submit" class="btn btn-success" />
-}
+
 
 <br />
 @Html.ActionLink("Manager Home", "Index", "Managers")

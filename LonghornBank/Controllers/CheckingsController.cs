@@ -109,7 +109,7 @@ namespace LonghornBank.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CheckingID, Balance, Name")] Checking checking)
         {
-
+            Decimal originaldeposit = checking.Balance;
             var CustomerQuery = from c in db.Users
                                where c.UserName == User.Identity.Name
                                select c;
@@ -145,6 +145,10 @@ namespace LonghornBank.Controllers
                 if (checking.Balance > 5000m)
                 {
                     FirstDeposit = ApprovedorNeedsApproval.NeedsApproval;
+                    //Added by Carson 5/2
+                    checking.PendingBalance = checking.Balance;
+                    checking.Balance = 0;
+                    
                 }
                 else
                 {
@@ -161,7 +165,7 @@ namespace LonghornBank.Controllers
                 // Create a new transaction 
                 BankingTransaction InitialDeposit = new BankingTransaction
                 {
-                    Amount = checking.Balance,
+                    Amount = originaldeposit,
                     ApprovalStatus = FirstDeposit,
                     BankingTransactionType = BankingTranactionType.Deposit,
                     Description = "Initial Deposit to Cash Balance",
