@@ -432,6 +432,9 @@ namespace LonghornBank.Controllers
                 // Check to see if the model state if valid
                 bankingTransaction.BankingTransactionType = BankingTranactionType.Deposit;
 
+                //Sets status to default of not disputed
+                bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
+
                 db.BankingTransaction.Add(bankingTransaction);
                 if (bankingTransaction.Amount <= 5000)
                 {
@@ -474,6 +477,9 @@ namespace LonghornBank.Controllers
                 // Check to see if the model state if valid
                 bankingTransaction.BankingTransactionType = BankingTranactionType.Deposit;
 
+                //Sets status to default of not disputed
+                bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
+
                 db.BankingTransaction.Add(bankingTransaction);
                 if (bankingTransaction.Amount <= 5000)
                 {
@@ -511,6 +517,9 @@ namespace LonghornBank.Controllers
                 List<IRA> NewIraAccounts = new List<IRA> { SelectedIra };
 
                 bankingTransaction.IRAAccount = NewIraAccounts;
+
+                //Sets status to default of not disputed
+                bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
 
                 if (SelectedIra.RunningTotal == 5000)
                 {
