@@ -89,6 +89,12 @@ namespace LonghornBank.Controllers
 
             AppUser customer = CustomerQuery.FirstOrDefault();
 
+            //Return frozen view if no go
+            if (customer.ActiveStatus == false)
+            {
+                return View("Frozen");
+            }
+
             if (customer == null)
             {
                 return HttpNotFound();
@@ -177,6 +183,20 @@ namespace LonghornBank.Controllers
         // GET: Savings/Edit/5
         public ActionResult Edit(int? id)
         {
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
+            //Return frozen view if no go
+            if (customer.ActiveStatus == false)
+            {
+                return View("Frozen");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

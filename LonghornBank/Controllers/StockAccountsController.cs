@@ -127,6 +127,12 @@ namespace LonghornBank.Controllers
             // Get the Customer 
             AppUser customer = CustomerQuery.FirstOrDefault();
 
+            //Return frozen view if no go
+            if (customer.ActiveStatus == false)
+            {
+                return View("Frozen");
+            }
+
             if (customer == null)
             {
                 return HttpNotFound();

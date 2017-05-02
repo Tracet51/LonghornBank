@@ -38,6 +38,19 @@ namespace LonghornBank.Controllers
         // GET: Payees/Create
         public ActionResult Create()
         {
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
+            if (customer.ActiveStatus == false)
+            {
+                return View("Frozen");
+            }
+
             return View();
         }
 
@@ -48,6 +61,7 @@ namespace LonghornBank.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "PayeeID,Name,StreetAddress,City,State,Zip,PhoneNumber,PayeeType")] Payee payee)
         { 
+
 
             if (ModelState.IsValid)
             {
@@ -62,6 +76,19 @@ namespace LonghornBank.Controllers
         // GET: Payees/Edit/5
         public ActionResult Edit(int? id)
         {
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
+            if (customer.ActiveStatus == false)
+            {
+                return View("Frozen");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -127,6 +154,11 @@ namespace LonghornBank.Controllers
 
             // Get the Customer 
             AppUser customer = CustomerQuery.FirstOrDefault();
+
+            if (customer.ActiveStatus == false)
+            {
+                return View("Frozen");
+            }
 
             if (customer == null)
             {

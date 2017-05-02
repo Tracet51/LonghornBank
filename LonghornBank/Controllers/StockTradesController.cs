@@ -242,6 +242,12 @@ namespace LonghornBank.Controllers
             // Get the Customer 
             AppUser customer = CustomerQuery.FirstOrDefault();
 
+            //Return frozen view if no go
+            if (customer.ActiveStatus == false)
+            {
+                return View("Frozen");
+            }
+
             // Get the Selected Stock
             StockMarket SelectedStock = db.StockMarket.Find(StockID);
 
@@ -654,6 +660,12 @@ namespace LonghornBank.Controllers
                                 select c;
             // Get the Customer 
             AppUser customer = CustomerQuery.FirstOrDefault();
+
+            //Return frozen view if no go
+            if (customer.ActiveStatus == false)
+            {
+                return View("Frozen");
+            }
 
             // Get the original trade 
             Trade OriginalTrade = db.Trades.Find(Sale.TradeID);
