@@ -9,12 +9,54 @@ using System.Web.Mvc;
 using LonghornBank.Models;
 using System.Net.Mail;
 using LonghornBank.Utility;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+using System.Threading.Tasks;
 
 
 namespace LonghornBank.Controllers
 {
     public class ManagersController : Controller
     {
+        private ApplicationSignInManager _signInManager;
+        private AppUserManager _userManager;
+
+        public ManagersController()
+        {
+        }
+
+        public ManagersController(AppUserManager userManager, ApplicationSignInManager signInManager)
+        {
+            UserManager = userManager;
+            SignInManager = signInManager;
+        }
+
+        public ApplicationSignInManager SignInManager
+        {
+            get
+            {
+                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+            }
+            private set
+            {
+                _signInManager = value;
+            }
+        }
+
+        public AppUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
         private AppDbContext db = new AppDbContext();
 
         // GET: Managers
@@ -87,34 +129,58 @@ namespace LonghornBank.Controllers
         //Get for Fire Employees
         public ActionResult FireEmployees()
         {
-            var query = from e in db.Employees
-                        select e;
-            List<Employee> employeelist = query.ToList();
-            return View(employeelist);
+            var QueryRole = from ri in db.Roles
+                            where ri.Name == "Employee"
+                            select ri.Id;
+
+            String RoleId = QueryRole.FirstOrDefault();
+
+            List<AppUser> Employees = db.Users
+                .Where(x => x.Roles.Select(y => y.RoleId).Contains(RoleId))
+                .ToList();
+
+            return View(Employees);
         }
         //Post for Fire Employees
         [HttpPost]
-        public ActionResult FireEmployees(Int32 EmployeeID, Boolean Fire)
+        public ActionResult FireEmployees(String EmployeeID, Boolean Fire)
         {
             if (Fire)
             {
-                Employee employee = db.Employees.Find(EmployeeID);
+                AppUser employee = db.Users.Find(EmployeeID);
                 employee.FiredStatus = true;
+
+                // Update the Database
+                var update = UserManager.Update(employee);
+
+                // Save the databse and set the view
                 db.SaveChanges();
                 ViewBag.SuccessMessage = "You have successfully fired an employee.";
             }
             if (Fire == false)
             {
-                Employee employee = db.Employees.Find(EmployeeID);
+                AppUser employee = db.Users.Find(EmployeeID);
                 employee.FiredStatus = false;
+
+                // Update the database 
+                var update = UserManager.Update(employee);
+
+                // Save the changes and update the database
                 db.SaveChanges();
                 ViewBag.SuccessMessage = "You have successfully rehired an employee.";
             }
 
-            var query = from e in db.Employees
-                        select e;
-            List<Employee> employeelist = query.ToList();
-            return View(employeelist);
+            var QueryRole = from ri in db.Roles
+                            where ri.Name == "Employee"
+                            select ri.Id;
+
+            String RoleId = QueryRole.FirstOrDefault();
+
+            List<AppUser> Employees = db.Users
+               .Where(x => x.Roles.Select(y => y.RoleId).Contains(RoleId))
+               .ToList();
+
+            return View(Employees);
         }
         //GET for approve stock accounts
         public ActionResult ApproveStockAccounts()
@@ -420,14 +486,15 @@ namespace LonghornBank.Controllers
             return RedirectToAction("DepositApproval", "Managers");
             //End Copied Get
         }
-        // GET: Managers/Details/5
-        public ActionResult Details(int? id)
+        // GET: Managers/Details/
+        public ActionResult Details()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Manager manager = db.Managers.Find(id);
+
+            var QueryManger = from m in db.Users
+                              where m.UserName == User.Identity.Name
+                              select m;
+            AppUser manager = QueryManger.FirstOrDefault();
+
             if (manager == null)
             {
                 return HttpNotFound();
@@ -441,36 +508,31 @@ namespace LonghornBank.Controllers
             return View();
         }
 
-        // POST: Managers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ManagerID,FName,LName,StreetAddress,City,State,Zip,EmailAddress,Password,PhoneNumber,SSN,ActiveStatus,FiredStatus")] Manager manager)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Managers.Add(manager);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(manager);
-        }
 
         // GET: Managers/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Manager manager = db.Managers.Find(id);
+            var QueryManger = from m in db.Users
+                              where m.UserName == User.Identity.Name
+                              select m;
+            AppUser manager = QueryManger.FirstOrDefault();
+
             if (manager == null)
             {
                 return HttpNotFound();
             }
-            return View(manager);
+
+            // Build out the view model 
+            Models.ManagerEditManager TheEdit = new ManagerEditManager
+            {
+                City = manager.City,
+                PhoneNumber = manager.PhoneNumber,
+                State = manager.State,
+                StreetAddress = manager.StreetAddress,
+                Zip = manager.Zip
+            };
+
+            return View(TheEdit);
         }
 
         // POST: Managers/Edit/5
@@ -478,61 +540,76 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ManagerID,FName,LName,StreetAddress,City,State,Zip,EmailAddress,Password,PhoneNumber,SSN,ActiveStatus,FiredStatus")] Manager manager)
+        public async Task<ActionResult> Edit(ManagerEditManager TheEdit)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(manager).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(manager);
-        }
+            // get the manager 
+            AppUser Manager = await UserManager.FindByNameAsync(User.Identity.Name);
 
-        // GET: Managers/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Manager manager = db.Managers.Find(id);
-            if (manager == null)
+            if (Manager == null)
             {
                 return HttpNotFound();
             }
-            return View(manager);
+
+            // Update the Manager 
+            Manager.City = TheEdit.City;
+            Manager.PhoneNumber = TheEdit.PhoneNumber;
+            Manager.StreetAddress = TheEdit.StreetAddress;
+            Manager.Zip = TheEdit.Zip;
+            Manager.State = TheEdit.State;
+
+            // Update the Database 
+            var upate = await UserManager.UpdateAsync(Manager);
+
+            db.SaveChanges();
+
+            return View("Index", "Managers");
         }
 
-        // POST: Managers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Manager manager = db.Managers.Find(id);
-            db.Managers.Remove(manager);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
 
         //FreezeEmployees GET
         public ActionResult FreezeEmployees()
         {
-            //IEnumerable<Employee> EmployeeList = db.Employees.ToList();
-            List<Employee> EmployeeList= db.Employees.ToList();
-            return View(EmployeeList);
+            var QueryRole = from ri in db.Roles
+                            where ri.Name == "Employee"
+                            select ri.Id;
+
+            String RoleId = QueryRole.FirstOrDefault();
+
+            List<AppUser> Employees = db.Users
+                .Where(x => x.Roles.Select(y => y.RoleId).Contains(RoleId))
+                .ToList();
+
+            return View(Employees);
         }
         //FreezeEmployees POST
         [HttpPost]
         public ActionResult FreezeEmployees(Boolean Freeze, String EmployeeID)
         {
             String idstring = Convert.ToString(EmployeeID);
-            Employee FreezingEmployee= db.Employees.Find(idstring);
+            AppUser FreezingEmployee= db.Users.Find(idstring);
+
+            // Set the Status
             FreezingEmployee.ActiveStatus = Freeze;
+
+            // Update the account 
+            var update = UserManager.Update(FreezingEmployee);
+
+            // Save the changes and set the confirmation message
             db.SaveChanges();
             ViewBag.ConfirmationMessage = "You have successfully frozen " + FreezingEmployee.FName + " " + FreezingEmployee.LName + "'s account.";
-            List<Employee> EmployeeList = db.Employees.ToList();
-            return View(EmployeeList);
+
+
+            var QueryRole = from ri in db.Roles
+                            where ri.Name == "Employee"
+                            select ri.Id;
+
+            String RoleId = QueryRole.FirstOrDefault();
+
+            List<AppUser> Employees = db.Users
+                .Where(x => x.Roles.Select(y => y.RoleId).Contains(RoleId))
+                .ToList();
+
+            return View(Employees);
         }
         public ActionResult FreezeCustomers()
         {
@@ -572,14 +649,76 @@ namespace LonghornBank.Controllers
 
         }
 
-        // GET: Managers/
+        // GET: Managers/AllEmployees
         public ActionResult DisplayAllEmployees()
         {
-            var QueryEmployee = from e in db.Users
-                                      where e.Roles== new AppRole("Employee")
-                                      select e;
+            var roleQuery = from ri in db.Roles
+                         where ri.Name == "Employee"
+                         select ri.Id;
 
-            return View();
+             String RoleId = roleQuery.FirstOrDefault();
+
+            List<AppUser> Employees = db.Users
+                .Where(x => x.Roles.Select(y => y.RoleId).Contains(RoleId))
+                .ToList();
+
+            return View(Employees);
+        }
+
+        // GET: Mangagers/EditEmployees/5
+        public ActionResult EditEmployee(string id)
+        {
+            if (id == null)
+            {
+                return View("Index", "Managers");
+            }
+            // Get the employee 
+            AppUser Employee = db.Users.Find(id);
+
+            if (Employee == null)
+            {
+                return View("Index", "Managers");
+            }
+
+            return View(Employee);
+        }
+
+        // POST: Managers/EditEmployee/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditEmployee(AppUser employee, Boolean RoleChange)
+        {
+            // Get the employee
+            var Employee = await UserManager.FindByNameAsync(employee.UserName);
+
+            // Update the Employee
+            Employee.City = employee.City;
+            Employee.PhoneNumber = employee.PhoneNumber;
+            Employee.State = employee.State;
+            Employee.StreetAddress = employee.StreetAddress;
+            Employee.Zip = employee.Zip;
+
+            // Comitt the update 
+            var update = await UserManager.UpdateAsync(Employee);
+
+            if (RoleChange == true)
+            {
+                Boolean InMangerRole = await (UserManager.IsInRoleAsync(employee.Id, "Manager"));
+                if (!InMangerRole)
+                {
+                    var role = await UserManager.AddToRoleAsync(employee.Id, "Manager");
+                }
+            }
+            else
+            {
+                Boolean InMangerRole =  await (UserManager.IsInRoleAsync(employee.Id, "Manager"));
+                if (InMangerRole == true)
+                {
+                    var role = await UserManager.RemoveFromRoleAsync(employee.Id, "Manager");
+                }
+            }
+
+            return RedirectToAction("DisplayAllEmployees", "Managers");
         }
 
         protected override void Dispose(bool disposing)

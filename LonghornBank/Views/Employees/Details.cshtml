@@ -1,4 +1,4 @@
-﻿@model LonghornBank.Models.Employee
+﻿@model LonghornBank.Models.AppUser
 
 @{
     ViewBag.Title = "Details";
@@ -59,19 +59,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EmailAddress)
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EmailAddress)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Password)
+            @Html.DisplayFor(model => model.Email)
         </dd>
 
         <dt>
@@ -82,33 +74,9 @@
             @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.SSN)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.SSN)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ActiveStatus)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ActiveStatus)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FiredStatus)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FiredStatus)
-        </dd>
-
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.EmployeeID }) |
+    @Html.ActionLink("Edit", "Edit") |
     @Html.ActionLink("Back to List", "Index")
 </p>

@@ -1,0 +1,31 @@
+﻿@model List<LonghornBank.Models.AppUser>
+@{
+    ViewBag.Title = "DisplayAllEmployees";
+}
+
+<h2>Display All Employees</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            First Name
+        </th>
+        <th>
+            Last Name
+        </th>
+        <th>
+            Active Status
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => user.FName)</td>
+            <td>@Html.DisplayFor(modelItem => user.LName)</td>
+            <td>@Html.DisplayFor(modelItem => user.ActiveStatus)</td>
+            <td>@Html.ActionLink("Edit", "EditEmployee", new { id = user.Id })</td>
+        </tr>
+    }
+</table>
+

@@ -64,11 +64,7 @@ namespace LonghornBank.Controllers
         {
             return View(db.Users.ToList());
         }
-        // GET: Employees
-        public ActionResult Index()
-        {
-            return View(db.Employees.ToList());
-        }
+
         public ActionResult CustomerDetails(String id)
         {
             if (id == null)
@@ -83,14 +79,16 @@ namespace LonghornBank.Controllers
             return View(customer);
         }
 
-        // GET: Employees/Details/5
-        public ActionResult Details(int? id)
+        // GET: Employees/Details/
+        // Show the employee the details of his profile
+        public ActionResult Details()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Employee employee = db.Employees.Find(id);
+            var QueryEmployee = from e in db.Users
+                                where e.UserName == User.Identity.Name
+                                select e;
+
+            AppUser employee = QueryEmployee.FirstOrDefault();
+
             if (employee == null)
             {
                 return HttpNotFound();
@@ -243,7 +241,7 @@ namespace LonghornBank.Controllers
             // Update the employee 
             var update = await UserManager.UpdateAsync(Employee);
 
-            return View("Portal", "Employees");
+            return RedirectToAction("Portal", "Employees");
         }
 
         // GET: Employees/ChangePassword
@@ -291,31 +289,6 @@ namespace LonghornBank.Controllers
             return View();
         }
 
-        // GET: Employees/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
-            {
-                return HttpNotFound();
-            }
-            return View(employee);
-        }
-
-        // POST: Employees/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Employee employee = db.Employees.Find(id);
-            db.Employees.Remove(employee);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
          
         protected override void Dispose(bool disposing)
         {
