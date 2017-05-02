@@ -53,6 +53,9 @@ namespace LonghornBank.Models
         [Required(ErrorMessage = "An Active Status is Required")]
         public Boolean ActiveStatus { get; set; }
 
+        [Display(Name = "Fired Status")]
+        public Boolean FiredStatus { get; set; }
+
         [Display(Name = "SSN")]
         public String SSN { get; set; }
 

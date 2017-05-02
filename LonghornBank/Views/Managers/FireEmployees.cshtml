@@ -1,0 +1,87 @@
+﻿@model IEnumerable<LonghornBank.Models.Employee>
+
+@{
+    ViewBag.Title = "FireEmployees";
+}
+
+<h2>Fire/Rehire Employees</h2>
+
+@ViewBag.SuccessMessage
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmailAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SSN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ActiveStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FiredStatus)
+        </th>
+        <th>
+            Fire
+        </th>
+        <th>
+           Re-Hire
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmailAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PhoneNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SSN)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ActiveStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FiredStatus)
+        </td>
+        
+            @using (Html.BeginForm("FireEmployees", "Managers", FormMethod.Post))
+            {   @Html.HiddenFor(modelItem => item.EmployeeID, new { Name = "EmployeeID" })
+            <td>
+                @Html.RadioButton("Fire", true, new { @class = "form-check-input" })             
+            </td>
+            <td>
+                @Html.RadioButton("Fire", false, new { @class = "form-check-input" })
+            </td>
+            <td>
+
+                <input type="submit" value="Update" class="btn btn-danger" />
+            </td>
+
+            }
+         
+    </tr>
+}
+
+</table>
+<br />
+<br />
+@Html.ActionLink("Manager Home", "Index", "Managers")
