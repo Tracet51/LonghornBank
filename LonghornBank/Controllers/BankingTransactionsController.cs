@@ -668,6 +668,8 @@ namespace LonghornBank.Controllers
 
             bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
 
+            Decimal Other_Fee = 0;
+
             if (CheckingID != 0)
             {
 
@@ -694,15 +696,25 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer from " + SelectedChecking.AccountNumber;
 
                     //Take money from checking
-                    if (bankingTransaction.Amount <= SelectedChecking.Balance)
+                    if (bankingTransaction.Amount <= SelectedChecking.Balance - 50 && SelectedChecking.Balance >= 0)
                     {
-                        //TODO: Write error message for invalid WithDrawal
 
                         Decimal New_Balance = SelectedChecking.Balance - bankingTransaction.Amount;
                         SelectedChecking.Balance = New_Balance;
 
                         Decimal New_Transfer_Balance = CheckingTrans.Balance + bankingTransaction.Amount;
                         CheckingTrans.Balance = New_Transfer_Balance;
+
+                        if (SelectedChecking.Balance - bankingTransaction.Amount < 0 && SelectedChecking.Balance - bankingTransaction.Amount >= -50)
+                        {
+                            SelectedChecking.Balance -= 30;
+                            bankingTransaction.Description = "OverDrawnFee";
+                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
+                            bankingTransaction.Amount = 30;
+                            db.BankingTransaction.Add(bankingTransaction);
+                            db.SaveChanges();
+                        }
+                       
                     }
 
                     else
@@ -743,15 +755,26 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer from " + SelectedChecking.AccountNumber;
 
                     //Adds money to account
-                    if (bankingTransaction.Amount <= SelectedChecking.Balance)
+                    if (bankingTransaction.Amount <= SelectedChecking.Balance - 50 && SelectedChecking.Balance >= 0)
                     {
-                        //TODO: Write error message for invalid WithDrawal
 
                         Decimal New_Balance = SavingsTrans.Balance + bankingTransaction.Amount;
                         SavingsTrans.Balance = New_Balance;
 
                         Decimal New_Transfer_Balance = SelectedChecking.Balance - bankingTransaction.Amount;
                         SelectedChecking.Balance = New_Transfer_Balance;
+
+
+                        if (SelectedChecking.Balance - bankingTransaction.Amount < 0 && SelectedChecking.Balance - bankingTransaction.Amount >= -50)
+                        {
+                            SelectedChecking.Balance -= 30;
+                            bankingTransaction.Description = "OverDrawnFee";
+                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
+                            bankingTransaction.Amount = 30;
+                            db.BankingTransaction.Add(bankingTransaction);
+                            db.SaveChanges();
+                        }
+                        
                     }
                     else
                     {
@@ -797,7 +820,7 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer from " + SelectedChecking.AccountNumber;
 
                     //Adds money to account
-                    if (bankingTransaction.Amount <= SelectedChecking.Balance)
+                    if (bankingTransaction.Amount <= SelectedChecking.Balance - 50 && SelectedChecking.Balance >= 0)
                     {
 
                         Decimal New_Balance = IRATrans.RunningTotal + bankingTransaction.Amount;
@@ -858,15 +881,25 @@ namespace LonghornBank.Controllers
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
 
                     //Adds money to account
-                    if (bankingTransaction.Amount <= SelectedChecking.Balance)
+                    if (bankingTransaction.Amount <= SelectedChecking.Balance - 50 && SelectedChecking.Balance >= 0)
                     {
-                        //TODO: Write error message for invalid WithDrawal
 
                         Decimal New_Balance = StockAccountTrans.CashBalance + bankingTransaction.Amount;
                         StockAccountTrans.CashBalance = New_Balance;
 
                         Decimal New_Transfer_Balance = SelectedChecking.Balance - bankingTransaction.Amount;
                         SelectedChecking.Balance = New_Transfer_Balance;
+
+                        if (SelectedChecking.Balance - bankingTransaction.Amount < 0 && SelectedChecking.Balance - bankingTransaction.Amount >= -50)
+                        {
+                            SelectedChecking.Balance -= 30;
+                            bankingTransaction.Description = "OverDrawnFee";
+                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
+                            bankingTransaction.Amount = 30;
+                            db.BankingTransaction.Add(bankingTransaction);
+                            db.SaveChanges();
+                        }
+
                     }
                     else
                     {
@@ -922,8 +955,9 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer from " + SelectedSavings.AccountNumber;
 
                     //Adds money from savings to checking account
-                    if (bankingTransaction.Amount <= SelectedSavings.Balance)
+                    if (bankingTransaction.Amount <= SelectedSavings.Balance - 50 && SelectedSavings.Balance >= 0)
                     {
+
                         //Adds money to transferred account
                         Decimal New_Balance = CheckingTrans.Balance + bankingTransaction.Amount;
                         CheckingTrans.Balance = New_Balance;
@@ -931,6 +965,17 @@ namespace LonghornBank.Controllers
                         //Takes away money from account being withdrawn from 
                         Decimal New_Transfer_Balance = SelectedSavings.Balance - bankingTransaction.Amount;
                         SelectedSavings.Balance = New_Transfer_Balance;
+
+                        if (SelectedSavings.Balance - bankingTransaction.Amount < 0 && SelectedSavings.Balance - bankingTransaction.Amount >= -50)
+                        {
+                            SelectedSavings.Balance -= 30;
+                            bankingTransaction.Description = "OverDrawnFee";
+                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
+                            bankingTransaction.Amount = 30;
+                            db.BankingTransaction.Add(bankingTransaction);
+                            db.SaveChanges();
+                        }
+
                     }
                     else
                     {
@@ -970,8 +1015,9 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer from " + SelectedSavings.AccountNumber;
 
                     //Adds money from savings to checking account
-                    if (bankingTransaction.Amount <= SelectedSavings.Balance)
+                    if (bankingTransaction.Amount <= SelectedSavings.Balance - 50 && SelectedSavings.Balance >= 0)
                     {
+
                         //Adds money to transferred account
                         Decimal New_Balance = SavingsTrans.Balance + bankingTransaction.Amount;
                         SavingsTrans.Balance = New_Balance;
@@ -979,6 +1025,17 @@ namespace LonghornBank.Controllers
                         //Takes away money from account being withdrawn from 
                         Decimal New_Transfer_Balance = SelectedSavings.Balance - bankingTransaction.Amount;
                         SelectedSavings.Balance = New_Transfer_Balance;
+
+                        if (SelectedSavings.Balance - bankingTransaction.Amount < 0 && SelectedSavings.Balance - bankingTransaction.Amount >= -50)
+                        {
+                            SelectedSavings.Balance -= 30;
+                            bankingTransaction.Description = "OverDrawnFee";
+                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
+                            bankingTransaction.Amount = 30;
+                            db.BankingTransaction.Add(bankingTransaction);
+                            db.SaveChanges();
+                        }
+
                     }
                     else
                     {
@@ -1019,7 +1076,7 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer from " + SelectedSavings.AccountNumber;
 
                     //Adds money to account
-                    if (bankingTransaction.Amount <= SelectedSavings.Balance)
+                    if (bankingTransaction.Amount <= SelectedSavings.Balance - 50 && SelectedSavings.Balance >= 0)
                     {
 
                         Decimal New_Balance = IRATrans.RunningTotal + bankingTransaction.Amount;
@@ -1073,15 +1130,25 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer from " + SelectedSavings.AccountNumber;
 
                     //Adds money to account
-                    if (bankingTransaction.Amount <= SelectedSavings.Balance)
+                    if (bankingTransaction.Amount <= SelectedSavings.Balance - 50 && SelectedSavings.Balance >= 0)
                     {
-                        //TODO: Write error message for invalid WithDrawal
 
                         Decimal New_Balance = StockAccountTrans.CashBalance + bankingTransaction.Amount;
                         StockAccountTrans.CashBalance = New_Balance;
 
                         Decimal New_Transfer_Balance = SelectedSavings.Balance - bankingTransaction.Amount;
                         SelectedSavings.Balance = New_Transfer_Balance;
+
+                        if (SelectedSavings.Balance - bankingTransaction.Amount < 0 && SelectedSavings.Balance - bankingTransaction.Amount >= -50)
+                        {
+                            SelectedSavings.Balance -= 30;
+                            bankingTransaction.Description = "OverDrawnFee";
+                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
+                            bankingTransaction.Amount = 30;
+                            db.BankingTransaction.Add(bankingTransaction);
+                            db.SaveChanges();
+                        }
+
                     }
 
                     else
@@ -1150,7 +1217,7 @@ namespace LonghornBank.Controllers
                         }
                         else
                         {
-                            if (bankingTransaction.Amount <= SelectedIRA.Balance)
+                            if (bankingTransaction.Amount <= SelectedIRA.Balance - 50)
                             {
                                 if (bankingTransaction.Amount > 3000)
                                 {
@@ -1209,7 +1276,7 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer From " + SelectedIRA;
 
                     //Adds money from savings to checking account
-                    if (bankingTransaction.Amount <= SelectedIRA.Balance)
+                    if (bankingTransaction.Amount <= SelectedIRA.Balance - 50 && SelectedIRA.Balance >= 0)
                     {
                         //Adds money to transferred account
                         Decimal New_Balance = SavingTrans.Balance + bankingTransaction.Amount;
@@ -1217,7 +1284,7 @@ namespace LonghornBank.Controllers
 
                         if (Customer.DOB <= Restrict1)
                         {
-                            if (bankingTransaction.Amount <= SelectedIRA.Balance)
+                            if (bankingTransaction.Amount <= SelectedIRA.Balance - 50 && SelectedIRA.Balance >= 0)
                             {
                                 Decimal Transfer = SelectedIRA.Balance - bankingTransaction.Amount;
                                 SelectedIRA.Balance = Transfer;
@@ -1231,7 +1298,7 @@ namespace LonghornBank.Controllers
                         }
                         else
                         {
-                            if (bankingTransaction.Amount <= SelectedIRA.Balance)
+                            if (bankingTransaction.Amount <= SelectedIRA.Balance - 50 && SelectedIRA.Balance >= 0)
                             {
 
                                 if (bankingTransaction.Amount > 3000)
@@ -1284,7 +1351,7 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer From " + SelectedIRA;
 
                     //Adds money from savings to checking account
-                    if (bankingTransaction.Amount <= SelectedIRA.Balance)
+                    if (bankingTransaction.Amount <= SelectedIRA.Balance - 50 && SelectedIRA.Balance >= 0)
                     {
                         //Adds money to transferred account
                         Decimal New_Balance = StockAccountTrans.CashBalance + bankingTransaction.Amount;
@@ -1292,7 +1359,7 @@ namespace LonghornBank.Controllers
 
                         if (Customer.DOB <= Restrict1)
                         {
-                            if (bankingTransaction.Amount <= SelectedIRA.Balance)
+                            if (bankingTransaction.Amount <= SelectedIRA.Balance - 50 && SelectedIRA.Balance >= 0)
                             {
                                 Decimal Transfer = SelectedIRA.Balance - bankingTransaction.Amount;
                                 SelectedIRA.Balance = Transfer;
@@ -1306,7 +1373,7 @@ namespace LonghornBank.Controllers
                         }
                         else
                         {
-                            if (bankingTransaction.Amount <= SelectedIRA.Balance)
+                            if (bankingTransaction.Amount <= SelectedIRA.Balance - 50 && SelectedIRA.Balance >= 0)
                             {
                                 if (bankingTransaction.Amount > 3000)
                                 {
@@ -1376,15 +1443,26 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer From " + SelectedStockAccount;
 
                     //Adds money from savings to checking account
-                    if (bankingTransaction.Amount <= SelectedStockAccount.CashBalance)
+                    if (bankingTransaction.Amount <= SelectedStockAccount.CashBalance - 50 && SelectedStockAccount.CashBalance >=0)
                     {
-                        //Adds money to transferred account
                         Decimal New_Balance = CheckingTrans.Balance + bankingTransaction.Amount;
                         CheckingTrans.Balance = New_Balance;
 
                         //Takes away money from account being withdrawn from 
                         Decimal New_Transfer_Balance = SelectedStockAccount.CashBalance - bankingTransaction.Amount;
                         SelectedStockAccount.CashBalance = New_Transfer_Balance;
+
+                        if (SelectedStockAccount.CashBalance - bankingTransaction.Amount < 0 && SelectedStockAccount.CashBalance - bankingTransaction.Amount >= -50)
+                        {
+                            SelectedStockAccount.CashBalance -= 30;
+                            bankingTransaction.Description = "OverDrawnFee";
+                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
+                            bankingTransaction.Amount = 30;
+                            db.BankingTransaction.Add(bankingTransaction);
+                            db.SaveChanges();
+                        }
+
+
                     }
                     else
                     {
@@ -1425,7 +1503,7 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer From " + SelectedStockAccount;
 
                     //Adds money from savings to checking account
-                    if (bankingTransaction.Amount <= SelectedStockAccount.CashBalance)
+                    if (bankingTransaction.Amount <= SelectedStockAccount.CashBalance - 50 && SelectedStockAccount.CashBalance >= 0)
                     {
                         //Adds money to transferred account
                         Decimal New_Balance = SavingsTrans.Balance + bankingTransaction.Amount;
@@ -1434,6 +1512,17 @@ namespace LonghornBank.Controllers
                         //Takes away money from account being withdrawn from 
                         Decimal New_Transfer_Balance = SelectedStockAccount.CashBalance - bankingTransaction.Amount;
                         SelectedStockAccount.CashBalance = New_Transfer_Balance;
+
+
+                        if (SelectedStockAccount.CashBalance - bankingTransaction.Amount < 0 && SelectedStockAccount.CashBalance - bankingTransaction.Amount >= -50)
+                        {
+                            SelectedStockAccount.CashBalance -= 30;
+                            bankingTransaction.Description = "OverDrawnFee";
+                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
+                            bankingTransaction.Amount = 30;
+                            db.BankingTransaction.Add(bankingTransaction);
+                            db.SaveChanges();
+                        }
                     }
                     else
                     {
@@ -1474,7 +1563,7 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer From " + SelectedStockAccount;
 
                     //Adds money to account
-                    if (bankingTransaction.Amount <= SelectedStockAccount.CashBalance)
+                    if (bankingTransaction.Amount <= SelectedStockAccount.CashBalance - 50 && SelectedStockAccount.CashBalance >= 0)
                     {
 
                         Decimal New_Balance = IRATrans.RunningTotal + bankingTransaction.Amount;
@@ -1973,6 +2062,7 @@ namespace LonghornBank.Controllers
             bankingTransaction.TransactionDate = ErrorAction.PayeeTransaction.TransactionDate;
             bankingTransaction.BankingTransactionID = ErrorAction.PayeeTransaction.BankingTransactionID;
             bankingTransaction.BankingTransactionType = ErrorAction.PayeeTransaction.BankingTransactionType;
+            bankingTransaction.Amount = ErrorAction.PayeeTransaction.Amount;
 
             // Check to see if Deposit 
             if (bankingTransaction.BankingTransactionType == BankingTranactionType.Withdrawl)
@@ -2058,7 +2148,7 @@ namespace LonghornBank.Controllers
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
 
-                            Decimal Transfer_Balance = ErrorAction.SavingAccounts.Balance + bankingTransaction.Amount;
+                            Decimal Transfer_Balance = SelectedSaving.Balance + bankingTransaction.Amount;
                             SelectedSaving.Balance = Transfer_Balance;
                             bankingTransaction.Description = "Transfer from " + IRAact;
 
@@ -2075,16 +2165,14 @@ namespace LonghornBank.Controllers
 
                             String Cact = SelectedChecking.AccountNumber;
 
-                            Decimal New_Balance = SelectedIra.Balance - ErrorAction.PayeeTransaction.Amount;
+                            Decimal New_Balance = SelectedIra.Balance - bankingTransaction.Amount;
                             SelectedIra.Balance = New_Balance;
                             bankingTransaction.Description = "Transfer to " + Cact;
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
 
-                            Decimal Transfer_Balance = ErrorAction.CheckingAccounts.Balance + ErrorAction.PayeeTransaction.Amount;
+                            Decimal Transfer_Balance = SelectedChecking.Balance + bankingTransaction.Amount;
                             SelectedChecking.Balance = Transfer_Balance;
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
-                            bankingTransaction.TransactionDate = ErrorAction.PayeeTransaction.TransactionDate;
                             bankingTransaction.Description = "Transfer from " + IRAact;
 
                             db.BankingTransaction.Add(bankingTransaction);
@@ -2103,11 +2191,9 @@ namespace LonghornBank.Controllers
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
 
-                            Decimal Transfer_Balance = ErrorAction.StockAccounts.CashBalance + bankingTransaction.Amount;
+                            Decimal Transfer_Balance = SelectedStockAccount.CashBalance + bankingTransaction.Amount;
                             SelectedStockAccount.CashBalance = Transfer_Balance;
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
-                            bankingTransaction.TransactionDate = ErrorAction.PayeeTransaction.TransactionDate;
-                            bankingTransaction.Description = "Transfer from " + ErrorAction.IRAAccounts.AccountNumber;
+                            bankingTransaction.Description = "Transfer from " + IRAact;
 
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
@@ -2126,7 +2212,9 @@ namespace LonghornBank.Controllers
 
                     case "Include":
 
-                        if (ErrorAction.SavingAccounts.SavingID != 0)
+                        bankingTransaction.Amount = bankingTransaction.Amount - 30;
+
+                        if (ErrorAction.CheckingAccounts.CheckingID != 0)
                         {
                             Checking SelectedChecking = db.CheckingAccount.Find(ErrorAction.SavingAccounts.SavingID);
 
@@ -2135,44 +2223,40 @@ namespace LonghornBank.Controllers
 
                             String Cact = SelectedChecking.AccountNumber;
 
-                            Decimal New_Balance = SelectedIra.Balance - ErrorAction.PayeeTransaction.Amount;
+                            Decimal New_Balance = SelectedIra.Balance - bankingTransaction.Amount;
                             SelectedIra.Balance = New_Balance;
                             bankingTransaction.Description = "Transfer to " + Cact;
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
 
-                            Decimal Transfer_Balance = ErrorAction.SavingAccounts.Balance + ErrorAction.PayeeTransaction.Amount - 30;
-                            ErrorAction.SavingAccounts.Balance = Transfer_Balance;
+                            Decimal Transfer_Balance = SelectedChecking.Balance + bankingTransaction.Amount ;
+                            SelectedChecking.Balance = Transfer_Balance;
                             bankingTransaction.Amount = Transfer_Balance;
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
-                            bankingTransaction.TransactionDate = ErrorAction.PayeeTransaction.TransactionDate;
-                            bankingTransaction.Description = "Transfer from " + ErrorAction.IRAAccounts.AccountNumber;
+                            bankingTransaction.Description = "Transfer from " + IRAact;
 
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
                         }
 
-                        else if (ErrorAction.CheckingAccounts.CheckingID != 0)
+                        else if (ErrorAction.SavingAccounts.SavingID != 0)
                         {
-                            Checking SelectedChecking = db.CheckingAccount.Find(ErrorAction.SavingAccounts.SavingID);
+                            Saving SelectedSaving = db.SavingsAccount.Find(ErrorAction.SavingAccounts.SavingID);
 
                             // Create a list of checking accounts and add the one seleceted 
-                            List<Checking> NewCheckingAccounts = new List<Checking> { SelectedChecking };
+                            List<Saving> NewSavingAccounts = new List<Saving> { SelectedSaving };
 
-                            String Cact = SelectedChecking.AccountNumber;
+                            String Sact = SelectedSaving.AccountNumber;
 
                             Decimal New_Balance = SelectedIra.Balance - ErrorAction.PayeeTransaction.Amount;
                             SelectedIra.Balance = New_Balance;
-                            bankingTransaction.Description = "Transfer to " + Cact;
+
+                            bankingTransaction.Description = "Transfer to " + Sact;
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
 
-                            Decimal Transfer_Balance = ErrorAction.CheckingAccounts.Balance + ErrorAction.PayeeTransaction.Amount - 30;
-                            ErrorAction.CheckingAccounts.Balance = Transfer_Balance;
-                            bankingTransaction.Amount = Transfer_Balance;
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
-                            bankingTransaction.TransactionDate = ErrorAction.PayeeTransaction.TransactionDate;
-                            bankingTransaction.Description = "Transfer from " + ErrorAction.IRAAccounts.AccountNumber;
+                            Decimal Transfer_Balance = SelectedSaving.Balance + bankingTransaction.Amount;
+                            SelectedSaving.Balance = Transfer_Balance;
+                            bankingTransaction.Description = "Transfer from " + IRAact;
 
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
@@ -2190,12 +2274,9 @@ namespace LonghornBank.Controllers
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
 
-                            Decimal Transfer_Balance = ErrorAction.StockAccounts.CashBalance + ErrorAction.PayeeTransaction.Amount - 30;
-                            ErrorAction.StockAccounts.CashBalance = Transfer_Balance;
-                            bankingTransaction.Amount = Transfer_Balance;
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
-                            bankingTransaction.TransactionDate = ErrorAction.PayeeTransaction.TransactionDate;
-                            bankingTransaction.Description = "Transfer from " + ErrorAction.IRAAccounts.AccountNumber;
+                            Decimal Transfer_Balance = SelectedStockAccount.CashBalance + bankingTransaction.Amount;
+                            SelectedStockAccount.CashBalance = Transfer_Balance;
+                            bankingTransaction.Description = "Transfer from " + IRAact;
 
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
@@ -2204,7 +2285,6 @@ namespace LonghornBank.Controllers
                         Decimal Fee2 = SelectedIra.Balance - 30;
                         bankingTransaction.Description = "Unqualified WithDrawal fee";
                         bankingTransaction.TransactionDate = ErrorAction.PayeeTransaction.TransactionDate;
-                        bankingTransaction.BankingTransactionID = ErrorAction.PayeeTransaction.BankingTransactionID;
                         bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                         bankingTransaction.Amount = 30;
                         db.BankingTransaction.Add(bankingTransaction);

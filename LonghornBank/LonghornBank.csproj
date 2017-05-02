@@ -247,7 +247,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -269,6 +271,10 @@
     <Compile Include="Controllers\StockTradesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705021650049_initialsetup.cs" />
+    <Compile Include="Migrations\201705021650049_initialsetup.Designer.cs">
+      <DependentUpon>201705021650049_initialsetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
@@ -417,6 +423,11 @@
     <Content Include="Views\Managers\EditEmployee.cshtml" />
     <Content Include="Views\Shared\AccountConfirmation.cshtml" />
     <Content Include="Views\Shared\WithDrawalError.cshtml" />
+    <Content Include="Views\BankingTransactions\IRAWithDrawalError.cshtml" />
+    <Content Include="Views\BankingTransactions\NoMoreDeposits.cshtml" />
+    <Content Include="Views\BankingTransactions\Transfer.cshtml" />
+    <Content Include="Views\BankingTransactions\UnqualifiedMax.cshtml" />
+    <Content Include="Views\BankingTransactions\WithDrawal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -426,6 +437,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201705021650049_initialsetup.resx">
+      <DependentUpon>201705021650049_initialsetup.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
