@@ -420,6 +420,11 @@
     <Content Include="Views\Managers\ApproveStockAccounts.cshtml" />
     <Content Include="Views\Managers\FireEmployees.cshtml" />
     <Content Include="Views\Employees\ChangePassword.cshtml" />
+    <Content Include="Views\BankingTransactions\IRAWithDrawalError.cshtml" />
+    <Content Include="Views\BankingTransactions\NoMoreDeposits.cshtml" />
+    <Content Include="Views\BankingTransactions\Transfer.cshtml" />
+    <Content Include="Views\BankingTransactions\UnqualifiedMax.cshtml" />
+    <Content Include="Views\BankingTransactions\WithDrawal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -556,6 +556,7 @@ namespace LonghornBank.Controllers
             var CustomerQuery = from c in db.Users
                                 where c.Email == User.Identity.Name
                                 select c;
+
             AppUser Customer = CustomerQuery.FirstOrDefault();
 
             // Populate a list of Checking Accounts
@@ -2042,17 +2043,14 @@ namespace LonghornBank.Controllers
 
                             String SaAct = SelectedSaving.AccountNumber;
 
-                            Decimal New_Balance = SelectedIra.Balance - ErrorAction.PayeeTransaction.Amount;
+                            Decimal New_Balance = SelectedIra.Balance - bankingTransaction.Amount;
                             SelectedIra.Balance = New_Balance;
                             bankingTransaction.Description = "Transfer to " + SaAct;
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
 
-                            Decimal Transfer_Balance = ErrorAction.SavingAccounts.Balance + ErrorAction.PayeeTransaction.Amount;
-                            ErrorAction.SavingAccounts.Balance = Transfer_Balance;
-                            bankingTransaction.Amount = Transfer_Balance;
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
-                            bankingTransaction.TransactionDate = ErrorAction.PayeeTransaction.TransactionDate;
+                            Decimal Transfer_Balance = ErrorAction.SavingAccounts.Balance + bankingTransaction.Amount;
+                            SelectedSaving.Balance = Transfer_Balance;
                             bankingTransaction.Description = "Transfer from " + IRAact;
 
                             db.BankingTransaction.Add(bankingTransaction);
@@ -2075,8 +2073,7 @@ namespace LonghornBank.Controllers
                             db.SaveChanges();
 
                             Decimal Transfer_Balance = ErrorAction.CheckingAccounts.Balance + ErrorAction.PayeeTransaction.Amount;
-                            ErrorAction.CheckingAccounts.Balance = Transfer_Balance;
-                            bankingTransaction.Amount = Transfer_Balance;
+                            SelectedChecking.Balance = Transfer_Balance;
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
                             bankingTransaction.TransactionDate = ErrorAction.PayeeTransaction.TransactionDate;
                             bankingTransaction.Description = "Transfer from " + IRAact;
@@ -2091,15 +2088,14 @@ namespace LonghornBank.Controllers
 
                             String STact = SelectedStockAccount.AccountNumber;
 
-                            Decimal New_Balance = SelectedIra.Balance - ErrorAction.PayeeTransaction.Amount;
+                            Decimal New_Balance = SelectedIra.Balance - bankingTransaction.Amount;
                             SelectedIra.Balance = New_Balance;
                             bankingTransaction.Description = "Transfer to " + STact;
                             db.BankingTransaction.Add(bankingTransaction);
                             db.SaveChanges();
 
-                            Decimal Transfer_Balance = ErrorAction.StockAccounts.CashBalance + ErrorAction.PayeeTransaction.Amount;
-                            ErrorAction.StockAccounts.CashBalance = Transfer_Balance;
-                            bankingTransaction.Amount = Transfer_Balance;
+                            Decimal Transfer_Balance = ErrorAction.StockAccounts.CashBalance + bankingTransaction.Amount;
+                            SelectedStockAccount.CashBalance = Transfer_Balance;
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
                             bankingTransaction.TransactionDate = ErrorAction.PayeeTransaction.TransactionDate;
                             bankingTransaction.Description = "Transfer from " + ErrorAction.IRAAccounts.AccountNumber;
