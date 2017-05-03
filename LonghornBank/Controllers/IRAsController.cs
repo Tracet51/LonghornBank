@@ -66,6 +66,7 @@ namespace LonghornBank.Controllers
             ViewBag.IraTransactions = IRATransactions;
             ViewBag.Ranges = SearchTransactions.AmountRange();
             ViewBag.Dates = SearchTransactions.DateRanges();
+            ViewBag.ResultsCount = IRATransactions.Count;
             return View(ira);
         }
 
@@ -79,6 +80,7 @@ namespace LonghornBank.Controllers
             ViewBag.IraTransactions = IraTransactions;
             ViewBag.Ranges = SearchTransactions.AmountRange();
             ViewBag.Dates = SearchTransactions.DateRanges();
+            ViewBag.ResultsCount = IraTransactions.Count;
             return View("Details", ira);
         }
 

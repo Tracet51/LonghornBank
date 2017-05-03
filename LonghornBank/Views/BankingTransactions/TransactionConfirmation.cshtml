@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "TransactionConfirmation";
+
+}
+
+<h2>Transaction Confirmation</h2>
+<h3>Congratulations your @ViewBag.TransactionType was successful!</h3>
+@Html.ActionLink("Go to Portal", "Portal", "Home", null, new { @class = "btn btn-primary"})
+

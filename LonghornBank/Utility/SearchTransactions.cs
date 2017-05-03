@@ -141,15 +141,22 @@ namespace LonghornBank.Utility
 
             if (!String.IsNullOrEmpty(TheSearch.BeginSearchDate) && !String.IsNullOrEmpty(TheSearch.EndSearchDate) && (TheSearch.DateRange == 0 || TheSearch.DateRange == 4))
             {
-                // Convert to Datetime 
-                DateTime BeginDate = Convert.ToDateTime(TheSearch.BeginSearchDate);
-                DateTime EndDate = Convert.ToDateTime(TheSearch.EndSearchDate);
-
-                if (BeginDate < DateTime.Today && EndDate > BeginDate && (TheSearch.DateRange == 0 || TheSearch.DateRange == 4))
+                DateTime BeginDate;
+                DateTime EndDate;
+                try
                 {
-                    Transactions = Transactions.Where(c => c.TransactionDate >= BeginDate && c.TransactionDate <= EndDate).ToList();
-                }
+                    // Convert to Datetime 
+                    BeginDate = Convert.ToDateTime(TheSearch.BeginSearchDate);
+                    EndDate = Convert.ToDateTime(TheSearch.EndSearchDate);
 
+                    if (BeginDate < DateTime.Today && EndDate > BeginDate && (TheSearch.DateRange == 0 || TheSearch.DateRange == 4))
+                    {
+                        Transactions = Transactions.Where(c => c.TransactionDate >= BeginDate && c.TransactionDate <= EndDate).ToList();
+                    }
+                }
+                catch (Exception)
+                {
+                }
             }
 
             //0 should indicate searching for all dates
@@ -176,7 +183,7 @@ namespace LonghornBank.Utility
 
             if (TheSearch.SearchTransactionNumber != null)
             {
-                Transactions = Transactions.Where(c => c.Description.Contains(TheSearch.SearchTransactionNumber)).ToList();
+                Transactions = Transactions.Where(c => c.BankingTransactionID == Convert.ToInt32(TheSearch.SearchTransactionNumber)).ToList();
             }
 
             //Order Trans ID ascending

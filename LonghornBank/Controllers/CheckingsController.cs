@@ -68,6 +68,7 @@ namespace LonghornBank.Controllers
             ViewBag.CheckingTransactions = CheckingTransactions;
             ViewBag.Ranges = SearchTransactions.AmountRange();
             ViewBag.Dates = SearchTransactions.DateRanges();
+            ViewBag.ResultsCount = CheckingTransactions.Count;
 
             return View(checking);
         }
@@ -81,6 +82,7 @@ namespace LonghornBank.Controllers
             ViewBag.CheckingTransactions = Transactions;
             ViewBag.Ranges = SearchTransactions.AmountRange();
             ViewBag.Dates = SearchTransactions.DateRanges();
+            ViewBag.ResultsCount = Transactions.Count;
             return View("Details", checking);
         }
 
@@ -182,7 +184,7 @@ namespace LonghornBank.Controllers
             // Add the transaction to the database
             db.BankingTransaction.Add(InitialDeposit);
             db.SaveChanges();
-            return RedirectToAction("Index", "Home", new { id = customer.Id});
+            return RedirectToAction("Portal", "Home", new { id = customer.Id});
             }
         
 

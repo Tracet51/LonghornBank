@@ -22,7 +22,7 @@
                 EMail
             </th>
             <th>
-                Current Frozen Status
+                Current Active Status
             </th>
             <th>
                 Freeze Account?
@@ -50,10 +50,10 @@
                 @using (Html.BeginForm("FreezeEmployees", "Managers", FormMethod.Post))
                     {   @Html.HiddenFor(modelItem => item.Id, new { Name = "EmployeeID" })
                     <td>
-                        @Html.RadioButton("Freeze", true, new { @class = "form-check-input" })
+                        @Html.RadioButton("Freeze", false, new { @class = "form-check-input" })
                     </td>
                         <td>
-                            @Html.RadioButton("Freeze", false, new { @class = "form-check-input" })
+                            @Html.RadioButton("Freeze", true, new { @class = "form-check-input" })
                         </td>
                         <td>
 

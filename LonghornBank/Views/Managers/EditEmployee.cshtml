@@ -1,6 +1,7 @@
 ﻿@model LonghornBank.Models.AppUser
 @{
     ViewBag.Title = "Edit Employees";
+    Boolean Status = ViewBag.Status;
 }
 
 <h2>Edit Employee</h2>
@@ -58,7 +59,7 @@
         <div class="form-group">
             <div class="col-md-10">
                 @Html.Label("Manager Status", new { @class = "control-label col-md-2" })
-                @Html.CheckBox("RoleChange", true, new { @class = "form-check-input" })
+                @Html.CheckBox("RoleChange", Status, new { @class = "form-check-input" })
                 @Html.Hidden("RoleChange")
             </div>
         </div>
