@@ -688,6 +688,18 @@ namespace LonghornBank.Controllers
             {
                 return View("Index", "Managers");
             }
+            Boolean Status;
+
+            if (UserManager.IsInRole(Employee.Id, "Manager"))
+            {
+                Status = true;
+            }
+            else
+            {
+                Status = false;
+            }
+
+            ViewBag.Status = Status;
 
             return View(Employee);
         }

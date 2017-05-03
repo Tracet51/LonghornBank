@@ -81,6 +81,7 @@ namespace LonghornBank.Controllers
             ViewBag.Ranges = SearchTransactions.AmountRange();
             ViewBag.Dates = SearchTransactions.DateRanges();
             ViewBag.Customer = Customer;
+            ViewBag.ResultsCount = Trans.Count;
 
             return View(CustomerStockAccount);
         }
@@ -113,6 +114,7 @@ namespace LonghornBank.Controllers
             ViewBag.Transactions = StockTransaction;
             ViewBag.Ranges = SearchTransactions.AmountRange();
             ViewBag.Dates = SearchTransactions.DateRanges();
+            ViewBag.ResultsCount = StockTransaction.Count;
             return View("Details", CustomerStockAccount);
         }
 
@@ -152,7 +154,7 @@ namespace LonghornBank.Controllers
         // Post request to create the account
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StockAccountID,CashBalance,Name")] StockAccount stockAccount)
+        public ActionResult Create([Bind(Include = "StockAccountID,Name")] StockAccount stockAccount)
         {
             if (ModelState.IsValid)
             {
@@ -182,11 +184,12 @@ namespace LonghornBank.Controllers
 
                 // set the stock account to needs approval
                 stockAccount.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval;
+                stockAccount.CashBalance = 0;
 
                 db.StockAccount.Add(stockAccount);
                 db.SaveChanges();
 
-                // Add the inital deposit to the account 
+                /* Add the inital deposit to the account 
 
                 // Get the StockAccount
                 var StockAccountQuery = from sa in db.StockAccount
@@ -218,9 +221,12 @@ namespace LonghornBank.Controllers
                     StockAccount = CustomerStockAccount
                 };
 
+
                 // Add the transaction to the database
                 db.BankingTransaction.Add(InitialDeposit);
                 db.SaveChanges();
+
+                */
 
                 return View("AccountConfirmation");
             }

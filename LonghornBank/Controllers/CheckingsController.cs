@@ -68,6 +68,7 @@ namespace LonghornBank.Controllers
             ViewBag.CheckingTransactions = CheckingTransactions;
             ViewBag.Ranges = SearchTransactions.AmountRange();
             ViewBag.Dates = SearchTransactions.DateRanges();
+            ViewBag.ResultsCount = CheckingTransactions.Count;
 
             return View(checking);
         }
@@ -81,6 +82,7 @@ namespace LonghornBank.Controllers
             ViewBag.CheckingTransactions = Transactions;
             ViewBag.Ranges = SearchTransactions.AmountRange();
             ViewBag.Dates = SearchTransactions.DateRanges();
+            ViewBag.ResultsCount = Transactions.Count;
             return View("Details", checking);
         }
 
