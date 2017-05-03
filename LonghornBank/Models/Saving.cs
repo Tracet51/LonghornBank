@@ -26,6 +26,8 @@ namespace LonghornBank.Models
         //[Required(ErrorMessage = "Pending Balance is Required")]
         public Decimal PendingBalance { get; set; }
 
+        public Boolean Overdrawn { get; set; }
+
         public virtual AppUser Customer { get; set; }
 
         public virtual List<BankingTransaction> BankingTransactions { get; set; }

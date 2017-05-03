@@ -24,6 +24,8 @@ namespace LonghornBank.Models
         [Display(Name = "Account Name")]
         public String Name { get; set; }
 
+        public Boolean Overdrawn { get; set; }
+
         // create connection to customer account 
         public virtual AppUser Customer { get; set; }
 

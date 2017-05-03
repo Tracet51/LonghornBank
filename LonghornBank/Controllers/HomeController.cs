@@ -61,6 +61,14 @@ namespace LonghornBank.Controllers
                 account.AccountNumber = account.AccountNumber.Substring(6);
             }
 
+            foreach (Checking account in CustomerCheckings)
+            {
+                if(account.Balance < 0)
+                {
+                    account.Overdrawn = true;
+                }
+            }
+
             // Send to the Viewbag
             ViewBag.CheckingAccounts = CustomerCheckings;
 
@@ -80,6 +88,14 @@ namespace LonghornBank.Controllers
 
             ViewBag.SavingsAccounts = CustomerSavings;
 
+            foreach (Saving account in CustomerSavings)
+            {
+                if(account.Balance < 0)
+                {
+                    account.Overdrawn = true;
+                }
+            }
+
             // Find the IRA Accounts Associated
             var IRAQuery = from IR in db.IRAAccount
                                where IR.Customer.Id == customer.Id
@@ -91,6 +107,14 @@ namespace LonghornBank.Controllers
             foreach (IRA account in CustomerIRA)
             {
                 account.AccountNumber = account.AccountNumber.Substring(6);
+            }
+
+            foreach (IRA account in CustomerIRA)
+            {
+                if(account.Balance < 0)
+                {
+                    account.Overdrawn = true;
+                }
             }
 
             ViewBag.IRAAccounts = CustomerIRA;
@@ -116,6 +140,11 @@ namespace LonghornBank.Controllers
                 StockAccountValue += CustomerSA.CashBalance;
 
                 */
+
+                if(CustomerSA.CashBalance < 0)
+                {
+                    CustomerSA.Overdrawn = true;
+                }
 
                 CustomerSA.AccountNumber = CustomerSA.AccountNumber.Substring(6);
 

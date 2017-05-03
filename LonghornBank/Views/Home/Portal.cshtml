@@ -10,6 +10,46 @@
 }
 
 <h2>Portal</h2>
+@foreach (var item in Model.CheckingAccounts)
+{
+    if (item.Overdrawn == true)
+    {
+        <div class="alert alert-danger">
+            You cannot withdraw from an account wth zero dollars or a negative account balance, and you cannot overdraw more than 50 dollars from your account.
+        </div>
+    }
+
+}
+
+@foreach (var item in Model.SavingAccounts)
+{
+    if (item.Overdrawn == true)
+    {
+        <div class="alert alert-danger">
+            You cannot withdraw from an account wth zero dollars or a negative account balance, and you cannot overdraw more than 50 dollars from your account.
+        </div>
+    }
+}
+
+@foreach (var item in Model.IRAAccounts)
+{
+    if (item.Overdrawn == true)
+    {
+        <div class="alert alert-danger">
+            You cannot withdraw from an account wth zero dollars or a negative account balance, and you cannot overdraw more than 50 dollars from your account.
+        </div>
+    }
+}
+
+@foreach (var item in Model.StockAccount)
+{
+    if (item.Overdrawn == true)
+    {
+        <div class="alert alert-danger">
+            You cannot withdraw from an account wth zero dollars or a negative account balance, and you cannot overdraw more than 50 dollars from your account.
+        </div>
+    }
+}
 
 <p>
     @Html.ActionLink("Add New Checking Account", "Create", "Checkings", null, new { @class = "btn btn-info" })

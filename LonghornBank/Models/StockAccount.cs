@@ -106,6 +106,8 @@ namespace LonghornBank.Models
         [Column("Bounses")]
         public Boolean Balanced { get; set; }
 
+        public Boolean Overdrawn { get; set; }
+
         // A stock account can belong to 1 person 
         public virtual AppUser Customer { get; set; }
 
