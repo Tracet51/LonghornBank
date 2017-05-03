@@ -888,6 +888,7 @@ namespace LonghornBank.Controllers
 
             Decimal Other_Fee = 0;
 
+            // Transfer from account checking
             if (CheckingID != 0)
             {
 
@@ -929,7 +930,7 @@ namespace LonghornBank.Controllers
                             bankingTransaction.Description = "OverDrawnFee";
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
+
                             db.SaveChanges();
                         }
                        
@@ -940,15 +941,15 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
                     bankingTransaction.Description = "Transfer to " + CheckingTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedChecking).State = EntityState.Modified;
+                    db.Entry(CheckingTrans).State = EntityState.Modified;
+
                     db.SaveChanges();
 
                     // Add transaction type to ViewBag
@@ -992,7 +993,8 @@ namespace LonghornBank.Controllers
                             bankingTransaction.Description = "OverDrawnFee";
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
+
+
                             db.SaveChanges();
                         }
                         
@@ -1002,15 +1004,17 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
+
 
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
                     bankingTransaction.Description = "Transfer to " + SavingsTrans.AccountNumber;
+
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedChecking).State = EntityState.Modified;
+                    db.Entry(SavingsTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Add transaction type to ViewBag
@@ -1071,7 +1075,6 @@ namespace LonghornBank.Controllers
 
                         SelectedChecking.Balance = New_Transfer_Balance;
 
-                        db.BankingTransaction.Add(bankingTransaction);
                         db.SaveChanges();
                     }
                     else
@@ -1079,15 +1082,14 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
                     bankingTransaction.Description = "Transfer to " + IRATrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedChecking).State = EntityState.Modified;
+                    db.Entry(IRATrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Add transaction type to ViewBag
@@ -1142,6 +1144,8 @@ namespace LonghornBank.Controllers
 
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedChecking).State = EntityState.Modified;
+                    db.Entry(StockAccountTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Add transaction type to ViewBag
@@ -1203,8 +1207,6 @@ namespace LonghornBank.Controllers
                             bankingTransaction.Description = "OverDrawnFee";
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
-                            db.SaveChanges();
                         }
 
                     }
@@ -1214,15 +1216,16 @@ namespace LonghornBank.Controllers
                     }
 
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
+
 
                     // Add the Checking Account
                     bankingTransaction.SavingsAccount = NewSavingsAccounts;
                     bankingTransaction.Description = "Transfer to " + CheckingTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedSavings).State = EntityState.Modified;
+                    db.Entry(CheckingTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Add transaction type to ViewBag
@@ -1266,8 +1269,6 @@ namespace LonghornBank.Controllers
                             bankingTransaction.Description = "OverDrawnFee";
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
-                            db.SaveChanges();
                         }
 
                     }
@@ -1276,15 +1277,14 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Add the Checking Account
                     bankingTransaction.SavingsAccount = NewSavingsAccounts;
                     bankingTransaction.Description = "Transfer to " + SavingsTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedSavings).State = EntityState.Modified;
+                    db.Entry(SavingsTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Add transaction type to ViewBag
@@ -1341,15 +1341,14 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Add the Checking Account
                     bankingTransaction.SavingsAccount = NewSavingsAccounts;
                     bankingTransaction.Description = "Transfer to " + IRATrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedSavings).State = EntityState.Modified;
+                    db.Entry(IRATrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Redirect 
@@ -1382,8 +1381,6 @@ namespace LonghornBank.Controllers
                             bankingTransaction.Description = "OverDrawnFee";
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
-                            db.SaveChanges();
                         }
 
                     }
@@ -1393,16 +1390,16 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Add the Checking Account
                     bankingTransaction.SavingsAccount = NewSavingsAccounts;
                     bankingTransaction.Description = "Transfer to " + StockAccountTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedSavings).State = EntityState.Modified;
+                    db.Entry(StockAccountTrans).State = EntityState.Modified;
                     db.SaveChanges();
+
 
                     // Add transaction type to ViewBag
                     ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
@@ -1480,16 +1477,14 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Associate with Savings Account 
                     bankingTransaction.IRAAccount = NewIRAAccounts;
                     bankingTransaction.Description = "Transfer to " + CheckingTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedIRA).State = EntityState.Modified;
+                    db.Entry(CheckingTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Add transaction type to ViewBag
@@ -1566,15 +1561,13 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     bankingTransaction.IRAAccount = NewIRAAccounts;
                     bankingTransaction.Description = "Transfer to " + SavingTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedIRA).State = EntityState.Modified;
+                    db.Entry(SavingTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Add transaction type to ViewBag
@@ -1641,16 +1634,14 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
-
-
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
+                    
                     bankingTransaction.IRAAccount = NewIRAAccounts;
                     bankingTransaction.Description = "Transfer to " + StockAccountTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedIRA).State = EntityState.Modified;
+                    db.Entry(StockAccountTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Add transaction type to ViewBag
@@ -1707,8 +1698,6 @@ namespace LonghornBank.Controllers
                             bankingTransaction.Description = "OverDrawnFee";
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
-                            db.SaveChanges();
                         }
 
 
@@ -1718,16 +1707,14 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Associate with Savings Account 
                     bankingTransaction.StockAccount = SelectedStockAccount;
                     bankingTransaction.Description = "Transfer to " + CheckingTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedStockAccount).State = EntityState.Modified;
+                    db.Entry(CheckingTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Add transaction type to ViewBag
@@ -1772,8 +1759,6 @@ namespace LonghornBank.Controllers
                             bankingTransaction.Description = "OverDrawnFee";
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
-                            db.SaveChanges();
                         }
                     }
                     else
@@ -1781,15 +1766,14 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Associate with Savings Account 
                     bankingTransaction.StockAccount = SelectedStockAccount;
                     bankingTransaction.Description = "Transfer to " + SavingsTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedStockAccount).State = EntityState.Modified;
+                    db.Entry(SavingsTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Add transaction type to ViewBag
@@ -1847,15 +1831,14 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Associate with Savings Account 
                     bankingTransaction.StockAccount = SelectedStockAccount;
                     bankingTransaction.Description = "Transfer to " + IRATrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedStockAccount).State = EntityState.Modified;
+                    db.Entry(IRATrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Add transaction type to ViewBag
