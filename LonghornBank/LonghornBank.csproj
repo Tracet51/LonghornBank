@@ -274,6 +274,10 @@
     <Compile Include="Migrations\201705022222281_ReqCash.Designer.cs">
       <DependentUpon>201705022222281_ReqCash.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705032133031_Test3.cs" />
+    <Compile Include="Migrations\201705032133031_Test3.Designer.cs">
+      <DependentUpon>201705032133031_Test3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
@@ -444,6 +448,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201705022222281_ReqCash.resx">
       <DependentUpon>201705022222281_ReqCash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705032133031_Test3.resx">
+      <DependentUpon>201705032133031_Test3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -462,12 +462,15 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    return View("TransactionConfirmation");
                 }
             }
 
-            return View(bankingTransaction);
+            return RedirectToAction("WithDrawal");
         }
 
         // GET: BankingTransactions/Edit/5
@@ -936,8 +939,11 @@ namespace LonghornBank.Controllers
 
                             db.SaveChanges();
                         }
+                        else
+                        {
+                            bankingTransaction.Amount = actual;
+                        }
 
-                        bankingTransaction.Amount = actual;
                        
                     }
 
@@ -999,8 +1005,10 @@ namespace LonghornBank.Controllers
 
                             db.SaveChanges();
                         }
-
-                        bankingTransaction.Amount = actual;
+                        else
+                        {
+                            bankingTransaction.Amount = actual;
+                        }
 
                     }
                     else
@@ -1077,8 +1085,6 @@ namespace LonghornBank.Controllers
 
                         SelectedChecking.Balance = New_Transfer_Balance;
 
-                        db.BankingTransaction.Add(bankingTransaction);
-                        db.SaveChanges();
                     }
                     else
                     {
@@ -1128,8 +1134,10 @@ namespace LonghornBank.Controllers
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
                         }
-
-                        bankingTransaction.Amount = actual;
+                        else
+                        {
+                            bankingTransaction.Amount = actual;
+                        }
 
                     }
                     else
@@ -1210,7 +1218,10 @@ namespace LonghornBank.Controllers
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
                         }
-                        bankingTransaction.Amount = actual;
+                        else
+                        {
+                            bankingTransaction.Amount = actual;
+                        }
                     }
                     else
                     {
@@ -1272,7 +1283,10 @@ namespace LonghornBank.Controllers
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
                         }
-                        bankingTransaction.Amount = actual;
+                        else
+                        {
+                            bankingTransaction.Amount = actual;
+                        }
                     }
                     else
                     {
@@ -1344,10 +1358,11 @@ namespace LonghornBank.Controllers
                             bankingTransaction.Description = "OverDrawnFee";
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
-                            db.SaveChanges();
                         }
-                        bankingTransaction.Amount = actual;
+                        else
+                        {
+                            bankingTransaction.Amount = actual;
+                        }
                     }
                     else
                     {
@@ -1396,7 +1411,10 @@ namespace LonghornBank.Controllers
                             bankingTransaction.Amount = 30;
                         }
 
-                        bankingTransaction.Amount = actual;
+                        else
+                        {
+                            bankingTransaction.Amount = actual;
+                        }
 
                     }
 
@@ -1473,11 +1491,11 @@ namespace LonghornBank.Controllers
                                 bankingTransaction.Description = "OverDrawnFee";
                                 bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                                 bankingTransaction.Amount = 30;
-                                db.BankingTransaction.Add(bankingTransaction);
-                                db.SaveChanges();
                             }
-
-                            bankingTransaction.Amount = actual;
+                            else
+                            {
+                                bankingTransaction.Amount = actual;
+                            }
                         }
                         else
                         {
@@ -1560,11 +1578,12 @@ namespace LonghornBank.Controllers
                                     bankingTransaction.Description = "OverDrawnFee";
                                     bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                                     bankingTransaction.Amount = 30;
-                                    db.BankingTransaction.Add(bankingTransaction);
-                                    db.SaveChanges();
                                 }
-
-                                bankingTransaction.Amount = actual;
+                                else
+                                {
+                                    bankingTransaction.Amount = actual;
+                                }
+                                
                             }
                             else
                             {
@@ -1648,11 +1667,12 @@ namespace LonghornBank.Controllers
                                     bankingTransaction.Description = "OverDrawnFee";
                                     bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                                     bankingTransaction.Amount = 30;
-                                    db.BankingTransaction.Add(bankingTransaction);
-                                    db.SaveChanges();
                                 }
-
-                                bankingTransaction.Amount = actual;
+                                else
+                                {
+                                    bankingTransaction.Amount = actual;
+                                }
+                                
                             }
                             else
                             {
@@ -1734,7 +1754,7 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer From " + SelectedStockAccount;
 
                     //Adds money from savings to checking account
-                    if (bankingTransaction.Amount <= SelectedStockAccount.CashBalance + 50 && SelectedStockAccount.CashBalance >=0)
+                    if (bankingTransaction.Amount <= SelectedStockAccount.CashBalance + 50m && SelectedStockAccount.CashBalance >= 0)
                     {
                         Decimal New_Balance = CheckingTrans.Balance + bankingTransaction.Amount;
                         CheckingTrans.Balance = New_Balance;
@@ -1750,8 +1770,10 @@ namespace LonghornBank.Controllers
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
                         }
-
-                        bankingTransaction.Amount = actual;
+                        else
+                        {
+                            bankingTransaction.Amount = actual;
+                        }
                     }
                     else
                     {
@@ -1810,6 +1832,10 @@ namespace LonghornBank.Controllers
                             bankingTransaction.Description = "OverDrawnFee";
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
+                        }
+                        else
+                        {
+                            bankingTransaction.Amount = actual;
                         }
                     }
                     else
@@ -1882,11 +1908,11 @@ namespace LonghornBank.Controllers
                             bankingTransaction.Description = "OverDrawnFee";
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
-                            db.SaveChanges();
                         }
-
-                        bankingTransaction.Amount = actual;
+                        else
+                        {
+                            bankingTransaction.Amount = actual;
+                        }
 
                     }
                     else
