@@ -326,8 +326,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    return View("TransactionConfirmation");
                 }
 
                 // Check to see if Savings Account
@@ -359,8 +362,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    return View("TransactionConfirmation");
                 }
 
                 else if (IraID != 0)
@@ -422,8 +428,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    return View("TransactionConfirmation");
                 }
 
                 // Check to see if Savings Account
@@ -570,16 +579,20 @@ namespace LonghornBank.Controllers
                 //Sets status to default of not disputed
                 bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
 
-                db.BankingTransaction.Add(bankingTransaction);
-                if (bankingTransaction.Amount <= 5000)
+                if (bankingTransaction.Amount <= 5000m)
                 {
                     Decimal New_Balance = SelectedChecking.Balance + bankingTransaction.Amount;
                     SelectedChecking.Balance = New_Balance;
+
+                    bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.Approved;
                 }
                 else
                 {
                     Decimal PendingBalance = SelectedChecking.PendingBalance + bankingTransaction.Amount;
                     SelectedChecking.PendingBalance = PendingBalance;
+
+                    // make the transaction not approved 
+                    bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval;
                 }
 
                 // Repopulate the dropdown options
@@ -593,13 +606,19 @@ namespace LonghornBank.Controllers
                 SelectList CheckingSelectList = new SelectList(CustomerChecking, "CheckingID", "Name");
                 ViewBag.CheckingAccounts = CheckingSelectList;
 
+                db.BankingTransaction.Add(bankingTransaction);
                 db.Entry(SelectedChecking).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                // Add transaction type to ViewBag
+                ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
+                // Redirect 
+                return View("TransactionConfirmation");
             }
 
             // Check to see if Savings Account
-            if (SavingID != 0)
+            else if (SavingID != 0)
             {
                 // Find the selected saving Account
                 Saving SelectedSaving = db.SavingsAccount.Find(SavingID);
@@ -615,16 +634,20 @@ namespace LonghornBank.Controllers
                 //Sets status to default of not disputed
                 bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
 
-                db.BankingTransaction.Add(bankingTransaction);
                 if (bankingTransaction.Amount <= 5000)
                 {
                     Decimal New_Balance = SelectedSaving.Balance + bankingTransaction.Amount;
                     SelectedSaving.Balance = New_Balance;
+
+                    // make the transaction not approved 
+                    bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.Approved;
                 }
                 else
                 {
                     Decimal PendingBalance = SelectedSaving.PendingBalance + bankingTransaction.Amount;
                     SelectedSaving.PendingBalance = PendingBalance;
+
+                    bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval;
                 }
 
                 // Repopulate the dropdown options
@@ -638,12 +661,18 @@ namespace LonghornBank.Controllers
                 SelectList SavingSelectList = new SelectList(CustomerSaving, "SavingID", "Name");
                 ViewBag.SavingAccounts = SavingSelectList;
 
+                db.BankingTransaction.Add(bankingTransaction);
                 db.Entry(SelectedSaving).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                // Add transaction type to ViewBag
+                ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
+                // Redirect 
+                return View("TransactionConfirmation");
             }
             //Check to see if depositing into IRRA
-            if (IraID != 0)
+            else if (IraID != 0)
             {
                 // Find the Selected IRA Account
                 IRA SelectedIra = db.IRAAccount.Find(IraID);
@@ -683,13 +712,61 @@ namespace LonghornBank.Controllers
                 }
 
 
-
                 // Add to database
                 db.BankingTransaction.Add(bankingTransaction);
+                db.Entry(SelectedIra).State = EntityState.Modified;
                 db.SaveChanges();
 
+                // Add transaction type to ViewBag
+                ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                 // Redirect 
-                return RedirectToAction("Index");
+                return View("TransactionConfirmation");
+            }
+            else if (StockAccountID != 0)
+            {
+                // Get the stock account
+                StockAccount CustomerStockPortfolio = db.StockAccount.Find(StockAccountID);
+
+                // Set the status 
+                bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
+                bankingTransaction.BankingTransactionType = BankingTranactionType.Deposit;
+                
+                // Check for Deposit over $5000
+                if (bankingTransaction.Amount > 5000m)
+                {
+                    // Needs to be approved
+                    bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval;
+
+                    // Set the pending balance
+                    CustomerStockPortfolio.PendingBalance += bankingTransaction.Amount;
+
+                }
+
+                else
+                {
+                    // Does not need approval
+                    bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval;
+
+                    // Set the cash balance 
+                    CustomerStockPortfolio.CashBalance += bankingTransaction.Amount;
+                }
+
+                // Relate the transaction to the stock account 
+                bankingTransaction.StockAccount = CustomerStockPortfolio;
+
+                // add the information to the database
+                db.BankingTransaction.Add(bankingTransaction);
+                db.Entry(CustomerStockPortfolio).State = EntityState.Modified;
+                
+
+                db.SaveChanges();
+
+                // Add transaction type to ViewBag
+                ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
+                // Redirect 
+                return View("TransactionConfirmation");
             }
 
             return View(bankingTransaction);
@@ -874,8 +951,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
 
                 // If Transfering to Savings Account
@@ -933,8 +1013,12 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
+
                 }
 
                 else if (IRAIDTrans != 0)
@@ -1006,8 +1090,12 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
+
                 }
 
                 else if (StockAccountIDTrans != 0)
@@ -1037,8 +1125,6 @@ namespace LonghornBank.Controllers
                             bankingTransaction.Description = "OverDrawnFee";
                             bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
                             bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
-                            db.SaveChanges();
                         }
 
                     }
@@ -1048,18 +1134,22 @@ namespace LonghornBank.Controllers
                     }
 
                     // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
                     bankingTransaction.Description = "Transfer to " + StockAccountTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
+
                 }
 
                 // Redirect 
@@ -1135,8 +1225,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
 
                 // If Transfering to a Savings Account 
@@ -1194,8 +1287,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
 
                 else if (IRAIDTrans != 0)
@@ -1308,8 +1404,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
 
                 // Redirect 
@@ -1393,8 +1492,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
 
 
                 }
@@ -1475,8 +1577,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
 
 
                 }
@@ -1548,8 +1653,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
 
 
                 }
@@ -1622,8 +1730,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
 
                 // If Transfering to a Savings Account 
@@ -1681,8 +1792,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
 
                 else if (IRAIDTrans != 0)
@@ -1744,8 +1858,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
             }
             return View(bankingTransaction);

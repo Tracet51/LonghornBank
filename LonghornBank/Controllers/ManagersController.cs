@@ -369,7 +369,7 @@ namespace LonghornBank.Controllers
         }
 
         //DEPO Approval GET
-        public ActionResult DepositApproval()
+        public ActionResult  DepositApproval()
         {
             List<BankingTransaction> SelectedDepositsOrig = new List<BankingTransaction>();
             SelectedDepositsOrig = db.BankingTransaction.Where(b=>b.ApprovalStatus == ApprovedorNeedsApproval.NeedsApproval).ToList();
@@ -407,6 +407,13 @@ namespace LonghornBank.Controllers
                     depoviewmodel.FName = IA.Customer.FName;
                     depoviewmodel.LName = IA.Customer.LName;
                 }
+                if (deposit.StockAccount != null)
+                {
+                    StockAccount SA = deposit.StockAccount;
+
+                    depoviewmodel.FName = SA.Customer.FName;
+                    depoviewmodel.LName = SA.Customer.LName;
+                }
                 ListOfDepositApprovalViewModels.Add(depoviewmodel);
             }
             return View(ListOfDepositApprovalViewModels);
@@ -421,30 +428,55 @@ namespace LonghornBank.Controllers
                 BankingTransaction bankingtransactionobject = db.BankingTransaction.Find(id);
                 bankingtransactionobject.ApprovalStatus = ApprovedorNeedsApproval.Approved;
                 ViewBag.SuccessMessage = "You have successfully approved deposits.";
+
                 if (bankingtransactionobject.CheckingAccount.FirstOrDefault() != null)
                 {
                     Checking checking= bankingtransactionobject.CheckingAccount.First();
                     Decimal pendingbalance= checking.PendingBalance;
                     checking.PendingBalance = pendingbalance-bankingtransactionobject.Amount;
                     checking.Balance = bankingtransactionobject.Amount+checking.Balance;
+
+                    db.Entry(checking).State = EntityState.Modified;
                     db.SaveChanges();
                 }
+
                 if (bankingtransactionobject.SavingsAccount.FirstOrDefault() != null)
                 {
                     Saving saving = bankingtransactionobject.SavingsAccount.First();
                     Decimal pendingbalance = saving.PendingBalance;
                     saving.PendingBalance = pendingbalance - bankingtransactionobject.Amount;
                     saving.Balance = bankingtransactionobject.Amount + saving.Balance;
+
+                    db.Entry(saving).State = EntityState.Modified;
                     db.SaveChanges();
                 }
+
                 if (bankingtransactionobject.IRAAccount.FirstOrDefault() != null)
                 {
                     IRA ira = bankingtransactionobject.IRAAccount.First();
                     Decimal pendingbalance = ira.PendingBalance;
                     ira.PendingBalance = pendingbalance - bankingtransactionobject.Amount;
                     ira.Balance = bankingtransactionobject.Amount + ira.Balance;
+
+                    db.Entry(ira).State = EntityState.Modified;
                     db.SaveChanges();
                 }
+
+                if (bankingtransactionobject.StockAccount != null)
+                {
+                    StockAccount Stock = bankingtransactionobject.StockAccount;
+
+                    // Change the pending balance 
+                    Stock.PendingBalance -= bankingtransactionobject.Amount;
+
+                    // Change the balance 
+                    Stock.CashBalance += bankingtransactionobject.Amount;
+
+                    // Save the changes 
+                    db.Entry(Stock).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
                 //SendEmail()
                 String emailsubject = "A message from Longhorn Bank";
                 String emailbody= "Your deposit of $" + bankingtransactionobject.Amount + " has been approved! You may now use your funds. \n\n Thank you for banking with Longhorn Bank";
@@ -489,6 +521,13 @@ namespace LonghornBank.Controllers
 
                     depoviewmodel.FName = IA.Customer.FName;
                     depoviewmodel.LName = IA.Customer.LName;
+                }
+                if (deposit.StockAccount != null)
+                {
+                    StockAccount SA = deposit.StockAccount;
+
+                    depoviewmodel.FName = SA.Customer.FName;
+                    depoviewmodel.LName = SA.Customer.LName;
                 }
                 ListOfDepositApprovalViewModels.Add(depoviewmodel);
             }

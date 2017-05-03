@@ -21,6 +21,7 @@ namespace LonghornBank.Models
         [Column("CashBalance")]
         public Decimal CashBalance { get; set; }
 
+
         [Display(Name = "Account Name")]
         [Column("Name")]
         public String Name { get; set; }

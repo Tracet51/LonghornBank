@@ -184,7 +184,9 @@ namespace LonghornBank.Controllers
 
                 // set the stock account to needs approval
                 stockAccount.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval;
-                stockAccount.CashBalance = 0;
+                stockAccount.CashBalance = 0m;
+                stockAccount.PendingBalance = 0m;
+                stockAccount.Balanced = false;
 
                 db.StockAccount.Add(stockAccount);
                 db.SaveChanges();

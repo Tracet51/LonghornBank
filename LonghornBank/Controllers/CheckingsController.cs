@@ -184,7 +184,7 @@ namespace LonghornBank.Controllers
             // Add the transaction to the database
             db.BankingTransaction.Add(InitialDeposit);
             db.SaveChanges();
-            return RedirectToAction("Index", "Home", new { id = customer.Id});
+            return RedirectToAction("Portal", "Home", new { id = customer.Id});
             }
         
 

@@ -430,6 +430,7 @@
     <Content Include="Views\BankingTransactions\NoMoreDeposits.cshtml" />
     <Content Include="Views\BankingTransactions\Transfer.cshtml" />
     <Content Include="Views\BankingTransactions\UnqualifiedMax.cshtml" />
+    <Content Include="Views\BankingTransactions\TransactionConfirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

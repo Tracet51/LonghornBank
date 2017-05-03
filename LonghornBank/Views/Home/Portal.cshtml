@@ -28,16 +28,16 @@
     <table class="table">
         <tr>
             <th>
-                Checking Account Name
+                Account Name
             </th>
             <th>
-                Checking Account Number
+                Account Number
             </th>
             <th>
-                Checking Account Balance
+                Account Balance
             </th>
             <th>
-                Checking Account Pending Balance
+                Account Pending Balance
             </th>
             <th></th>
         </tr>
@@ -67,16 +67,16 @@
 <table class="table">
     <tr>
         <th>
-            Savings Account Name
+            Account Name
         </th>
         <th>
-            Savings Account Number
+            Account Number
         </th>
         <th>
-            Savings Account Balance
+            Account Balance
         </th>
         <th>
-            Savings Account Pending Balance
+            Account Pending Balance
         </th>
         <th></th>
     </tr>
@@ -106,16 +106,16 @@
     <table class="table">
         <tr>
             <th>
-                IRA Account Name
+                Account Name
             </th>
             <th>
-                IRA Account Number
+                Account Number
             </th>
             <th>
-                IRA Account Balance
+                Account Balance
             </th>
             <th>
-                IRA Account Pending Balance
+                Account Pending Balance
             </th>
             <th></th>
         </tr>
@@ -146,16 +146,19 @@
         <table class="table">
             <tr>
                 <th>
-                    Stock Account Name
+                    Account Name
                 </th>
                 <th>
-                    Stock Account Number
+                    Account Number
                 </th>
                 <th>
-                    Stock Account Value
+                    Account Value
                 </th>
                 <th>
-                    Stock Account Gains
+                    Pending Balance
+                </th>
+                <th>
+                    Gains
                 </th>
                 <th></th>
             </tr>
@@ -166,6 +169,7 @@
                     <td>@Html.DisplayFor(modelItem => item.Name)</td>
                     <td>@Html.DisplayFor(modelItem => item.AccountNumber)</td>
                     <td>@Html.Raw(StockValue)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
                     <td>@Html.DisplayFor(modelItem => item.Gains)</td>
                     <td>
                         @Html.ActionLink("Change Account Settings", "Edit", "StockAccounts") |
