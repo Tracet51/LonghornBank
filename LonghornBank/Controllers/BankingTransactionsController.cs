@@ -929,22 +929,33 @@ namespace LonghornBank.Controllers
                         Decimal New_Transfer_Balance = CheckingTrans.Balance + bankingTransaction.Amount;
                         CheckingTrans.Balance = New_Transfer_Balance;
 
-                        if (New_Balance < 0 && New_Balance >= -50)
+                        if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
 
+                            // Take out the fee
                             SelectedChecking.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.CheckingAccount = NewCheckingAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
 
                             db.SaveChanges();
                         }
-                        else
-                        {
-                            bankingTransaction.Amount = actual;
-                        }
 
-                       
+
+                        bankingTransaction.Amount = actual;
+
+
                     }
 
                     else
@@ -995,20 +1006,30 @@ namespace LonghornBank.Controllers
                         SelectedChecking.Balance = New_Transfer_Balance;
 
 
-                        if (New_Balance < 0 && New_Balance >= -50)
+                        if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedChecking.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.CheckingAccount = NewCheckingAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
 
 
                             db.SaveChanges();
                         }
-                        else
-                        {
-                            bankingTransaction.Amount = actual;
-                        }
+                        bankingTransaction.Amount = actual;
 
                     }
                     else
@@ -1127,26 +1148,37 @@ namespace LonghornBank.Controllers
                         Decimal New_Transfer_Balance = SelectedChecking.Balance - bankingTransaction.Amount;
                         SelectedChecking.Balance = New_Transfer_Balance;
 
-                        if (New_Balance < 0 && New_Balance >= -50)
+                        if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedChecking.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.CheckingAccount = NewCheckingAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
+
+                            db.SaveChanges();
                         }
-                        else
-                        {
-                            bankingTransaction.Amount = actual;
-                        }
+                        
+                        bankingTransaction.Amount = actual;
 
                     }
                     else
                     {
                         return View("WithDrawalError");
                     }
-
-                    // Add to database
-                    db.SaveChanges();
+                    
 
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
@@ -1211,17 +1243,29 @@ namespace LonghornBank.Controllers
                         Decimal New_Transfer_Balance = SelectedSavings.Balance - bankingTransaction.Amount;
                         SelectedSavings.Balance = New_Transfer_Balance;
 
-                        if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
+                        if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -80)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedSavings.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.SavingsAccount = NewSavingsAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
+                            db.SaveChanges();
                         }
-                        else
-                        {
-                            bankingTransaction.Amount = actual;
-                        }
+
+                        bankingTransaction.Amount = actual;
                     }
                     else
                     {
@@ -1278,15 +1322,27 @@ namespace LonghornBank.Controllers
 
                         if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedSavings.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.SavingsAccount = NewSavingsAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
+                            db.SaveChanges();
                         }
-                        else
-                        {
-                            bankingTransaction.Amount = actual;
-                        }
+
+                        bankingTransaction.Amount = actual;
                     }
                     else
                     {
@@ -1354,15 +1410,28 @@ namespace LonghornBank.Controllers
 
                         if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedSavings.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.SavingsAccount = NewSavingsAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
+                            db.SaveChanges();
                         }
-                        else
-                        {
-                            bankingTransaction.Amount = actual;
-                        }
+                        
+                        // Set the amount
+                        bankingTransaction.Amount = actual;
                     }
                     else
                     {
@@ -1405,16 +1474,28 @@ namespace LonghornBank.Controllers
 
                         if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedSavings.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.SavingsAccount = NewSavingsAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
+                            db.SaveChanges();
                         }
 
-                        else
-                        {
-                            bankingTransaction.Amount = actual;
-                        }
+                        // Set the amount
+                        bankingTransaction.Amount = actual;
 
                     }
 
@@ -1487,15 +1568,28 @@ namespace LonghornBank.Controllers
 
                             if (Transfer < 0 && Transfer >= -50)
                             {
+                                // Create a new banking transaction 
+                                BankingTransaction Fee = new BankingTransaction();
+
+                                // Take out the fee
                                 SelectedIRA.Balance -= 30;
-                                bankingTransaction.Description = "OverDrawnFee";
-                                bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                bankingTransaction.Amount = 30;
+
+                                // Create the bankings transaction 
+                                Fee.Description = "OverDrawnFee";
+                                Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                Fee.Amount = 30;
+                                Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                Fee.IRAAccount = NewIRAAccounts;
+
+                                // Add the fee to the database
+                                db.BankingTransaction.Add(Fee);
+                                db.SaveChanges();
                             }
-                            else
-                            {
-                                bankingTransaction.Amount = actual;
-                            }
+
+                            // Set the amount
+                            bankingTransaction.Amount = actual;
                         }
                         else
                         {
@@ -1574,16 +1668,29 @@ namespace LonghornBank.Controllers
 
                                 if ( Transfer < 0 && Transfer >= -50)
                                 {
+                                    // Create a new banking transaction 
+                                    BankingTransaction Fee = new BankingTransaction();
+
+                                    // Take out the fee
                                     SelectedIRA.Balance -= 30;
-                                    bankingTransaction.Description = "OverDrawnFee";
-                                    bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                    bankingTransaction.Amount = 30;
+
+                                    // Create the bankings transaction 
+                                    Fee.Description = "OverDrawnFee";
+                                    Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                    Fee.Amount = 30;
+                                    Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                    Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                    Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                    Fee.IRAAccount = NewIRAAccounts;
+
+                                    // Add the fee to the database
+                                    db.BankingTransaction.Add(Fee);
+                                    db.SaveChanges();
                                 }
-                                else
-                                {
-                                    bankingTransaction.Amount = actual;
-                                }
-                                
+
+                                // Set the amount
+                                bankingTransaction.Amount = actual;
+
                             }
                             else
                             {
@@ -1663,16 +1770,29 @@ namespace LonghornBank.Controllers
 
                                 if (Transfer < 0 && SelectedIRA.Balance - Transfer >= -50)
                                 {
+                                    // Create a new banking transaction 
+                                    BankingTransaction Fee = new BankingTransaction();
+
+                                    // Take out the fee
                                     SelectedIRA.Balance -= 30;
-                                    bankingTransaction.Description = "OverDrawnFee";
-                                    bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                    bankingTransaction.Amount = 30;
+
+                                    // Create the bankings transaction 
+                                    Fee.Description = "OverDrawnFee";
+                                    Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                    Fee.Amount = 30;
+                                    Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                    Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                    Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                    Fee.IRAAccount = NewIRAAccounts;
+
+                                    // Add the fee to the database
+                                    db.BankingTransaction.Add(Fee);
+                                    db.SaveChanges();
                                 }
-                                else
-                                {
-                                    bankingTransaction.Amount = actual;
-                                }
-                                
+
+                                // Set the amount
+                                bankingTransaction.Amount = actual;
+
                             }
                             else
                             {
@@ -1765,15 +1885,28 @@ namespace LonghornBank.Controllers
 
                         if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedStockAccount.CashBalance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.StockAccount = SelectedStockAccount;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
+                            db.SaveChanges();
                         }
-                        else
-                        {
-                            bankingTransaction.Amount = actual;
-                        }
+
+                        // Set the amount
+                        bankingTransaction.Amount = actual;
                     }
                     else
                     {
@@ -1828,15 +1961,28 @@ namespace LonghornBank.Controllers
 
                         if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedStockAccount.CashBalance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.StockAccount = SelectedStockAccount;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
+                            db.SaveChanges();
                         }
-                        else
-                        {
-                            bankingTransaction.Amount = actual;
-                        }
+
+                        // Set the amount
+                        bankingTransaction.Amount = actual;
                     }
                     else
                     {
@@ -1904,15 +2050,28 @@ namespace LonghornBank.Controllers
                         SelectedStockAccount.CashBalance = New_Transfer_Balance;
                         if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedStockAccount.CashBalance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.StockAccount = SelectedStockAccount;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
+                            db.SaveChanges();
                         }
-                        else
-                        {
-                            bankingTransaction.Amount = actual;
-                        }
+
+                        // Set the amount
+                        bankingTransaction.Amount = actual;
 
                     }
                     else
