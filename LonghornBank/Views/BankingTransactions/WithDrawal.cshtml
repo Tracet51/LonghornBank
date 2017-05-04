@@ -22,14 +22,14 @@
 
 }
 
-<h2>Create a New Transaction</h2>
+<h2>Withdrawal</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Withdrawl Transaction</h4>
+        <h4>Create a Withdrawal by filling out the information below</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -70,12 +70,12 @@
         <br />
         <br />
 
-        <b class="control-label col-md-2">Stock Accounts:</b>
+        <b class="control-label col-md-2">IRA Accounts:</b>
         @Html.DropDownList("StockAccountID", StockAccounts, new { @class = "form-control" })
         <br />
         <br />
 
-        <b class="control-label col-md-2">IRA Accounts:</b>
+        <b class="control-label col-md-2">Stock Accounts:</b>
         @Html.DropDownList("IraID", IraAccounts, new { @class = "form-control" })
         <br />
         <br />

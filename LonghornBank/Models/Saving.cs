@@ -23,6 +23,8 @@ namespace LonghornBank.Models
 
         [Display(Name = "Pending Balance")]
 
+        public String AccountDisplay { get; set; }
+
         //[Required(ErrorMessage = "Pending Balance is Required")]
         public Decimal PendingBalance { get; set; }
 

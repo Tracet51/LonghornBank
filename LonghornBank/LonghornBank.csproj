@@ -274,6 +274,14 @@
     <Compile Include="Migrations\201705022049575_overdrawn.Designer.cs">
       <DependentUpon>201705022049575_overdrawn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705040051534_transfer.cs" />
+    <Compile Include="Migrations\201705040051534_transfer.Designer.cs">
+      <DependentUpon>201705040051534_transfer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705040505341_multi_list.cs" />
+    <Compile Include="Migrations\201705040505341_multi_list.Designer.cs">
+      <DependentUpon>201705040505341_multi_list.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
     <Compile Include="Migrations\SeedDataCustomers.cs" />
@@ -438,6 +446,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201705022049575_overdrawn.resx">
       <DependentUpon>201705022049575_overdrawn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705040051534_transfer.resx">
+      <DependentUpon>201705040051534_transfer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705040505341_multi_list.resx">
+      <DependentUpon>201705040505341_multi_list.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

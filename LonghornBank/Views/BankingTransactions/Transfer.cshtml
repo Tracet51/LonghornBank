@@ -32,7 +32,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Create a deposit by filling out the information below</h4>
+        <h4>Create a Transfer by filling out the information below</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -67,6 +67,7 @@
 
         <b class="control-label col-md-2">Checking Accounts:</b>
         @Html.DropDownList("CheckingID", CheckingAccounts, new { @class = "form-control" })
+       
         <br />
         <br />
 
@@ -118,5 +119,4 @@
     @Html.ActionLink("Back to Manage Checking Account", "Index", controllerName: "Checkings")
 </div>
 
-}
 

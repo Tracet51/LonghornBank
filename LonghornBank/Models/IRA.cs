@@ -38,6 +38,8 @@ namespace LonghornBank.Models
         [Display(Name = "Fee")]
         public Decimal Fee { get; set; }
 
+        public String AccountDisplay { get; set; }
+
         public Boolean Overdrawn { get; set; }
 
 

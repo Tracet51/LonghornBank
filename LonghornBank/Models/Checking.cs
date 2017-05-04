@@ -31,5 +31,6 @@ namespace LonghornBank.Models
 
         // Create Many to Many Relationship w/ Transaction 
         public virtual List<BankingTransaction> BankingTransactions { get; set; }
+        public String AccountDisplay { get; set; }
     }
 }

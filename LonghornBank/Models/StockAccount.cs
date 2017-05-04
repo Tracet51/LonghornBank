@@ -108,6 +108,8 @@ namespace LonghornBank.Models
 
         public Boolean Overdrawn { get; set; }
 
+        public String AccountDisplay { get; set; }
+
         // A stock account can belong to 1 person 
         public virtual AppUser Customer { get; set; }
 

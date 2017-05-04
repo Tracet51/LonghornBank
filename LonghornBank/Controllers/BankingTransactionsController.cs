@@ -595,18 +595,19 @@ namespace LonghornBank.Controllers
 
             // Create a list of accounts of execute
             List<Checking> CheckingAccounts = CheckingQuery.ToList();
-
-            // Create a None Options 
-            Checking SelectNone = new Checking() { CheckingID = 0, AccountNumber = "1000000000000", Balance = 0, Name = "None" };
-            CheckingAccounts.Add(SelectNone);
-
-            foreach (Checking account in CheckingAccounts)
+            foreach(var account in CheckingAccounts)
             {
                 account.AccountNumber = "XXXXXX" + account.AccountNumber.Substring(6);
+                account.AccountDisplay = account.AccountNumber + " | " + account.Name + " | " + account.Balance;
             }
+            // Create a None Options 
+            Checking SelectNone = new Checking() { CheckingID = 0, AccountNumber = "1000000000000", Balance = 0, Name = "None" };
+            SelectNone.AccountDisplay =  "XXXXXX" + SelectNone.AccountNumber.Substring(6);
+            SelectNone.AccountDisplay = SelectNone.AccountNumber + " " + SelectNone.Name + " " + SelectNone.Balance;
+            CheckingAccounts.Add(SelectNone);
 
             // Convert the List into a select list 
-            SelectList CheckingSelectList = new SelectList(CheckingAccounts.OrderBy(a => a.CheckingID), "CheckingID", "AccountNumber");
+            SelectList CheckingSelectList = new SelectList(CheckingAccounts.OrderBy(a => a.CheckingID), "CheckingID", "AccountDisplay");
 
             // Populate a list of Savings Accounts
             var SavingsQuery = from sa in db.SavingsAccount
@@ -615,18 +616,20 @@ namespace LonghornBank.Controllers
 
             // Create a list of accounts of execute
             List<Saving> SavingsAccounts = SavingsQuery.ToList();
-
-            // Create a None Options 
-            Saving SelectNoneSavings = new Saving() { SavingID = 0, AccountNumber = "1000000000000", Balance = 0, Name = "None" };
-            SavingsAccounts.Add(SelectNoneSavings);
-
             foreach (Saving account in SavingsAccounts)
             {
                 account.AccountNumber = "XXXXXX" + account.AccountNumber.Substring(6);
+                account.AccountDisplay = account.AccountNumber + " | " + account.Name + " | " + account.Balance;
             }
 
+            // Create a None Options 
+            Saving SelectNoneSavings = new Saving() { SavingID = 0, AccountNumber = "1000000000000", Balance = 0, Name = "None" };
+            SelectNoneSavings.AccountNumber = "XXXXXX" + SelectNoneSavings.AccountNumber.Substring(6);
+            SelectNoneSavings.AccountDisplay = SelectNoneSavings.AccountNumber + " " + SelectNoneSavings.Name + " " + SelectNoneSavings.Balance;
+            SavingsAccounts.Add(SelectNoneSavings);
+
             // Convert the List into a select list 
-            SelectList SavingsSelectList = new SelectList(SavingsAccounts.OrderBy(a => a.SavingID), "SavingID", "AccountNumber");
+            SelectList SavingsSelectList = new SelectList(SavingsAccounts.OrderBy(a => a.SavingID), "SavingID", "AccountDisplay");
 
             // Grab the IRA account
             var StockAccountQuery = from stock in db.StockAccount
@@ -636,17 +639,20 @@ namespace LonghornBank.Controllers
             // Get the IRA account
             List<StockAccount> StockAccounts = StockAccountQuery.ToList();
 
-            // Create a None Options 
-            StockAccount SelectNoStockAccount = new StockAccount() { StockAccountID = 0, AccountNumber = "1000000000000", CashBalance = 0, Name = "None" };
-            StockAccounts.Add(SelectNoStockAccount);
-
             foreach (StockAccount account in StockAccounts)
             {
                 account.AccountNumber = "XXXXXX" + account.AccountNumber.Substring(6);
+                account.AccountDisplay = account.AccountNumber + " | " + account.Name + " | " + account.CashBalance;
             }
 
+            // Create a None Options 
+            StockAccount SelectNoStockAccount = new StockAccount() { StockAccountID = 0, AccountNumber = "1000000000000", CashBalance = 0, Name = "None" };
+            SelectNoStockAccount.AccountNumber = "XXXXXX" + SelectNoStockAccount.AccountNumber.Substring(6);
+            SelectNoStockAccount.AccountDisplay = SelectNoStockAccount.AccountNumber + " " + SelectNoStockAccount.Name + " " + SelectNoStockAccount.CashBalance;
+            StockAccounts.Add(SelectNoStockAccount);
+
             // Convert the List into a select list 
-            SelectList StockSelectList = new SelectList(StockAccounts.OrderBy(a => a.StockAccountID), "StockAccountID", "AccountNumber");
+            SelectList StockSelectList = new SelectList(StockAccounts.OrderBy(a => a.StockAccountID), "StockAccountID", "AccountDisplay");
 
             // Grab the IRA account
             var IraQuery = from ira in db.IRAAccount
@@ -656,17 +662,20 @@ namespace LonghornBank.Controllers
             // Get the IRA account
             List<IRA> IRAAccounts = IraQuery.ToList();
 
-            // Create a None Options 
-            IRA SelectNoIRA = new IRA() { IRAID = 0, AccountNumber = "1000000000000", Balance = 0, Name = "None" };
-            IRAAccounts.Add(SelectNoIRA);
-
             foreach (IRA account in IRAAccounts)
             {
                 account.AccountNumber = "XXXXXX" + account.AccountNumber.Substring(6);
+                account.AccountDisplay = account.AccountNumber + " | " + account.Name + " | " + account.Balance;
             }
 
+            // Create a None Options 
+            IRA SelectNoIRA = new IRA() { IRAID = 0, AccountNumber = "1000000000000", Balance = 0, Name = "None" };
+            SelectNoIRA.AccountNumber = "XXXXXX" + SelectNoIRA.AccountNumber.Substring(6);
+            SelectNoIRA.AccountDisplay = SelectNoIRA.AccountNumber + " " + SelectNoIRA.Name + " " + SelectNoIRA.Balance;
+            IRAAccounts.Add(SelectNoIRA);
+
             // Convert the List into a select list 
-            SelectList IRASelectList = new SelectList(IRAAccounts.OrderBy(a => a.IRAID), "IRAID", "AccountNumber");
+            SelectList IRASelectList = new SelectList(IRAAccounts.OrderBy(a => a.IRAID), "IRAID", "AccountDisplay");
 
             // Add the Accounts to the Tuple of Accounts 
             Tuple<SelectList, SelectList, SelectList, SelectList> Accounts = new Tuple<SelectList, SelectList, SelectList, SelectList>(CheckingSelectList, SavingsSelectList, StockSelectList, IRASelectList);

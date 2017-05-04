@@ -172,6 +172,15 @@ namespace LonghornBank.Controllers
 
             // Create a list of accounts of execute
             List<Checking> AllCheckingAccounts = CheckingQuery.ToList();
+            Checking SelectNone = new Checking() { CheckingID = 0, AccountNumber = "1000000000000", Balance = 0, Name = "None" };
+            SelectNone.AccountDisplay = SelectNone.Name + " " + SelectNone.Balance;
+            AllCheckingAccounts.Add(SelectNone);
+
+            foreach (var account in AllCheckingAccounts)
+            {
+                account.AccountNumber = "XXXXXX" + account.AccountNumber.Substring(6);
+                account.AccountDisplay = account.Name + " | " + account.Balance;
+            }
 
             // Populate a list of Savings Accounts
             var SavingsQuery = from sa in db.SavingsAccount
@@ -181,13 +190,23 @@ namespace LonghornBank.Controllers
             // Create a list of accounts of execute
             List<Saving> AllSavingsAccounts = SavingsQuery.ToList();
 
+            Saving SelectNoneSavings = new Saving() { SavingID = 0, AccountNumber = "1000000000000", Balance = 0, Name = "None" };
+            SelectNoneSavings.AccountDisplay = SelectNoneSavings.Name + " " + SelectNoneSavings.Balance;
+            AllSavingsAccounts.Add(SelectNoneSavings);
+
+            foreach (var account in AllSavingsAccounts)
+            {
+                account.AccountNumber = "XXXXXX" + account.AccountNumber.Substring(6);
+                account.AccountDisplay =  account.Name + " | " + account.Balance;
+            }
+
 
             PayeeViewModel PayeeCustomerInfo = new PayeeViewModel
             {
                 UserCustomerProfile = customer,
                 PayeeAccount = customer.PayeeAccounts,
-                CheckingAccounts = new SelectList(AllCheckingAccounts, "CheckingID", "Name"),
-                SavingsAccounts = new SelectList(AllSavingsAccounts, "SavingID", "Name")
+                CheckingAccounts = new SelectList(AllCheckingAccounts, "CheckingID", "AccountDisplay"),
+                SavingsAccounts = new SelectList(AllSavingsAccounts, "SavingID", "AccountDisplay")
             };
 
             return View(PayeeCustomerInfo);
@@ -237,6 +256,8 @@ namespace LonghornBank.Controllers
                                 CheckingAccount = CheckingList
                             };
 
+                            CustomerChecking.Overdrawn = true;
+
                             PayeeTrans.Add(OverDrawn);
 
                             db.Entry(OverDrawn).State = EntityState.Modified;
@@ -250,7 +271,7 @@ namespace LonghornBank.Controllers
                             BankingTransactionType = BankingTranactionType.BillPayment,
                             TransactionDate = Pay.PayeeTransaction.TransactionDate,
                             CheckingAccount = CheckingList,
-                            Description = "Payment of bill to "
+                            Description = "Payment of bill"
                         };
 
                         db.CheckingAccount.Find(CustomerChecking.CheckingID).Balance -= Pay.PayeeTransaction.Amount;
@@ -291,6 +312,8 @@ namespace LonghornBank.Controllers
                                 SavingsAccount = SavingList
                             };
 
+                            CustomerSaving.Overdrawn = true;
+
                             PayeeTrans.Add(OverDrawn);
 
                             db.Entry(OverDrawn).State = EntityState.Modified;
@@ -304,7 +327,7 @@ namespace LonghornBank.Controllers
                             BankingTransactionType = BankingTranactionType.BillPayment,
                             TransactionDate = Pay.PayeeTransaction.TransactionDate,
                             SavingsAccount = SavingList,
-                            Description = "Payment of bill to "
+                            Description = "Payment of bill"
                         };
 
                         db.CheckingAccount.Find(CustomerSaving.SavingID).Balance -= Pay.PayeeTransaction.Amount;
