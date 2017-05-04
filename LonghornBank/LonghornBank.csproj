@@ -230,17 +230,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201705032231553_Test4.cs" />
-    <Compile Include="Migrations\201705032231553_Test4.Designer.cs">
-      <DependentUpon>201705032231553_Test4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705040051534_transfer.cs" />
-    <Compile Include="Migrations\201705040051534_transfer.Designer.cs">
-      <DependentUpon>201705040051534_transfer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705040505341_multi_list.cs" />
-    <Compile Include="Migrations\201705040505341_multi_list.Designer.cs">
-      <DependentUpon>201705040505341_multi_list.cs</DependentUpon>
+    <Compile Include="Migrations\201705041804040_PayeeTests.cs" />
+    <Compile Include="Migrations\201705041804040_PayeeTests.Designer.cs">
+      <DependentUpon>201705041804040_PayeeTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
@@ -408,14 +400,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201705032231553_Test4.resx">
-      <DependentUpon>201705032231553_Test4.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705040051534_transfer.resx">
-      <DependentUpon>201705040051534_transfer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705040505341_multi_list.resx">
-      <DependentUpon>201705040505341_multi_list.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201705041804040_PayeeTests.resx">
+      <DependentUpon>201705041804040_PayeeTests.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
