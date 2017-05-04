@@ -18,9 +18,9 @@ namespace LonghornBank.Models
 
 
         [Display(Name = "Cash Balance")]
-        [Required(ErrorMessage = "A Cash Balance is Required")]
         [Column("CashBalance")]
         public Decimal CashBalance { get; set; }
+
 
         [Display(Name = "Account Name")]
         [Column("Name")]

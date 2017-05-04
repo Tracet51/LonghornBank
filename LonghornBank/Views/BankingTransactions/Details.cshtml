@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Details";
+    List<LonghornBank.Models.BankingTransaction> OtherTransactinos = ViewBag.OtherTransactions;
+    Int32 AccountId = ViewBag.AccountId;
 }
 
 <h2>Details</h2>
@@ -81,6 +83,48 @@
         </dd>
 
     </dl>
+
+    <h4>Similar Transactions</h4>
+
+    <table class="table">
+        <tr>
+            <th>
+                Description
+            </th>
+            <th>
+                Transaction Type
+            </th>
+            <th>
+                Transaction Number
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                Employee Comments
+            </th>
+            <th></th>
+        </tr>
+
+
+
+        @foreach (var item in OtherTransactinos)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => item.BankingTransactionType)</td>
+                <td>@Html.DisplayFor(modelItem => item.BankingTransactionID)</td>
+                <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                <td>@Html.DisplayFor(modelItem => item.ManagerDisputeMessage)</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "BankingTransactions", new { id = item.BankingTransactionID }, null) |
+                    @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = item.BankingTransactionID , choice = 1, AccountId = AccountId}, null)
+                </td>
+            </tr>
+        }
+    </table>
+
+
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.BankingTransactionID }) |

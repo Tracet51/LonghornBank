@@ -9,6 +9,7 @@
     AppUser Customer = ViewBag.Customer;
     SelectList Ranges = ViewBag.Ranges;
     SelectList Dates = ViewBag.Dates;
+    Int32 ResultsCount = ViewBag.ResultsCount;
 }
 
 
@@ -79,11 +80,11 @@
         <div class="row">
 
             <div class="col-md-6">
-                Transaction Description:@Html.TextBox("SearchDescription", null, new { @class = "form-control" })<br />
+                Transaction Description:@Html.TextBox("SearchDescription", null, new { @class = "form-control", @placeholder = "Tax Refund" })<br />
             </div>
 
             <div class="col-md-6">
-                Transaction Number:@Html.TextBox("SearchTransactionNumber", null, new { @class = "form-control" })<br />
+                Transaction Number:@Html.TextBox("SearchTransactionNumber", null, new { @class = "form-control", @placeholder = "28" })<br />
             </div>
 
         </div>
@@ -160,14 +161,14 @@
 
         <p class="form-check">
             <div class="col-md-4">
-                Start Amount Custom Range @Html.TextBox("SearchAmountBegin", null, new { @class = "form-control" })
+                Start Amount Custom Range @Html.TextBox("SearchAmountBegin", null, new { @class = "form-control", @placeholder = "1000" })
                 <br />            
             </div>
         </p>
 
         <p class="form-check">
             <div class="col-md-4">
-                End Amount Custom Range @Html.TextBox("SearchAmountEnd", null, new { @class = "form-control" })
+                End Amount Custom Range @Html.TextBox("SearchAmountEnd", null, new { @class = "form-control", @placeholder = "1000" })
                 <br /> 
             </div>
         </p>
@@ -186,14 +187,14 @@
 
         <p class="form-check">
             <div class="col-md-4">
-                Start Date @Html.TextBox("BeginSearchDate", null, new { @class = "form-control" })
+                Start Date @Html.TextBox("BeginSearchDate", null, new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
                 <br />
             </div>
         </p>
 
         <p class="form-check">
             <div class="col-md-4">
-                End Date @Html.TextBox("EndSearchDate", null, new { @class = "form-control" })
+                End Date @Html.TextBox("EndSearchDate", null, new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
                 <br />
             </div>
         </p>
@@ -362,6 +363,7 @@
 
 <h4>Transactions</h4>
 <hr />
+<p>Records: @Html.Raw(ResultsCount)</p>
 <table class="table">
     <tr>
         <th>
@@ -401,7 +403,7 @@
                 @Html.DisplayFor(modelItem => t.Amount)
             </td>
             <td>
-                @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = t.BankingTransactionID }, null)
+                @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = t.BankingTransactionID, choice = 4, AccountId = Model.StockAccountID }, null)
             </td>
         </tr>
     }

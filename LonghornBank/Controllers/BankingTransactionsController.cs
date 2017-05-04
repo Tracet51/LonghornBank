@@ -108,7 +108,7 @@ namespace LonghornBank.Controllers
 
         // GET: BankingTransactions/Details/5
         // id == BankingTransactionID
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, Int32 choice, Int32 AccountId)
         {
             if (id == null)
             {
@@ -119,7 +119,130 @@ namespace LonghornBank.Controllers
             {
                 return HttpNotFound();
             }
-            return View(bankingTransaction);
+
+            // Check to see the account related to the details
+            // Checking Accounts
+            if (choice == 1)
+            {
+                var QueryTrans = from t in db.BankingTransaction
+                                 from c in t.CheckingAccount
+                                 where c.CheckingID == AccountId && t.BankingTransactionType == bankingTransaction.BankingTransactionType && t.BankingTransactionID != bankingTransaction.BankingTransactionID
+                                 orderby t.TransactionDate
+                                 select t;
+                List<BankingTransaction> TransactionsList = QueryTrans.ToList();
+
+                // Check the length of the Transactions List
+                Int32 Length = TransactionsList.Count;
+
+                // Set the Range for return to max out at 5 
+                if (Length > 5)
+                {
+                    Length = 5;
+                }
+
+                TransactionsList = TransactionsList.GetRange(0, Length);
+
+                // Add Transactions and Id to the ViewBag
+                ViewBag.OtherTransactions = TransactionsList;
+
+                // Add the account ids to the ViewBag
+                ViewBag.AccountId = AccountId;
+
+                return View(bankingTransaction);
+                                 
+            }
+
+            // Savings Accounts
+            else if (choice == 2)
+            {
+                var QueryTrans = from t in db.BankingTransaction
+                                 from c in t.SavingsAccount
+                                 where c.SavingID == AccountId && t.BankingTransactionType == bankingTransaction.BankingTransactionType && t.BankingTransactionID != bankingTransaction.BankingTransactionID
+                                 orderby t.TransactionDate
+                                 select t;
+                List<BankingTransaction> TransactionsList = QueryTrans.ToList();
+
+                // Check the length of the Transactions List
+                Int32 Length = TransactionsList.Count;
+
+                // Set the Range for return to max out at 5 
+                if (Length > 5)
+                {
+                    Length = 5;
+                }
+
+                TransactionsList = TransactionsList.GetRange(0, Length);
+
+                // Add Transactions and Id to the ViewBag
+                ViewBag.OtherTransactions = TransactionsList;
+
+                // Add the account ids to the ViewBag
+                ViewBag.AccountId = AccountId;
+
+                return View(bankingTransaction);
+            }
+
+            // IRAs
+            else if (choice == 3)
+            {
+                var QueryTrans = from t in db.BankingTransaction
+                                 from c in t.IRAAccount
+                                 where c.IRAID == AccountId && t.BankingTransactionType == bankingTransaction.BankingTransactionType && t.BankingTransactionID != bankingTransaction.BankingTransactionID
+                                 orderby t.TransactionDate
+                                 select t;
+                List<BankingTransaction> TransactionsList = QueryTrans.ToList();
+
+                // Check the length of the Transactions List
+                Int32 Length = TransactionsList.Count;
+
+                // Set the Range for return to max out at 5 
+                if (Length > 5)
+                {
+                    Length = 5;
+                }
+
+                TransactionsList = TransactionsList.GetRange(0, Length);
+
+                // Add Transactions and Id to the ViewBag
+                ViewBag.OtherTransactions = TransactionsList;
+
+                // Add the account ids to the ViewBag
+                ViewBag.AccountId = AccountId;
+
+                return View(bankingTransaction);
+            }
+            else if (choice == 4)
+            {
+                var QueryTrans = from t in db.BankingTransaction
+                                 where t.StockAccount.StockAccountID == AccountId && t.BankingTransactionType == bankingTransaction.BankingTransactionType && t.BankingTransactionID != bankingTransaction.BankingTransactionID
+                                 orderby t.TransactionDate
+                                 select t;
+                List<BankingTransaction> TransactionsList = QueryTrans.ToList();
+
+                // Check the length of the Transactions List
+                Int32 Length = TransactionsList.Count;
+
+                // Set the Range for return to max out at 5 
+                if (Length > 5)
+                {
+                    Length = 5;
+                }
+
+                TransactionsList = TransactionsList.GetRange(0, 5);
+
+                // Add Transactions and Id to the ViewBag
+                ViewBag.OtherTransactions = TransactionsList;
+
+                // Add the account ids to the ViewBag
+                ViewBag.AccountId = AccountId;
+
+                return View(bankingTransaction);
+            }
+
+            else
+            {
+                return View("Error");
+            }
         }
 
         // GET: BankingTransactions/Create/?id
@@ -204,8 +327,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    return View("TransactionConfirmation");
                 }
 
                 // Check to see if Savings Account
@@ -237,8 +363,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    return View("TransactionConfirmation");
                 }
 
                 else if (IraID != 0)
@@ -300,8 +429,11 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    return View("TransactionConfirmation");
                 }
 
                 // Check to see if Savings Account
@@ -330,12 +462,15 @@ namespace LonghornBank.Controllers
                     db.BankingTransaction.Add(bankingTransaction);
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = id });
+                    return View("TransactionConfirmation");
                 }
             }
 
-            return View(bankingTransaction);
+            return RedirectToAction("WithDrawal");
         }
 
         // GET: BankingTransactions/Edit/5
@@ -448,16 +583,20 @@ namespace LonghornBank.Controllers
                 //Sets status to default of not disputed
                 bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
 
-                db.BankingTransaction.Add(bankingTransaction);
-                if (bankingTransaction.Amount <= 5000)
+                if (bankingTransaction.Amount <= 5000m)
                 {
                     Decimal New_Balance = SelectedChecking.Balance + bankingTransaction.Amount;
                     SelectedChecking.Balance = New_Balance;
+
+                    bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.Approved;
                 }
                 else
                 {
                     Decimal PendingBalance = SelectedChecking.PendingBalance + bankingTransaction.Amount;
                     SelectedChecking.PendingBalance = PendingBalance;
+
+                    // make the transaction not approved 
+                    bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval;
                 }
 
                 // Repopulate the dropdown options
@@ -471,13 +610,19 @@ namespace LonghornBank.Controllers
                 SelectList CheckingSelectList = new SelectList(CustomerChecking, "CheckingID", "Name");
                 ViewBag.CheckingAccounts = CheckingSelectList;
 
+                db.BankingTransaction.Add(bankingTransaction);
                 db.Entry(SelectedChecking).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                // Add transaction type to ViewBag
+                ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
+                // Redirect 
+                return View("TransactionConfirmation");
             }
 
             // Check to see if Savings Account
-            if (SavingID != 0)
+            else if (SavingID != 0)
             {
                 // Find the selected saving Account
                 Saving SelectedSaving = db.SavingsAccount.Find(SavingID);
@@ -493,16 +638,20 @@ namespace LonghornBank.Controllers
                 //Sets status to default of not disputed
                 bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
 
-                db.BankingTransaction.Add(bankingTransaction);
                 if (bankingTransaction.Amount <= 5000)
                 {
                     Decimal New_Balance = SelectedSaving.Balance + bankingTransaction.Amount;
                     SelectedSaving.Balance = New_Balance;
+
+                    // make the transaction not approved 
+                    bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.Approved;
                 }
                 else
                 {
                     Decimal PendingBalance = SelectedSaving.PendingBalance + bankingTransaction.Amount;
                     SelectedSaving.PendingBalance = PendingBalance;
+
+                    bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval;
                 }
 
                 // Repopulate the dropdown options
@@ -516,12 +665,18 @@ namespace LonghornBank.Controllers
                 SelectList SavingSelectList = new SelectList(CustomerSaving, "SavingID", "Name");
                 ViewBag.SavingAccounts = SavingSelectList;
 
+                db.BankingTransaction.Add(bankingTransaction);
                 db.Entry(SelectedSaving).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                // Add transaction type to ViewBag
+                ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
+                // Redirect 
+                return View("TransactionConfirmation");
             }
             //Check to see if depositing into IRRA
-            if (IraID != 0)
+            else if (IraID != 0)
             {
                 // Find the Selected IRA Account
                 IRA SelectedIra = db.IRAAccount.Find(IraID);
@@ -561,13 +716,61 @@ namespace LonghornBank.Controllers
                 }
 
 
-
                 // Add to database
                 db.BankingTransaction.Add(bankingTransaction);
+                db.Entry(SelectedIra).State = EntityState.Modified;
                 db.SaveChanges();
 
+                // Add transaction type to ViewBag
+                ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                 // Redirect 
-                return RedirectToAction("Index");
+                return View("TransactionConfirmation");
+            }
+            else if (StockAccountID != 0)
+            {
+                // Get the stock account
+                StockAccount CustomerStockPortfolio = db.StockAccount.Find(StockAccountID);
+
+                // Set the status 
+                bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
+                bankingTransaction.BankingTransactionType = BankingTranactionType.Deposit;
+                
+                // Check for Deposit over $5000
+                if (bankingTransaction.Amount > 5000m)
+                {
+                    // Needs to be approved
+                    bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval;
+
+                    // Set the pending balance
+                    CustomerStockPortfolio.PendingBalance += bankingTransaction.Amount;
+
+                }
+
+                else
+                {
+                    // Does not need approval
+                    bankingTransaction.ApprovalStatus = ApprovedorNeedsApproval.NeedsApproval;
+
+                    // Set the cash balance 
+                    CustomerStockPortfolio.CashBalance += bankingTransaction.Amount;
+                }
+
+                // Relate the transaction to the stock account 
+                bankingTransaction.StockAccount = CustomerStockPortfolio;
+
+                // add the information to the database
+                db.BankingTransaction.Add(bankingTransaction);
+                db.Entry(CustomerStockPortfolio).State = EntityState.Modified;
+                
+
+                db.SaveChanges();
+
+                // Add transaction type to ViewBag
+                ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
+                // Redirect 
+                return View("TransactionConfirmation");
             }
 
             return View(bankingTransaction);
@@ -699,6 +902,7 @@ namespace LonghornBank.Controllers
 
             Decimal actual = bankingTransaction.Amount;
 
+            // Transfer from account checking
             if (CheckingID != 0)
             {
 
@@ -734,19 +938,33 @@ namespace LonghornBank.Controllers
                         Decimal New_Transfer_Balance = CheckingTrans.Balance + bankingTransaction.Amount;
                         CheckingTrans.Balance = New_Transfer_Balance;
 
-                        if (New_Balance < 0 && New_Balance >= -50)
+                        if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
 
+                            // Take out the fee
                             SelectedChecking.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.CheckingAccount = NewCheckingAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
+
                             db.SaveChanges();
                         }
 
+
                         bankingTransaction.Amount = actual;
-                       
+
+
                     }
 
                     else
@@ -754,19 +972,22 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
                     bankingTransaction.Description = "Transfer to " + CheckingTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedChecking).State = EntityState.Modified;
+                    db.Entry(CheckingTrans).State = EntityState.Modified;
+
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
 
                 // If Transfering to Savings Account
@@ -794,16 +1015,29 @@ namespace LonghornBank.Controllers
                         SelectedChecking.Balance = New_Transfer_Balance;
 
 
-                        if (New_Balance < 0 && New_Balance >= -50)
+                        if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedChecking.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.CheckingAccount = NewCheckingAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
+
+
                             db.SaveChanges();
                         }
-
                         bankingTransaction.Amount = actual;
 
                     }
@@ -812,19 +1046,25 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
+
 
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
                     bankingTransaction.Description = "Transfer to " + SavingsTrans.AccountNumber;
+
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedChecking).State = EntityState.Modified;
+                    db.Entry(SavingsTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
+
                 }
 
                 else if (IRAIDTrans != 0)
@@ -875,39 +1115,28 @@ namespace LonghornBank.Controllers
 
                         SelectedChecking.Balance = New_Transfer_Balance;
 
-                        if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
-                        {
-                            SelectedChecking.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
-                            db.SaveChanges();
-                        }
-
-                        bankingTransaction.Amount = actual;
-
-                        db.BankingTransaction.Add(bankingTransaction);
-                        db.SaveChanges();
                     }
                     else
                     {
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
                     bankingTransaction.Description = "Transfer to " + IRATrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedChecking).State = EntityState.Modified;
+                    db.Entry(IRATrans).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
+
                 }
 
                 else if (StockAccountIDTrans != 0)
@@ -928,16 +1157,29 @@ namespace LonghornBank.Controllers
                         Decimal New_Transfer_Balance = SelectedChecking.Balance - bankingTransaction.Amount;
                         SelectedChecking.Balance = New_Transfer_Balance;
 
-                        if (New_Balance < 0 && New_Balance >= -50)
+                        if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedChecking.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.CheckingAccount = NewCheckingAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
+
                             db.SaveChanges();
                         }
-
+                        
                         bankingTransaction.Amount = actual;
 
                     }
@@ -945,20 +1187,24 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
-
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
+                    
 
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
                     bankingTransaction.Description = "Transfer to " + StockAccountTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedChecking).State = EntityState.Modified;
+                    db.Entry(StockAccountTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
+
                 }
 
                 // Redirect 
@@ -1006,15 +1252,28 @@ namespace LonghornBank.Controllers
                         Decimal New_Transfer_Balance = SelectedSavings.Balance - bankingTransaction.Amount;
                         SelectedSavings.Balance = New_Transfer_Balance;
 
-                        if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
+                        if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -80)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedSavings.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.SavingsAccount = NewSavingsAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
                         }
+
                         bankingTransaction.Amount = actual;
                     }
                     else
@@ -1023,19 +1282,23 @@ namespace LonghornBank.Controllers
                     }
 
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
+
 
                     // Add the Checking Account
                     bankingTransaction.SavingsAccount = NewSavingsAccounts;
                     bankingTransaction.Description = "Transfer to " + CheckingTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedSavings).State = EntityState.Modified;
+                    db.Entry(CheckingTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
 
                 // If Transfering to a Savings Account 
@@ -1068,13 +1331,26 @@ namespace LonghornBank.Controllers
 
                         if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedSavings.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.SavingsAccount = NewSavingsAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
                         }
+
                         bankingTransaction.Amount = actual;
                     }
                     else
@@ -1082,19 +1358,21 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Add the Checking Account
                     bankingTransaction.SavingsAccount = NewSavingsAccounts;
                     bankingTransaction.Description = "Transfer to " + SavingsTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedSavings).State = EntityState.Modified;
+                    db.Entry(SavingsTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
 
                 else if (IRAIDTrans != 0)
@@ -1141,13 +1419,27 @@ namespace LonghornBank.Controllers
 
                         if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedSavings.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.SavingsAccount = NewSavingsAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
                         }
+                        
+                        // Set the amount
                         bankingTransaction.Amount = actual;
                     }
                     else
@@ -1155,15 +1447,14 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Add the Checking Account
                     bankingTransaction.SavingsAccount = NewSavingsAccounts;
                     bankingTransaction.Description = "Transfer to " + IRATrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedSavings).State = EntityState.Modified;
+                    db.Entry(IRATrans).State = EntityState.Modified;
                     db.SaveChanges();
 
                     // Redirect 
@@ -1192,14 +1483,27 @@ namespace LonghornBank.Controllers
 
                         if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedSavings.Balance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.SavingsAccount = NewSavingsAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
                         }
 
+                        // Set the amount
                         bankingTransaction.Amount = actual;
 
                     }
@@ -1209,19 +1513,22 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Add the Checking Account
                     bankingTransaction.SavingsAccount = NewSavingsAccounts;
                     bankingTransaction.Description = "Transfer to " + StockAccountTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedSavings).State = EntityState.Modified;
+                    db.Entry(StockAccountTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
+
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
 
                 // Redirect 
@@ -1270,14 +1577,27 @@ namespace LonghornBank.Controllers
 
                             if (Transfer < 0 && Transfer >= -50)
                             {
+                                // Create a new banking transaction 
+                                BankingTransaction Fee = new BankingTransaction();
+
+                                // Take out the fee
                                 SelectedIRA.Balance -= 30;
-                                bankingTransaction.Description = "OverDrawnFee";
-                                bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                bankingTransaction.Amount = 30;
-                                db.BankingTransaction.Add(bankingTransaction);
+
+                                // Create the bankings transaction 
+                                Fee.Description = "OverDrawnFee";
+                                Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                Fee.Amount = 30;
+                                Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                Fee.IRAAccount = NewIRAAccounts;
+
+                                // Add the fee to the database
+                                db.BankingTransaction.Add(Fee);
                                 db.SaveChanges();
                             }
 
+                            // Set the amount
                             bankingTransaction.Amount = actual;
                         }
                         else
@@ -1305,20 +1625,21 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Associate with Savings Account 
                     bankingTransaction.IRAAccount = NewIRAAccounts;
                     bankingTransaction.Description = "Transfer to " + CheckingTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedIRA).State = EntityState.Modified;
+                    db.Entry(CheckingTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
 
 
                 }
@@ -1356,15 +1677,29 @@ namespace LonghornBank.Controllers
 
                                 if ( Transfer < 0 && Transfer >= -50)
                                 {
+                                    // Create a new banking transaction 
+                                    BankingTransaction Fee = new BankingTransaction();
+
+                                    // Take out the fee
                                     SelectedIRA.Balance -= 30;
-                                    bankingTransaction.Description = "OverDrawnFee";
-                                    bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                    bankingTransaction.Amount = 30;
-                                    db.BankingTransaction.Add(bankingTransaction);
+
+                                    // Create the bankings transaction 
+                                    Fee.Description = "OverDrawnFee";
+                                    Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                    Fee.Amount = 30;
+                                    Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                    Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                    Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                    Fee.IRAAccount = NewIRAAccounts;
+
+                                    // Add the fee to the database
+                                    db.BankingTransaction.Add(Fee);
                                     db.SaveChanges();
                                 }
 
+                                // Set the amount
                                 bankingTransaction.Amount = actual;
+
                             }
                             else
                             {
@@ -1400,19 +1735,20 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     bankingTransaction.IRAAccount = NewIRAAccounts;
                     bankingTransaction.Description = "Transfer to " + SavingTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedIRA).State = EntityState.Modified;
+                    db.Entry(SavingTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
 
 
                 }
@@ -1443,15 +1779,29 @@ namespace LonghornBank.Controllers
 
                                 if (Transfer < 0 && SelectedIRA.Balance - Transfer >= -50)
                                 {
+                                    // Create a new banking transaction 
+                                    BankingTransaction Fee = new BankingTransaction();
+
+                                    // Take out the fee
                                     SelectedIRA.Balance -= 30;
-                                    bankingTransaction.Description = "OverDrawnFee";
-                                    bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                    bankingTransaction.Amount = 30;
-                                    db.BankingTransaction.Add(bankingTransaction);
+
+                                    // Create the bankings transaction 
+                                    Fee.Description = "OverDrawnFee";
+                                    Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                    Fee.Amount = 30;
+                                    Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                    Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                    Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                    Fee.IRAAccount = NewIRAAccounts;
+
+                                    // Add the fee to the database
+                                    db.BankingTransaction.Add(Fee);
                                     db.SaveChanges();
                                 }
 
+                                // Set the amount
                                 bankingTransaction.Amount = actual;
+
                             }
                             else
                             {
@@ -1484,20 +1834,21 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
-
-
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
+                    
                     bankingTransaction.IRAAccount = NewIRAAccounts;
                     bankingTransaction.Description = "Transfer to " + StockAccountTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedIRA).State = EntityState.Modified;
+                    db.Entry(StockAccountTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
 
 
                 }
@@ -1532,7 +1883,7 @@ namespace LonghornBank.Controllers
                     bankingTransaction.Description = "Transfer From " + SelectedStockAccount;
 
                     //Adds money from savings to checking account
-                    if (bankingTransaction.Amount <= SelectedStockAccount.CashBalance + 50 && SelectedStockAccount.CashBalance >=0)
+                    if (bankingTransaction.Amount <= SelectedStockAccount.CashBalance + 50m && SelectedStockAccount.CashBalance >= 0)
                     {
                         Decimal New_Balance = CheckingTrans.Balance + bankingTransaction.Amount;
                         CheckingTrans.Balance = New_Balance;
@@ -1543,14 +1894,27 @@ namespace LonghornBank.Controllers
 
                         if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedStockAccount.CashBalance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.StockAccount = SelectedStockAccount;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
                         }
 
+                        // Set the amount
                         bankingTransaction.Amount = actual;
                     }
                     else
@@ -1558,20 +1922,21 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Associate with Savings Account 
                     bankingTransaction.StockAccount = SelectedStockAccount;
                     bankingTransaction.Description = "Transfer to " + CheckingTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedStockAccount).State = EntityState.Modified;
+                    db.Entry(CheckingTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
 
                 // If Transfering to a Savings Account 
@@ -1605,32 +1970,49 @@ namespace LonghornBank.Controllers
 
                         if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedStockAccount.CashBalance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.StockAccount = SelectedStockAccount;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
                         }
+
+                        // Set the amount
+                        bankingTransaction.Amount = actual;
                     }
                     else
                     {
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Associate with Savings Account 
                     bankingTransaction.StockAccount = SelectedStockAccount;
                     bankingTransaction.Description = "Transfer to " + SavingsTrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedStockAccount).State = EntityState.Modified;
+                    db.Entry(SavingsTrans).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
 
                 else if (IRAIDTrans != 0)
@@ -1677,14 +2059,27 @@ namespace LonghornBank.Controllers
                         SelectedStockAccount.CashBalance = New_Transfer_Balance;
                         if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
                         {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
                             SelectedStockAccount.CashBalance -= 30;
-                            bankingTransaction.Description = "OverDrawnFee";
-                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                            bankingTransaction.Amount = 30;
-                            db.BankingTransaction.Add(bankingTransaction);
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.StockAccount = SelectedStockAccount;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
                         }
 
+                        // Set the amount
                         bankingTransaction.Amount = actual;
 
                     }
@@ -1693,19 +2088,21 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
-                    // Add to database
-                    db.BankingTransaction.Add(bankingTransaction);
-                    db.SaveChanges();
-
                     // Associate with Savings Account 
                     bankingTransaction.StockAccount = SelectedStockAccount;
                     bankingTransaction.Description = "Transfer to " + IRATrans.AccountNumber;
+
                     // Add to database
                     db.BankingTransaction.Add(bankingTransaction);
+                    db.Entry(SelectedStockAccount).State = EntityState.Modified;
+                    db.Entry(IRATrans).State = EntityState.Modified;
                     db.SaveChanges();
 
+                    // Add transaction type to ViewBag
+                    ViewBag.TransactionType = bankingTransaction.BankingTransactionType.ToString();
+
                     // Redirect 
-                    return RedirectToAction("Index", "BankingTransactions", new { id = Customer.Id });
+                    return View("TransactionConfirmation");
                 }
             }
             return View(bankingTransaction);

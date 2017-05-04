@@ -64,6 +64,7 @@ namespace LonghornBank.Controllers
             ViewBag.SavingsTransactions = SavingTransactions;
             ViewBag.Ranges = SearchTransactions.AmountRange();
             ViewBag.Dates = SearchTransactions.DateRanges();
+            ViewBag.ResultsCount = SavingTransactions.Count;
             return View(saving);
         }
 
@@ -76,6 +77,7 @@ namespace LonghornBank.Controllers
             ViewBag.SavingsTransactions = Transactions;
             ViewBag.Ranges = SearchTransactions.AmountRange();
             ViewBag.Dates = SearchTransactions.DateRanges();
+            ViewBag.ResultsCount = Transactions.Count;
             return View("Details", saving);
         }
 
