@@ -253,7 +253,9 @@ namespace LonghornBank.Controllers
                                 Amount = 30,
                                 BankingTransactionType = BankingTranactionType.Fee,
                                 TransactionDate = Pay.PayeeTransaction.TransactionDate,
-                                CheckingAccount = CheckingList
+                                CheckingAccount = CheckingList,
+                                ApprovalStatus = ApprovedorNeedsApproval.Approved,
+                                TransactionDispute = DisputeStatus.NotDisputed
                             };
 
                             CustomerChecking.Overdrawn = true;
@@ -271,7 +273,9 @@ namespace LonghornBank.Controllers
                             BankingTransactionType = BankingTranactionType.BillPayment,
                             TransactionDate = Pay.PayeeTransaction.TransactionDate,
                             CheckingAccount = CheckingList,
-                            Description = "Payment of bill"
+                            Description = "Payment of bill",
+                            ApprovalStatus = ApprovedorNeedsApproval.Approved,
+                            TransactionDispute = DisputeStatus.NotDisputed
                         };
 
                         db.CheckingAccount.Find(CustomerChecking.CheckingID).Balance -= Pay.PayeeTransaction.Amount;
@@ -309,7 +313,9 @@ namespace LonghornBank.Controllers
                                 Amount = 30,
                                 BankingTransactionType = BankingTranactionType.Fee,
                                 TransactionDate = Pay.PayeeTransaction.TransactionDate,
-                                SavingsAccount = SavingList
+                                SavingsAccount = SavingList,
+                                TransactionDispute = DisputeStatus.NotDisputed,
+                                ApprovalStatus = ApprovedorNeedsApproval.Approved
                             };
 
                             CustomerSaving.Overdrawn = true;
@@ -327,10 +333,13 @@ namespace LonghornBank.Controllers
                             BankingTransactionType = BankingTranactionType.BillPayment,
                             TransactionDate = Pay.PayeeTransaction.TransactionDate,
                             SavingsAccount = SavingList,
-                            Description = "Payment of bill"
+                            Description = "Payment of bill",
+                            ApprovalStatus = ApprovedorNeedsApproval.Approved,
+                            TransactionDispute = DisputeStatus.NotDisputed
+                            
                         };
 
-                        db.CheckingAccount.Find(CustomerSaving.SavingID).Balance -= Pay.PayeeTransaction.Amount;
+                        db.SavingsAccount.Find(CustomerSaving.SavingID).Balance -= Pay.PayeeTransaction.Amount;
 
                         db.BankingTransaction.Add(CheckingWithdrawl);
                         db.SaveChanges();

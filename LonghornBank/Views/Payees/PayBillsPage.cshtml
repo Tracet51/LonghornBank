@@ -44,10 +44,10 @@
                     @Html.DisplayFor(modelItem => item.PayeeType)
                 </td>
                 <td>
-                    @Html.DropDownListFor(m => m.CheckingID, Model.CheckingAccounts)
+                    @Html.DropDownListFor(m => m.CheckingID, Model.CheckingAccounts, new { @class = "form-control" })
                 </td>
                 <td>
-                    @Html.DropDownListFor(m => m.SavingID, Model.SavingsAccounts)
+                    @Html.DropDownListFor(m => m.SavingID, Model.SavingsAccounts, new { @class = "form-control" })
                 </td>
                 <td>
                     @Html.EditorFor(model => model.PayeeTransaction.Amount, new { htmlAttributes = new { @class = "form-control" } })

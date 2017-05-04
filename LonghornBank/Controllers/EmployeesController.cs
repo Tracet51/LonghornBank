@@ -178,10 +178,13 @@ namespace LonghornBank.Controllers
 
                 var update = await UserManager.UpdateAsync(user);
 
-                var passwordRemove = await UserManager.RemovePasswordAsync(user.Id);
+                if (NewPasswordUnhashed != null)
+                {
+                    var passwordRemove = await UserManager.RemovePasswordAsync(user.Id);
 
-                var passwordUpdate = await UserManager.AddPasswordAsync(user.Id, NewPasswordUnhashed);
-
+                    var passwordUpdate = await UserManager.AddPasswordAsync(user.Id, NewPasswordUnhashed);
+                }
+                
                 var result = await db.SaveChangesAsync();
                 
                 db.SaveChanges();
