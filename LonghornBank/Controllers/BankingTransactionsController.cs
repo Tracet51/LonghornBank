@@ -485,7 +485,16 @@ namespace LonghornBank.Controllers
             {
                 return HttpNotFound();
             }
-            return View(bankingTransaction);
+
+            // Fill out the view model 
+            DisputeTransaction Dispute = new DisputeTransaction
+            {
+                BankingTransactionID = bankingTransaction.BankingTransactionID,
+                CustomerOpinion = bankingTransaction.Amount
+
+            };
+
+            return View(Dispute);
         }
 
         // POST: BankingTransactions/Edit/5
@@ -493,16 +502,25 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "BankingTransactionID,TransactionDispute,TransactionDate,Amount,Description, DisputeMessage, CustomerOpinion, CorrectedAmount, BankingTransactionType")] BankingTransaction bankingTransaction)
+        public ActionResult Edit([Bind(Include = "BankingTransactionID,TransactionDispute, DisputeMessage, CustomerOpinion, CorrectedAmount")] DisputeTransaction Dispute)
         {
             if (ModelState.IsValid)
             {
+                // Get the transations 
+                BankingTransaction bankingTransaction = db.BankingTransaction.Find(Dispute.BankingTransactionID);
+
+                // set the fields 
+                bankingTransaction.CustomerOpinion = Dispute.CustomerOpinion;
+                bankingTransaction.DisputeMessage = Dispute.TransactionDispute.ToString() + ": " + Dispute.DisputeMessage;
+                bankingTransaction.TransactionDispute = DisputeStatus.Submitted;
+
                 db.Entry(bankingTransaction).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+
+                return RedirectToAction("DisputeConfirmation");
             }
 
-            return View(bankingTransaction);
+            return View(Dispute);
         }
 
         // GET: BankingTransactions/Delete/5
@@ -3036,6 +3054,10 @@ namespace LonghornBank.Controllers
 
         }
 
+        public ActionResult DisputeConfirmation()
+        {
+            return View();
+        }
 
 
         public static DateTime Today { get;}
