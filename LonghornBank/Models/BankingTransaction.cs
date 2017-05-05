@@ -43,7 +43,7 @@ namespace LonghornBank.Models
         public ApprovedorNeedsApproval ApprovalStatus { get; set; }
 
         //[Required(ErrorMessage = "Disputed Amount is Required")]
-        [Display(Name = "Disputed Amount")]
+        [Display(Name = "Customer's Opinion - Disputed Amount")]
         public Decimal CustomerOpinion { get; set; }
 
         public String ManagerDisputeMessage { get; set; }

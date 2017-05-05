@@ -443,7 +443,7 @@ namespace LonghornBank.Controllers
 
                 // set the fields 
                 bankingTransaction.CustomerOpinion = Dispute.CustomerOpinion;
-                bankingTransaction.DisputeMessage = Dispute.TransactionDispute.ToString() + ": " + Dispute.DisputeMessage;
+                bankingTransaction.DisputeMessage = Dispute.DisputeMessage;
                 bankingTransaction.TransactionDispute = DisputeStatus.Submitted;
 
                 db.Entry(bankingTransaction).State = EntityState.Modified;
@@ -3285,7 +3285,7 @@ namespace LonghornBank.Controllers
         
 
         //Detailed Search function
-        public ActionResult SearchResults(SearchViewModel TheSearch)
+        public ActionResult Search(SearchViewModel TheSearch)
         {
             List<BankingTransaction> Transactions = SearchTransactions.Search(db, TheSearch, 0, 0);
 

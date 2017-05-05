@@ -231,6 +231,8 @@ namespace LonghornBank.Controllers
                 ViewBag.ConfirmationMessage = "You have accepted a customer's dispute for transaction ID #" + BankingTransactionID + " and the amount is now $" + ManagerApprovedDecimal;
                 editedtransobject.CorrectedAmount = ManagerApprovedDecimal;
                 editedtransobject.TransactionDispute = DisputeStatus.Accepted;
+
+
                 //SendEmail()
                 String emailsubject = "A message from Longhorn Bank";
                 String emailbody = "Your dispute on transaction #" + editedtransobject.BankingTransactionID + " has been reviewed by a manager. \n This dispute has been accepted and has been revised to the amount you requested.\n We apologize for the inconvenience.\n Sincerely,\n Longhorn Bank Management";
@@ -294,8 +296,15 @@ namespace LonghornBank.Controllers
         [HttpPost]
        public ActionResult DisputeManagementDetail(DisputesViewModel bankingTransaction)
         {
+            // Get the manager 
+            var query = from m in db.Users
+                        where m.UserName == User.Identity.Name
+                        select m;
+
+            AppUser Manager = query.FirstOrDefault();
+
             BankingTransaction transaction = db.BankingTransaction.Find(bankingTransaction.DisputedTransaction.BankingTransactionID);
-            transaction.ManagerDisputeMessage = bankingTransaction.DisputedTransaction.ManagerDisputeMessage;
+            transaction.ManagerDisputeMessage = Manager.Email.ToString() + " " + bankingTransaction.DisputedTransaction.ManagerDisputeMessage;
 
 
             if (bankingTransaction.DisputedTransaction.CorrectedAmount == bankingTransaction.DisputedTransaction.CustomerOpinion)
@@ -317,7 +326,7 @@ namespace LonghornBank.Controllers
 
                     else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
                     {
-                        CustomerChecking.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        CustomerChecking.Balance += (bankingTransaction.DisputedTransaction.CorrectedAmount - transaction.Amount);
                         db.Entry(CustomerChecking).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -335,7 +344,7 @@ namespace LonghornBank.Controllers
 
                     else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
                     {
-                        CustomerSaving.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        CustomerSaving.Balance += (bankingTransaction.DisputedTransaction.CorrectedAmount - transaction.Amount);
                         db.Entry(CustomerSaving).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -354,7 +363,7 @@ namespace LonghornBank.Controllers
 
                     else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
                     {
-                        CustomerIra.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        CustomerIra.Balance += (bankingTransaction.DisputedTransaction.CorrectedAmount - transaction.Amount);
                         db.Entry(CustomerIra).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -371,7 +380,7 @@ namespace LonghornBank.Controllers
 
                     else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
                     {
-                        CustomerStock.CashBalance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        CustomerStock.CashBalance += (bankingTransaction.DisputedTransaction.CorrectedAmount - transaction.Amount);
                         db.Entry(CustomerStock).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -411,7 +420,7 @@ namespace LonghornBank.Controllers
 
                     else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
                     {
-                        CustomerChecking.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        CustomerChecking.Balance += (bankingTransaction.DisputedTransaction.CorrectedAmount - transaction.Amount);
                         db.Entry(CustomerChecking).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -429,7 +438,7 @@ namespace LonghornBank.Controllers
 
                     else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
                     {
-                        CustomerSaving.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        CustomerSaving.Balance += (bankingTransaction.DisputedTransaction.CorrectedAmount - transaction.Amount);
                         db.Entry(CustomerSaving).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -448,7 +457,7 @@ namespace LonghornBank.Controllers
 
                     else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
                     {
-                        CustomerIra.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        CustomerIra.Balance += (bankingTransaction.DisputedTransaction.CorrectedAmount - transaction.Amount);
                         db.Entry(CustomerIra).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -465,7 +474,7 @@ namespace LonghornBank.Controllers
 
                     else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
                     {
-                        CustomerStock.CashBalance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        CustomerStock.CashBalance += (bankingTransaction.DisputedTransaction.CorrectedAmount - transaction.Amount);
                         db.Entry(CustomerStock).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -503,7 +512,7 @@ namespace LonghornBank.Controllers
 
                     else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
                     {
-                        CustomerChecking.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        CustomerChecking.Balance += (bankingTransaction.DisputedTransaction.CorrectedAmount - transaction.Amount);
                         db.Entry(CustomerChecking).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -521,7 +530,7 @@ namespace LonghornBank.Controllers
 
                     else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
                     {
-                        CustomerSaving.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        CustomerSaving.Balance += (bankingTransaction.DisputedTransaction.CorrectedAmount - transaction.Amount);
                         db.Entry(CustomerSaving).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -540,7 +549,7 @@ namespace LonghornBank.Controllers
 
                     else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
                     {
-                        CustomerIra.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        CustomerIra.Balance += (bankingTransaction.DisputedTransaction.CorrectedAmount - transaction.Amount);
                         db.Entry(CustomerIra).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -557,7 +566,7 @@ namespace LonghornBank.Controllers
 
                     else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
                     {
-                        CustomerStock.CashBalance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        CustomerStock.CashBalance += (bankingTransaction.DisputedTransaction.CorrectedAmount - transaction.Amount);
                         db.Entry(CustomerStock).State = EntityState.Modified;
                         db.SaveChanges();
                     }

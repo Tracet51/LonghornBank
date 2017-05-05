@@ -397,6 +397,7 @@
     <Content Include="Views\Profile\Error.cshtml" />
     <Content Include="Views\Profile\Confirm.cshtml" />
     <Content Include="Views\BankingTransactions\Error.cshtml" />
+    <Content Include="Views\StockTrades\SaleError.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
