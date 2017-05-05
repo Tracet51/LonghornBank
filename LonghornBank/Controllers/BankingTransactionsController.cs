@@ -2849,7 +2849,7 @@ namespace LonghornBank.Controllers
 
             }
             // Redirect 
-            return RedirectToAction("Index", "BankingTransactions", new { id = ErrorActionIRA.CustomerProfile.Id });
+            return RedirectToAction("Home", "Portal", new { id = ErrorActionIRA.CustomerProfile.Id });
         }
 
         public ActionResult IRAWithDrawalError(string Description, DateTime Date, Decimal Amount, int IRAID, int CID, int SID, int StAID, int btID, BankingTranactionType type)

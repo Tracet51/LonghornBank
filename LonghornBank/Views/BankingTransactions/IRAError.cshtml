@@ -29,6 +29,8 @@
         @Html.HiddenFor(model => model.StockAccounts.StockAccountID)
         @Html.HiddenFor(model => model.IRAAccounts.RunningTotal)
 
+        <div>If you would like to meet your yearly limit click Automatic. If you would like to enter the amount click User</div>
+
         <div class="form-group">
             @Html.LabelFor(model => model.PayeeTransaction.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
