@@ -977,6 +977,10 @@ namespace LonghornBank.Controllers
                             db.BankingTransaction.Add(Fee);
 
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = SelectedChecking.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedChecking.Balance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
                         }
 
 
@@ -1055,6 +1059,11 @@ namespace LonghornBank.Controllers
 
 
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = SelectedChecking.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedChecking.Balance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
+
                         }
                         bankingTransaction.Amount = actual;
 
@@ -1133,6 +1142,34 @@ namespace LonghornBank.Controllers
 
                         SelectedChecking.Balance = New_Transfer_Balance;
 
+                        if (New_Transfer_Balance < 0 && New_Transfer_Balance >= -50)
+                        {
+                            // Create a new banking transaction 
+                            BankingTransaction Fee = new BankingTransaction();
+
+                            // Take out the fee
+                            SelectedChecking.Balance -= 30;
+
+                            // Create the bankings transaction 
+                            Fee.Description = "OverDrawnFee";
+                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                            Fee.Amount = 30;
+                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                            Fee.CheckingAccount = NewCheckingAccounts;
+
+                            // Add the fee to the database
+                            db.BankingTransaction.Add(Fee);
+                            db.SaveChanges();
+
+                            // Send the email 
+                            String Body = SelectedChecking.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedChecking.Balance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
+                        }
+
+                        bankingTransaction.Amount = actual;
+
                     }
                     else
                     {
@@ -1196,6 +1233,10 @@ namespace LonghornBank.Controllers
                             db.BankingTransaction.Add(Fee);
 
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = SelectedChecking.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedChecking.Balance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
                         }
                         
                         bankingTransaction.Amount = actual;
@@ -1290,6 +1331,10 @@ namespace LonghornBank.Controllers
                             // Add the fee to the database
                             db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = SelectedSavings.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedSavings.Balance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
                         }
 
                         bankingTransaction.Amount = actual;
@@ -1367,6 +1412,10 @@ namespace LonghornBank.Controllers
                             // Add the fee to the database
                             db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = SelectedSavings.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedSavings.Balance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
                         }
 
                         bankingTransaction.Amount = actual;
@@ -1455,6 +1504,10 @@ namespace LonghornBank.Controllers
                             // Add the fee to the database
                             db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = SelectedSavings.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedSavings.Balance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
                         }
                         
                         // Set the amount
@@ -1519,6 +1572,10 @@ namespace LonghornBank.Controllers
                             // Add the fee to the database
                             db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = SelectedSavings.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedSavings.Balance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
                         }
 
                         // Set the amount
@@ -1613,6 +1670,10 @@ namespace LonghornBank.Controllers
                                 // Add the fee to the database
                                 db.BankingTransaction.Add(Fee);
                                 db.SaveChanges();
+
+                                // Send the email 
+                                String Body = SelectedIRA.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedIRA.Balance.ToString();
+                                LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
                             }
 
                             // Set the amount
@@ -1713,6 +1774,10 @@ namespace LonghornBank.Controllers
                                     // Add the fee to the database
                                     db.BankingTransaction.Add(Fee);
                                     db.SaveChanges();
+
+                                    // Send the email 
+                                    String Body = SelectedIRA.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedIRA.Balance.ToString();
+                                    LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
                                 }
 
                                 // Set the amount
@@ -1815,6 +1880,10 @@ namespace LonghornBank.Controllers
                                     // Add the fee to the database
                                     db.BankingTransaction.Add(Fee);
                                     db.SaveChanges();
+
+                                    // Send the email 
+                                    String Body = SelectedIRA.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedIRA.Balance.ToString();
+                                    LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
                                 }
 
                                 // Set the amount
@@ -1930,6 +1999,10 @@ namespace LonghornBank.Controllers
                             // Add the fee to the database
                             db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = SelectedStockAccount.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedStockAccount.CashBalance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
                         }
 
                         // Set the amount
@@ -2006,6 +2079,10 @@ namespace LonghornBank.Controllers
                             // Add the fee to the database
                             db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = SelectedStockAccount.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedStockAccount.CashBalance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
                         }
 
                         // Set the amount
@@ -2095,6 +2172,10 @@ namespace LonghornBank.Controllers
                             // Add the fee to the database
                             db.BankingTransaction.Add(Fee);
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = SelectedStockAccount.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedStockAccount.CashBalance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
                         }
 
                         // Set the amount
@@ -2354,14 +2435,29 @@ namespace LonghornBank.Controllers
 
                                     if (SelectedSaving.Balance - bankingTransaction.Amount < 0 && SelectedSaving.Balance - bankingTransaction.Amount >= -50)
                                     {
-                                        SelectedSaving.Balance -= New_Balance;
+                                        // Create a new banking transaction 
+                                        BankingTransaction Fee = new BankingTransaction();
+
+                                        // Take out the fee
                                         SelectedSaving.Balance -= 30;
-                                        bankingTransaction.Description = "OverDrawnFee";
-                                        bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                        bankingTransaction.Amount = 30;
-                                        db.BankingTransaction.Add(bankingTransaction);
+
+                                        // Create the bankings transaction 
+                                        Fee.Description = "OverDrawnFee";
+                                        Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                        Fee.Amount = 30;
+                                        Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                        Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                        Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                        Fee.SavingsAccount = NewSavingAccounts;
+
+                                        // Add the fee to the database
+                                        db.BankingTransaction.Add(Fee);
                                         db.SaveChanges();
-                                        
+
+                                        // Send the email 
+                                        String Body = SelectedSaving.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedSaving.Balance.ToString();
+                                        LonghornBank.Utility.Email.PasswordEmail(ErrorActionIRA.CustomerProfile.Email, "Overdrawn Account", Body);
+
                                     }
                                     else
                                     {
@@ -2403,13 +2499,28 @@ namespace LonghornBank.Controllers
 
                                     if (SelectedChecking.Balance - bankingTransaction.Amount < 0 && SelectedChecking.Balance - bankingTransaction.Amount >= -50)
                                     {
-                                        SelectedChecking.Balance -= New_Balance;
+                                        // Create a new banking transaction 
+                                        BankingTransaction Fee = new BankingTransaction();
+
+                                        // Take out the fee
                                         SelectedChecking.Balance -= 30;
-                                        bankingTransaction.Description = "OverDrawnFee";
-                                        bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                        bankingTransaction.Amount = 30;
-                                        db.BankingTransaction.Add(bankingTransaction);
+
+                                        // Create the bankings transaction 
+                                        Fee.Description = "OverDrawnFee";
+                                        Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                        Fee.Amount = 30;
+                                        Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                        Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                        Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                        Fee.CheckingAccount = NewCheckingAccounts;
+
+                                        // Add the fee to the database
+                                        db.BankingTransaction.Add(Fee);
                                         db.SaveChanges();
+
+                                        // Send the email 
+                                        String Body = SelectedChecking.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedChecking.Balance.ToString();
+                                        LonghornBank.Utility.Email.PasswordEmail(ErrorActionIRA.CustomerProfile.Email, "Overdrawn Account", Body);
                                     }
                                     else
                                     {
@@ -2448,13 +2559,28 @@ namespace LonghornBank.Controllers
 
                                     if (SelectedStockAccount.CashBalance - bankingTransaction.Amount < 0 && SelectedStockAccount.CashBalance - bankingTransaction.Amount >= -50)
                                     {
-                                        SelectedStockAccount.CashBalance -= New_Balance;
+                                        // Create a new banking transaction 
+                                        BankingTransaction Fee = new BankingTransaction();
+
+                                        // Take out the fee
                                         SelectedStockAccount.CashBalance -= 30;
-                                        bankingTransaction.Description = "OverDrawnFee";
-                                        bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                        bankingTransaction.Amount = 30;
-                                        db.BankingTransaction.Add(bankingTransaction);
+
+                                        // Create the bankings transaction 
+                                        Fee.Description = "OverDrawnFee";
+                                        Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                        Fee.Amount = 30;
+                                        Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                        Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                        Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                        Fee.StockAccount = SelectedStockAccount;
+
+                                        // Add the fee to the database
+                                        db.BankingTransaction.Add(Fee);
                                         db.SaveChanges();
+
+                                        // Send the email 
+                                        String Body = SelectedStockAccount.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedStockAccount.CashBalance.ToString();
+                                        LonghornBank.Utility.Email.PasswordEmail(ErrorActionIRA.CustomerProfile.Email, "Overdrawn Account", Body);
                                     }
                                     else
                                     {
@@ -2512,13 +2638,28 @@ namespace LonghornBank.Controllers
 
                                         if (SelectedSaving.Balance - bankingTransaction.Amount < 0 && SelectedSaving.Balance - bankingTransaction.Amount >= -50)
                                         {
-                                            SelectedSaving.Balance -= New_Balance2;
+                                            // Create a new banking transaction 
+                                            BankingTransaction Fee = new BankingTransaction();
+
+                                            // Take out the fee
                                             SelectedSaving.Balance -= 30;
-                                            bankingTransaction.Description = "OverDrawnFee";
-                                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                            bankingTransaction.Amount = 30;
-                                            db.BankingTransaction.Add(bankingTransaction);
+
+                                            // Create the bankings transaction 
+                                            Fee.Description = "OverDrawnFee";
+                                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                            Fee.Amount = 30;
+                                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                            Fee.SavingsAccount = NewSavingAccounts;
+
+                                            // Add the fee to the database
+                                            db.BankingTransaction.Add(Fee);
                                             db.SaveChanges();
+
+                                            // Send the email 
+                                            String Body = SelectedSaving.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedSaving.Balance.ToString();
+                                            LonghornBank.Utility.Email.PasswordEmail(ErrorActionIRA.CustomerProfile.Email, "Overdrawn Account", Body);
                                         }
                                         else
                                         {
@@ -2562,13 +2703,28 @@ namespace LonghornBank.Controllers
 
                                         if (SelectedChecking.Balance - bankingTransaction.Amount < 0 && SelectedChecking.Balance - bankingTransaction.Amount >= -50)
                                         {
-                                            SelectedChecking.Balance -= New_Balance2;
+                                            // Create a new banking transaction 
+                                            BankingTransaction Fee = new BankingTransaction();
+
+                                            // Take out the fee
                                             SelectedChecking.Balance -= 30;
-                                            bankingTransaction.Description = "OverDrawnFee";
-                                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                            bankingTransaction.Amount = 30;
-                                            db.BankingTransaction.Add(bankingTransaction);
+
+                                            // Create the bankings transaction 
+                                            Fee.Description = "OverDrawnFee";
+                                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                            Fee.Amount = 30;
+                                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                            Fee.CheckingAccount = NewCheckingAccounts;
+
+                                            // Add the fee to the database
+                                            db.BankingTransaction.Add(Fee);
                                             db.SaveChanges();
+
+                                            // Send the email 
+                                            String Body = SelectedChecking.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedChecking.Balance.ToString();
+                                            LonghornBank.Utility.Email.PasswordEmail(ErrorActionIRA.CustomerProfile.Email, "Overdrawn Account", Body);
                                         }
                                         else
                                         {
@@ -2610,13 +2766,28 @@ namespace LonghornBank.Controllers
 
                                         if (SelectedStockAccount.CashBalance - bankingTransaction.Amount < 0 && SelectedStockAccount.CashBalance - bankingTransaction.Amount >= -50)
                                         {
-                                            SelectedStockAccount.CashBalance -= New_Balance2;
+                                            // Create a new banking transaction 
+                                            BankingTransaction Fee = new BankingTransaction();
+
+                                            // Take out the fee
                                             SelectedStockAccount.CashBalance -= 30;
-                                            bankingTransaction.Description = "OverDrawnFee";
-                                            bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                            bankingTransaction.Amount = 30;
-                                            db.BankingTransaction.Add(bankingTransaction);
+
+                                            // Create the bankings transaction 
+                                            Fee.Description = "OverDrawnFee";
+                                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                            Fee.Amount = 30;
+                                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                            Fee.StockAccount = SelectedStockAccount;
+
+                                            // Add the fee to the database
+                                            db.BankingTransaction.Add(Fee);
                                             db.SaveChanges();
+
+                                            // Send the email 
+                                            String Body = SelectedStockAccount.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedStockAccount.CashBalance.ToString();
+                                            LonghornBank.Utility.Email.PasswordEmail(ErrorActionIRA.CustomerProfile.Email, "Overdrawn Account", Body);
                                         }
                                         else
                                         {

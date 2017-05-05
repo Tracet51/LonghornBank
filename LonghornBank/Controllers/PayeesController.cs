@@ -263,7 +263,12 @@ namespace LonghornBank.Controllers
                             PayeeTrans.Add(OverDrawn);
 
                             db.Entry(OverDrawn).State = EntityState.Modified;
+                            
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = CustomerChecking.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + CustomerChecking.Balance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
 
                         }
 
@@ -324,6 +329,10 @@ namespace LonghornBank.Controllers
 
                             db.Entry(OverDrawn).State = EntityState.Modified;
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = CustomerChecking.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + CustomerChecking.Balance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
 
                         }
 
