@@ -17,6 +17,19 @@ namespace LonghornBank.Controllers
         // GET: Payees
         public ActionResult Index()
         {
+            // Query the Database for the logged in user 
+            var CustomerQuery = from c in db.Users
+                                where c.UserName == User.Identity.Name
+                                select c;
+
+
+            // Get the Customer 
+            AppUser customer = CustomerQuery.FirstOrDefault();
+
+            if (customer.ActiveStatus == false)
+            {
+                return View("Frozen");
+            }
             return View(db.Payees.ToList());
         }
 

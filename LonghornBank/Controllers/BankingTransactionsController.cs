@@ -302,6 +302,8 @@ namespace LonghornBank.Controllers
 
             bankingTransaction.BankingTransactionType = BankingTranactionType.Withdrawl;
 
+            bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
+
             if (ModelState.IsValid)
             {
                 // Check to if Checking Account
@@ -594,6 +596,8 @@ namespace LonghornBank.Controllers
                                 select c;
 
             AppUser Customer = CustomerQuery.FirstOrDefault();
+
+            bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
 
             if (CheckingID != 0)
             {
@@ -924,6 +928,8 @@ namespace LonghornBank.Controllers
                                 select c;
             AppUser Customer = CustomerQuery.FirstOrDefault();
 
+            bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
+
             bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
 
             Decimal actual = bankingTransaction.Amount;
@@ -1029,11 +1035,6 @@ namespace LonghornBank.Controllers
                     // Create a list of checking accounts and add the one seleceted 
                     List<Saving> NewSavingsAccounts = new List<Saving> { SavingsTrans };
 
-                    // Add the Savings Account
-                    bankingTransaction.SavingsAccount = NewSavingsAccounts;
-
-                    bankingTransaction.Description = "Transfer from " + SelectedChecking.AccountNumber;
-
                     //Adds money to account
                     if (bankingTransaction.Amount <= SelectedChecking.Balance + 50 && SelectedChecking.Balance >= 0)
                     {
@@ -1081,7 +1082,11 @@ namespace LonghornBank.Controllers
                         return View("WithDrawalError");
                     }
 
+                    // Add the Savings Account
+                    bankingTransaction.SavingsAccount = NewSavingsAccounts;
 
+                    bankingTransaction.Description = "Transfer from " + SelectedChecking.AccountNumber;
+                    db.BankingTransaction.Add(bankingTransaction);
 
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
@@ -1118,12 +1123,7 @@ namespace LonghornBank.Controllers
                         return View("NoMoreDeposits");
                     }
 
-                    // Add the Checking Account
-                    bankingTransaction.CheckingAccount = NewCheckingAccounts;
-
-                    bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
-
-                    bankingTransaction.Description = "Transfer from " + SelectedChecking.AccountNumber;
+                    
 
                     //Adds money to account
                     if (bankingTransaction.Amount <= SelectedChecking.Balance + 50 && SelectedChecking.Balance >= 0)
@@ -1175,6 +1175,13 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
+                    bankingTransaction.IRAAccount = NewIRAAccounts;
+
+                    bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
+
+                    bankingTransaction.Description = "Transfer from " + SelectedChecking.AccountNumber;
+
+                    db.BankingTransaction.Add(bankingTransaction);
 
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
@@ -1246,7 +1253,15 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
-                    
+                    // Add the Savings Account
+                    bankingTransaction.StockAccount = StockAccountTrans;
+
+                    bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
+
+                    bankingTransaction.Description = "Transfer from " + SelectedChecking.AccountNumber;
+
+                    db.BankingTransaction.Add(bankingTransaction);
+
 
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
@@ -1294,9 +1309,6 @@ namespace LonghornBank.Controllers
                     // Create a new association of the acccounts
                     bankingTransaction.CheckingAccount = NewCheckingAccounts;
 
-                    // Associate with Savings Account 
-                    bankingTransaction.SavingsAccount = NewSavingsAccounts;
-
                     bankingTransaction.Description = "Transfer from " + SelectedSavings.AccountNumber;
 
                     //Adds money from savings to checking account
@@ -1343,7 +1355,7 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
-
+                    db.BankingTransaction.Add(bankingTransaction);
 
 
 
@@ -1424,6 +1436,7 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
+                    db.BankingTransaction.Add(bankingTransaction);
 
                     // Add the Checking Account
                     bankingTransaction.SavingsAccount = NewSavingsAccounts;
@@ -1517,6 +1530,7 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
+                    db.BankingTransaction.Add(bankingTransaction);
 
                     // Add the Checking Account
                     bankingTransaction.SavingsAccount = NewSavingsAccounts;
@@ -1537,7 +1551,7 @@ namespace LonghornBank.Controllers
                     // Find the Selected Checking Account
                     StockAccount StockAccountTrans = db.StockAccount.Find(StockAccountID);
 
-                    // Add the Savings Account
+                    // Add the Checking Account
                     bankingTransaction.StockAccount = StockAccountTrans;
 
                     bankingTransaction.Description = "Transfer from " + SelectedSavings.AccountNumber;
@@ -1587,8 +1601,8 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
-
-                    // Add the Checking Account
+                    db.BankingTransaction.Add(bankingTransaction);
+                    // Add the Savings Account
                     bankingTransaction.SavingsAccount = NewSavingsAccounts;
                     bankingTransaction.Description = "Transfer to " + StockAccountTrans.AccountNumber;
 
@@ -1703,6 +1717,7 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
+                    db.BankingTransaction.Add(bankingTransaction);
 
                     // Associate with Savings Account 
                     bankingTransaction.IRAAccount = NewIRAAccounts;
@@ -1817,6 +1832,7 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
+                    db.BankingTransaction.Add(bankingTransaction);
 
                     bankingTransaction.IRAAccount = NewIRAAccounts;
                     bankingTransaction.Description = "Transfer to " + SavingTrans.AccountNumber;
@@ -1921,7 +1937,8 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
-                    
+                    db.BankingTransaction.Add(bankingTransaction);
+
                     bankingTransaction.IRAAccount = NewIRAAccounts;
                     bankingTransaction.Description = "Transfer to " + StockAccountTrans.AccountNumber;
 
@@ -2012,6 +2029,7 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
+                    db.BankingTransaction.Add(bankingTransaction);
 
                     // Associate with Savings Account 
                     bankingTransaction.StockAccount = SelectedStockAccount;
@@ -2092,6 +2110,8 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
+                    // Add to database
+                    db.BankingTransaction.Add(bankingTransaction);
 
                     // Associate with Savings Account 
                     bankingTransaction.StockAccount = SelectedStockAccount;
@@ -2186,6 +2206,8 @@ namespace LonghornBank.Controllers
                     {
                         return View("WithDrawalError");
                     }
+                    // Add to database
+                    db.BankingTransaction.Add(bankingTransaction);
 
                     // Associate with Savings Account 
                     bankingTransaction.StockAccount = SelectedStockAccount;
@@ -2337,12 +2359,15 @@ namespace LonghornBank.Controllers
         public ActionResult IRAError(string submit, IRAViewModel ErrorActionIRA)
         {
 
+           
+
             if (ErrorActionIRA.CustomerProfile.Id == null)
             {
                 return RedirectToAction("Portal", "Home");
             }
 
             BankingTransaction bankingTransaction = new BankingTransaction();
+            bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
             bankingTransaction.Description = ErrorActionIRA.PayeeTransaction.Description;
             bankingTransaction.TransactionDate = ErrorActionIRA.PayeeTransaction.TransactionDate;
             bankingTransaction.BankingTransactionID = ErrorActionIRA.PayeeTransaction.BankingTransactionID;
@@ -2904,7 +2929,9 @@ namespace LonghornBank.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult IRAWithDrawalError(IRAViewModel ErrorAction, string submit)
         {
+            
             BankingTransaction bankingTransaction = new BankingTransaction();
+            bankingTransaction.TransactionDispute = DisputeStatus.NotDisputed;
 
             if (ErrorAction.CustomerProfile == null)
             {
