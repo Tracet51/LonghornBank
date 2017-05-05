@@ -17,6 +17,7 @@ namespace LonghornBank.Controllers
 
         // GET: /StockTrades/StocksHome
         // Returns all of the trades associated with the account
+        [Authorize]
         public ActionResult StocksHome()
         {
 
@@ -56,6 +57,7 @@ namespace LonghornBank.Controllers
 
         // GET: / StockTrades/StockChoices/
         // shows all of the stock type choices 
+        [Authorize]
         public ActionResult StockChoices()
         {
             return View();
@@ -64,6 +66,7 @@ namespace LonghornBank.Controllers
 
         // GET: /StockTrades/ViewSelectedStock/
         // Views the selected stock type 
+        [Authorize]
         public ActionResult ViewSelectedStock(int? id)
         {
             // Get the users account 
@@ -151,7 +154,7 @@ namespace LonghornBank.Controllers
 
         // GET: /StockTrade/ChooseAccount
         // Once the user has selected the stock they want, they will now select the acocunt
-        
+        [Authorize]
         public ActionResult ChooseAccount(int? id)
         {
             // Get the users account 
@@ -226,6 +229,7 @@ namespace LonghornBank.Controllers
 
         // GET: /StockTrades/PurchaseStocks
         // Returns page to purchase stocks
+        [Authorize]
         public ActionResult PurchaseStocks(int? StockID, int? Choice, int? AccountID)
         {
             // Check to see if any IDs are null 
@@ -293,6 +297,7 @@ namespace LonghornBank.Controllers
         // Post the trade to the respective accounts
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult PurchaseStocks(PurchaseStockTrade PurchcaseTrade)
         {
             try
@@ -566,11 +571,12 @@ namespace LonghornBank.Controllers
                 return View("PurchaseError");
             }
         }
-            
+
 
         // GET: Trades
         // The individual details for each stock trade
         // id = trade id 
+        [Authorize]
         public ActionResult TradeDetails(int? id)
         {
             if (id == null)
@@ -604,6 +610,7 @@ namespace LonghornBank.Controllers
 
         //GET: StockTrades/SellStocksOptions
         // Loads the information to sell the stock
+        [Authorize]
         public ActionResult SellStockOptions(int StockSaleID, int StockAccountID, int TradeID)
         {
             // Get the trade 
@@ -624,6 +631,7 @@ namespace LonghornBank.Controllers
         // Displays the final information before posting the sale
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult SellStockOptions([Bind(Include ="StockAccountID,StockMarketID,TradeID,Quantity,SaleDate")]SellStockTradeOptions SSTO)
         {
             // Get the stock to sell 
@@ -651,6 +659,7 @@ namespace LonghornBank.Controllers
         // POST: StockTrades/SellStocks 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult SellStocks(SellStocksTrade Sale)
         {
             // Get the Customer 

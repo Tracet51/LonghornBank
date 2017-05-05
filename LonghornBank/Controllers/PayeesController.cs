@@ -19,7 +19,7 @@ namespace LonghornBank.Controllers
         {
             return View(db.Payees.ToList());
         }
-
+        [Authorize]
         // GET: Payees/Details/5
         public ActionResult Details(int? id)
         {
@@ -36,6 +36,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Payees/Create
+        [Authorize]
         public ActionResult Create()
         {
             var CustomerQuery = from c in db.Users
@@ -59,6 +60,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "PayeeID,Name,StreetAddress,City,State,Zip,PhoneNumber,PayeeType")] Payee payee)
         { 
 
@@ -74,6 +76,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Payees/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             var CustomerQuery = from c in db.Users
@@ -106,6 +109,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "PayeeID,Name,StreetAddress,City,State,Zip,PhoneNumber,PayeeType")] Payee payee)
         {
             if (ModelState.IsValid)
@@ -118,6 +122,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Payees/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -135,6 +140,7 @@ namespace LonghornBank.Controllers
         // POST: Payees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             Payee payee = db.Payees.Find(id);
@@ -143,8 +149,8 @@ namespace LonghornBank.Controllers
             return RedirectToAction("Index");
         }
 
-
-       public ActionResult PayBillsPage()
+        [Authorize]
+        public ActionResult PayBillsPage()
         {
             // Query the Database for the logged in user 
             var CustomerQuery = from c in db.Users
@@ -214,6 +220,7 @@ namespace LonghornBank.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult PayBillsPage(PayeeViewModel Pay)
         {
             // get the customer 
@@ -372,7 +379,7 @@ namespace LonghornBank.Controllers
 
             return View("SuccessfulPayee");
         }
-
+        [Authorize]
         public ActionResult EditOwnPayee(int? id)
         {
             if (id == null)
@@ -392,6 +399,7 @@ namespace LonghornBank.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult EditOwnPayee([Bind(Include = "PayeeID,Name,StreetAddress,City,State,Zip,PhoneNumber,PayeeType")] Payee payee)
         {
             if (ModelState.IsValid)

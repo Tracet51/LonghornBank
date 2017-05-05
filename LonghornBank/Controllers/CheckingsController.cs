@@ -16,6 +16,7 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Checkings
+        [Authorize]
         public ActionResult Index()
         {
             // Query the Database for the logged in user 
@@ -49,6 +50,7 @@ namespace LonghornBank.Controllers
 
         // GET: Checkings/Details/5
         // ID = checkingID
+        [Authorize]
         public ActionResult Details(int? id )
         {
             if (id == null)
@@ -87,6 +89,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Checkings/Create
+        [Authorize]
         public ActionResult Create()
         {
 
@@ -114,6 +117,7 @@ namespace LonghornBank.Controllers
         // POST: Checkings/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "CheckingID, Balance, Name")] Checking checking)
         {
             Decimal originaldeposit = checking.Balance;
@@ -193,6 +197,7 @@ namespace LonghornBank.Controllers
 
         // GET: Checkings/Edit/5
         // id = checkingID
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             var CustomerQuery = from c in db.Users
@@ -229,6 +234,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "CheckingID,AccountNumber,Name")] Checking checking)
         {
             if (ModelState.IsValid)

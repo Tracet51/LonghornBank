@@ -28,7 +28,7 @@ namespace LonghornBank.Controllers
             return View(customer);
         }
 
-
+        [Authorize]
         // GET: Home/Portal
         [Authorize]
         public ActionResult Portal()

@@ -17,17 +17,20 @@ namespace LonghornBank.Controllers
     {
         //
         // GET: /RoleAdmin/
+        [Authorize (Roles="Manager")]
         public ActionResult Index()
         {
             return View(RoleManager.Roles);
         }
 
+        [Authorize(Roles = "Manager")]
         public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public ActionResult Create([Required] string name)
         {
             if (ModelState.IsValid)
@@ -47,7 +50,7 @@ namespace LonghornBank.Controllers
             //if code gets this far, we need to show an error
             return View(name);
         }
-
+        [Authorize(Roles = "Manager")]
         public ActionResult Edit(string id)
         {
             AppRole role = RoleManager.FindById(id);
@@ -58,6 +61,7 @@ namespace LonghornBank.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public ActionResult Edit(RoleModificationModel model)
         {
             IdentityResult result;

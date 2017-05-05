@@ -16,6 +16,7 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: IRAs
+        [Authorize]
         public ActionResult Index()
         {
             // Query the Database for the logged in user 
@@ -47,6 +48,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: IRAs/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -85,6 +87,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: IRA/Create
+        [Authorize]
         public ActionResult Create()
         {
             DateTime Restrict1 = new DateTime(1947, 5, 5, 0, 0, 0);
@@ -124,6 +127,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "IRAID, Balance, Name")] IRA ira)
         {
             var CustomerQuery = from c in db.Users
@@ -201,6 +205,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: IRA/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             var CustomerQuery = from c in db.Users
@@ -234,6 +239,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "IRAID,Name,AccountNumber")] IRA ira)
         {
             if (ModelState.IsValid)

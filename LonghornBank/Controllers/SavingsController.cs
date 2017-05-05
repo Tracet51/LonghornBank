@@ -16,6 +16,7 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Savings
+        [Authorize]
         public ActionResult Index()
         {
             // Query the Customer
@@ -45,6 +46,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Savings/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -82,6 +84,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Savings/Create
+        [Authorize]
         public ActionResult Create()
         {
             // Query the Customer
@@ -110,6 +113,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "SavingID, Balance, Name")] Saving saving)
         {
             // Query the Customer
@@ -183,6 +187,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Savings/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             var CustomerQuery = from c in db.Users
@@ -216,6 +221,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "SavingID, Name, AccountNumber")] Saving saving)
         {
             if(ModelState.IsValid)

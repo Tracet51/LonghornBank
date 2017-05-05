@@ -20,6 +20,8 @@ namespace LonghornBank.Controllers
         // GET: BankingTransactions
         // Index Only Displays Checking 
         // Might Consider a Name Change 
+        [Authorize (Roles ="Employee")]
+        [Authorize(Roles = "Manager")]
         public ActionResult Index()
         {
             List<BankingTransaction> CustomerTransactions = db.BankingTransaction.ToList();
@@ -35,6 +37,7 @@ namespace LonghornBank.Controllers
 
         // GET: BankingTransactions/Details/5
         // id == BankingTransactionID
+        [Authorize]
         public ActionResult Details(int? id, Int32 choice, Int32 AccountId)
         {
             if (id == null)
@@ -173,6 +176,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: BankingTransactions/Create/?id
+        [Authorize]
         public ActionResult WithDrawal()
         {
             // Query the Database for the logged in user 
@@ -214,6 +218,7 @@ namespace LonghornBank.Controllers
         // id = The Customer's Account ID
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult WithDrawal([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description,BankingTransactionType")] BankingTransaction bankingTransaction, int CheckingID, int SavingID, int IraID, int StockAccountID)
         {
 
@@ -411,6 +416,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: BankingTransactions/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -439,6 +445,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "BankingTransactionID,TransactionDispute, DisputeMessage, CustomerOpinion, CorrectedAmount")] DisputeTransaction Dispute)
         {
             if (ModelState.IsValid)
@@ -461,6 +468,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: BankingTransactions/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -478,6 +486,7 @@ namespace LonghornBank.Controllers
         // POST: BankingTransactions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             BankingTransaction bankingTransaction = db.BankingTransaction.Find(id);
@@ -488,6 +497,7 @@ namespace LonghornBank.Controllers
 
         // GET: Portal/Checkings/Deposit/5
         // Where 5 is the CheckingID
+        [Authorize]
         public ActionResult Deposit() //int? id
         {
             var CustomerQuery = from c in db.Users
@@ -519,6 +529,7 @@ namespace LonghornBank.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Deposit([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description")] BankingTransaction bankingTransaction, Int32 CheckingID, Int32 SavingID, Int32 IraID, Int32 StockAccountID)
         {
             var CustomerQuery = from c in db.Users
@@ -733,7 +744,7 @@ namespace LonghornBank.Controllers
 
             return View(bankingTransaction);
         }
-
+        [Authorize]
         public ActionResult Transfer()
         {
             
@@ -854,6 +865,7 @@ namespace LonghornBank.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Transfer([Bind(Include = "BankingTransactionID,TransactionDate,Amount,Description")] BankingTransaction bankingTransaction, Int32 CheckingID, Int32 SavingID, Int32 IraID, Int32 StockAccountID, int CheckingIDTrans, int SavingIDTrans, int IRAIDTrans, int StockAccountIDTrans)
         {
             var CustomerQuery = from c in db.Users

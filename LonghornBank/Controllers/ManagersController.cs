@@ -60,10 +60,12 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
 
         // GET: Managers
+        [Authorize(Roles = "Manager")]
         public ActionResult Index()
         {
             return View("Index");
         }
+        [Authorize(Roles = "Manager")]
         public ActionResult BalancedPortfolioSuccess()
         {
             BalancedPortfolio.AddBounus(db);
@@ -127,6 +129,7 @@ namespace LonghornBank.Controllers
             return emailstring;
         }
         //Get for Fire Employees
+        [Authorize(Roles = "Manager")]
         public ActionResult FireEmployees()
         {
             var QueryRole = from ri in db.Roles
@@ -143,6 +146,7 @@ namespace LonghornBank.Controllers
         }
         //Post for Fire Employees
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public ActionResult FireEmployees(String EmployeeID, Boolean Fire)
         {
             if (Fire)
@@ -192,6 +196,7 @@ namespace LonghornBank.Controllers
             return View(Employees);
         }
         //GET for approve stock accounts
+        [Authorize(Roles = "Manager")]
         public ActionResult ApproveStockAccounts()
         {
             var query = from a in db.StockAccount
@@ -201,6 +206,7 @@ namespace LonghornBank.Controllers
             return View(stockaccountlist);
         }
         //POST for approve 
+        [Authorize(Roles = "Manager")]
         [HttpPost]
         public ActionResult ApproveStockAccounts(Int32 StockAccountID, Boolean Approve)
         {
@@ -220,6 +226,7 @@ namespace LonghornBank.Controllers
         }
 
         // Post Index To revise disputed amounts
+        [Authorize]
         [HttpPost]
         public ActionResult Disputes(string BankingTransactionID, string ManagerApprovedAmount)
         {
@@ -271,6 +278,7 @@ namespace LonghornBank.Controllers
             return View(SelectedDisputes);
         }
         //Get 
+        [Authorize(Roles = "Manager")]
         public ActionResult Disputes()
         {
             //var query = from b in db.BankingTransaction
@@ -284,6 +292,7 @@ namespace LonghornBank.Controllers
             
             return View(SelectedDisputes);
         }
+        [Authorize(Roles = "Manager")]
         public ActionResult ViewAllDisputes()
         {
             var query = from t in db.BankingTransaction
@@ -294,7 +303,8 @@ namespace LonghornBank.Controllers
 
         }
         [HttpPost]
-       public ActionResult DisputeManagementDetail(DisputesViewModel bankingTransaction)
+        [Authorize(Roles = "Manager")]
+        public ActionResult DisputeManagementDetail(DisputesViewModel bankingTransaction)
         {
             // Get the manager 
             var query = from m in db.Users
@@ -591,6 +601,7 @@ namespace LonghornBank.Controllers
         }
 
         //GET
+        [Authorize(Roles = "Manager")]
         public ActionResult DisputeManagementDetail(Int32 BankingTransactionID)
         {
             
@@ -622,6 +633,7 @@ namespace LonghornBank.Controllers
         }
 
         //DEPO Approval GET
+        [Authorize(Roles = "Manager")]
         public ActionResult  DepositApproval()
         {
             List<BankingTransaction> SelectedDepositsOrig = new List<BankingTransaction>();
@@ -673,6 +685,7 @@ namespace LonghornBank.Controllers
         }
         //DEPO Approval POST
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public ActionResult DepositApproval(Int32 BankingTransactionID)
         {
             Int32 id =Convert.ToInt32(BankingTransactionID);
@@ -788,6 +801,7 @@ namespace LonghornBank.Controllers
             //End Copied Get
         }
         // GET: Managers/Details/
+        [Authorize(Roles = "Manager")]
         public ActionResult Details()
         {
 
@@ -804,6 +818,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Managers/Create
+        [Authorize(Roles = "Manager")]
         public ActionResult Create()
         {
             return View();
@@ -811,6 +826,7 @@ namespace LonghornBank.Controllers
 
 
         // GET: Managers/Edit/5
+        [Authorize(Roles = "Manager")]
         public ActionResult Edit()
         {
             var QueryManger = from m in db.Users
@@ -841,6 +857,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult> Edit(ManagerEditManager TheEdit)
         {
             // get the manager 
@@ -868,6 +885,7 @@ namespace LonghornBank.Controllers
 
 
         //FreezeEmployees GET
+        [Authorize(Roles = "Manager")]
         public ActionResult FreezeEmployees()
         {
             var QueryRole = from ri in db.Roles
@@ -884,6 +902,7 @@ namespace LonghornBank.Controllers
         }
         //FreezeEmployees POST
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public ActionResult FreezeEmployees(Boolean Freeze, String EmployeeID)
         {
             String idstring = Convert.ToString(EmployeeID);
@@ -912,6 +931,7 @@ namespace LonghornBank.Controllers
 
             return View(Employees);
         }
+        [Authorize(Roles = "Manager")]
         public ActionResult FreezeCustomers()
         {
             List<AppUser> CustomerList = db.Users.ToList();
@@ -922,6 +942,7 @@ namespace LonghornBank.Controllers
             return View(CustomerList);
         }
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public ActionResult FreezeCustomers(String CustomerID, Boolean Freeze)
         {
 
@@ -951,6 +972,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Managers/AllEmployees
+        [Authorize(Roles = "Manager")]
         public ActionResult DisplayAllEmployees()
         {
             var roleQuery = from ri in db.Roles
@@ -967,6 +989,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Mangagers/EditEmployees/5
+        [Authorize(Roles = "Manager")]
         public ActionResult EditEmployee(string id)
         {
             if (id == null)
@@ -999,6 +1022,7 @@ namespace LonghornBank.Controllers
         // POST: Managers/EditEmployee/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult> EditEmployee(AppUser employee, Boolean RoleChange)
         {
             // Get the employee
@@ -1035,6 +1059,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: Managers/ChangeEmployeePassword
+        [Authorize(Roles = "Manager")]
         public ActionResult ChangeEmployeePassword(String id)
         {
             // Get the employee 
@@ -1055,6 +1080,7 @@ namespace LonghornBank.Controllers
         // Allows the manager to change an employee password
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult> ChangeEmployeePassword(ChangeEmployeePassword TheChange)
         {
             // Get the employee

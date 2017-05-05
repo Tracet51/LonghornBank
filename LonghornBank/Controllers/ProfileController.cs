@@ -22,7 +22,7 @@ namespace LonghornBank.Controllers
         public ProfileController()
         {
         }
-
+        
         public ProfileController(AppUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;

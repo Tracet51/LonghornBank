@@ -56,6 +56,8 @@ namespace LonghornBank.Controllers
         }
 
         private AppDbContext db = new AppDbContext();
+        [Authorize(Roles ="Employee,Manager")]
+        
         public ActionResult Portal()
         {
             var Query = from e in db.Users
@@ -71,11 +73,12 @@ namespace LonghornBank.Controllers
 
             return View();
         }
+        [Authorize(Roles = "Employee,Manager")]
         public ActionResult ViewCustomers()
         {
             return View(db.Users.ToList());
         }
-
+        [Authorize(Roles = "Employee,Manager")]
         public ActionResult CustomerDetails(String id)
         {
             if (id == null)
@@ -92,6 +95,7 @@ namespace LonghornBank.Controllers
 
         // GET: Employees/Details/
         // Show the employee the details of his profile
+        [Authorize(Roles = "Employee,Manager")]
         public ActionResult Details()
         {
             var QueryEmployee = from e in db.Users
@@ -106,7 +110,7 @@ namespace LonghornBank.Controllers
             }
             return View(employee);
         }
-
+        [Authorize(Roles = "Employee,Manager")]
         // GET: Employees/Create
         public ActionResult Create()
         {
@@ -118,6 +122,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee,Manager")]
         public async Task<ActionResult> Create([Bind(Include = "EmployeeID,FName,LName,StreetAddress,City,State,Zip,EmailAddress,Password,PhoneNumber,SSN,ActiveStatus,FiredStatus")] Employee employee)
         {
             if (ModelState.IsValid || !ModelState.IsValid)
@@ -153,6 +158,7 @@ namespace LonghornBank.Controllers
             return View(employee);
         }
         //GET
+        [Authorize(Roles = "Employee,Manager")]
         public ActionResult EditCustomers(String id)
         {
             if (id == null)
@@ -169,6 +175,7 @@ namespace LonghornBank.Controllers
 
         //EDIT Customers POST
         [HttpPost]
+        [Authorize(Roles = "Employee,Manager")]
         public async Task<ActionResult> EditCustomers([Bind(Include = "Id,FName,LName,StreetAddress,City,State,Zip,Email,PhoneNumber,DOB,ActiveStatus")] AppUser customer, String NewPasswordUnhashed)
         {
             
@@ -203,8 +210,9 @@ namespace LonghornBank.Controllers
             }
             return View(customer);
           }
-        
+
         // GET: Employees/Edit/5
+        [Authorize(Roles = "Employee,Manager")]
         public ActionResult Edit()
         {
             var employeequery = from e in db.Users
@@ -235,6 +243,7 @@ namespace LonghornBank.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee,Manager")]
         public async Task<ActionResult> Edit(EmployeeEditEmployee employee)
         {
             if (!ModelState.IsValid)
@@ -260,6 +269,7 @@ namespace LonghornBank.Controllers
 
         // GET: Employees/ChangePassword
         // return page to edit the employee password
+        [Authorize(Roles = "Employee,Manager")]
         public ActionResult ChangePassword()
         {
             return View();
@@ -269,6 +279,7 @@ namespace LonghornBank.Controllers
         // Post method to change the password 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee,Manager")]
         public async Task<ActionResult> ChangePassword(EmployeeChangePassword NewPassword)
         {
             // Check to make sure the passwords are the same

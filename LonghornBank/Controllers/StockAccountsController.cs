@@ -21,6 +21,7 @@ namespace LonghornBank.Controllers
 
         // GET: StockAccounts
         // Shows the Stock Account for the customer
+        [Authorize]
         public ActionResult Index()
         {
             // Query the Database for the logged in user 
@@ -56,6 +57,7 @@ namespace LonghornBank.Controllers
         // GET: StockAccounts/Details
         // Shows all of the Trades for the stock account 
         // Takes the Users to the index page of the StockTradeViewModel
+        [Authorize]
         public ActionResult Details()
         {
             // Get the customer 
@@ -138,6 +140,7 @@ namespace LonghornBank.Controllers
 
         // GET: StockAccounts/Create
         // Page to create the account
+        [Authorize]
         public ActionResult Create()
         {
             // Query the Database for the logged in user 
@@ -172,6 +175,7 @@ namespace LonghornBank.Controllers
         // Post request to create the account
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "StockAccountID,Name")] StockAccount stockAccount)
         {
             if (ModelState.IsValid)
@@ -256,6 +260,7 @@ namespace LonghornBank.Controllers
 
         // GET: StockAccounts/Edit
         // Get request to see information that they can edit on the account
+        [Authorize]
         public ActionResult Edit()
         {
             // Query the Database for the logged in user 
@@ -287,6 +292,7 @@ namespace LonghornBank.Controllers
         // Post request to edit the account 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(StockAccount stockAccount)
         {
             // get the stock account 
