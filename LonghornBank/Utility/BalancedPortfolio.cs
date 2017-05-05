@@ -69,7 +69,7 @@ namespace LonghornBank.Utility
         {
             // Get all of the stock account 
             var SAQ = from sa in db.StockAccount
-                      where sa.Trades != null && sa.BankingTransaction != null && sa.Balanced == true
+                      where sa.Trades.Count != 0 && sa.BankingTransaction.Count != 0 && sa.Balanced == true
                       select sa;
 
             List<StockAccount> AllStockAccounts = SAQ.ToList();
