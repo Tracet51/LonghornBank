@@ -2366,7 +2366,7 @@ namespace LonghornBank.Controllers
                     switch (submit)
                     {
                         case "Automatic":
-                            Decimal New_Balance = SelectedIra.Balance + (5000 - ErrorActionIRA.IRAAccounts.RunningTotal);
+                            Decimal New_Balance = SelectedIra.Balance + (5000 - SelectedIra.RunningTotal);
                             bankingTransaction.Amount = New_Balance;
                             SelectedIra.RunningTotal = New_Balance;
                             SelectedIra.Balance = 0 + New_Balance;
@@ -2378,9 +2378,8 @@ namespace LonghornBank.Controllers
                         case "User":
                             if (bankingTransaction.Amount + SelectedIra.RunningTotal <= 5000)
                             {
-                                SelectedIra.RunningTotal = SelectedIra.RunningTotal + bankingTransaction.Amount;
+                                SelectedIra.RunningTotal = bankingTransaction.Amount + SelectedIra.RunningTotal;
                                 Decimal New_Balance2 = SelectedIra.Balance + bankingTransaction.Amount;
-                                SelectedIra.RunningTotal = 0 + New_Balance2;
                                 SelectedIra.Balance = New_Balance2;
                                 db.BankingTransaction.Add(bankingTransaction);
                                 db.SaveChanges();
@@ -2388,7 +2387,7 @@ namespace LonghornBank.Controllers
 
                             else
                             {
-                                return RedirectToAction("IRAError", "BankingTransactions", ErrorActionIRA);
+                                return RedirectToAction("IRAError", "BankingTransactions", new { Description = ErrorActionIRA.PayeeTransaction.Description,  Date = ErrorActionIRA.PayeeTransaction.TransactionDate, Amount = ErrorActionIRA.PayeeTransaction.Amount, IRAID = ErrorActionIRA.IRAAccounts.IRAID, CID = ErrorActionIRA.CheckingAccounts.CheckingID, SID = ErrorActionIRA.SavingAccounts.SavingID, StAID = ErrorActionIRA.StockAccounts.StockAccountID, btID = ErrorActionIRA.PayeeTransaction.BankingTransactionID, type =ErrorActionIRA.PayeeTransaction.BankingTransactionType });
                             }
                             break;
                     }
@@ -2428,62 +2427,66 @@ namespace LonghornBank.Controllers
 
                                 bankingTransaction.SavingsAccount = NewSavingAccounts;
 
-                                if (bankingTransaction.Amount <= SelectedSaving.Balance + 50 && SelectedSaving.Balance >= 0)
+                                Decimal New = (5000 - SelectedIra.RunningTotal);
+
+                                if (SelectedSaving.Balance - bankingTransaction.Amount <= SelectedSaving.Balance)
                                 {
-                                    SelectedIra.RunningTotal = New_Balance;
-                                    SelectedIra.Balance = 0 + New_Balance;
-
-                                    if (SelectedSaving.Balance - bankingTransaction.Amount < 0 && SelectedSaving.Balance - bankingTransaction.Amount >= -50)
+                                    SelectedSaving.Balance -= New;
+                                    if (bankingTransaction.Amount <= SelectedSaving.Balance + 50 && SelectedSaving.Balance >= 0)
                                     {
-                                        // Create a new banking transaction 
-                                        BankingTransaction Fee = new BankingTransaction();
 
-                                        // Take out the fee
-                                        SelectedSaving.Balance -= 30;
+                                        if (SelectedSaving.Balance - bankingTransaction.Amount < 0 && SelectedSaving.Balance - bankingTransaction.Amount >= -50)
+                                        {
+                                            // Create a new banking transaction 
+                                            BankingTransaction Fee = new BankingTransaction();
 
-                                        // Create the bankings transaction 
-                                        Fee.Description = "OverDrawnFee";
-                                        Fee.BankingTransactionType = BankingTranactionType.Fee;
-                                        Fee.Amount = 30;
-                                        Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
-                                        Fee.TransactionDate = bankingTransaction.TransactionDate;
-                                        Fee.TransactionDispute = DisputeStatus.NotDisputed;
-                                        Fee.SavingsAccount = NewSavingAccounts;
+                                            // Take out the fee
+                                            SelectedSaving.Balance -= 30;
 
-                                        // Add the fee to the database
-                                        db.BankingTransaction.Add(Fee);
-                                        db.SaveChanges();
+                                            // Create the bankings transaction 
+                                            Fee.Description = "OverDrawnFee";
+                                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                            Fee.Amount = 30;
+                                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                            Fee.SavingsAccount = NewSavingAccounts;
 
-                                        // Send the email 
-                                        String Body = SelectedSaving.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedSaving.Balance.ToString();
-                                        LonghornBank.Utility.Email.PasswordEmail(ErrorActionIRA.CustomerProfile.Email, "Overdrawn Account", Body);
+                                            // Add the fee to the database
+                                            db.BankingTransaction.Add(Fee);
+                                            db.SaveChanges();
 
-                                    }
-                                    else
-                                    {
-                                        SelectedSaving.Balance -= New_Balance;
+                                            // Send the email 
+                                            String Body = SelectedSaving.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedSaving.Balance.ToString();
+                                            LonghornBank.Utility.Email.PasswordEmail(ErrorActionIRA.CustomerProfile.Email, "Overdrawn Account", Body);
+
+                                        }
                                     }
                                 }
                                 else
                                 {
                                     return View("WithDrawalError");
                                 }
-
+                                SelectedIra.RunningTotal = 5000;
+                                SelectedIra.Balance += New;
+                                bankingTransaction.Amount = New;
                                 bankingTransaction.Description = "Transfer to " + IRAact;
+                                bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
 
-                                db.BankingTransaction.Add(bankingTransaction);
-                                db.SaveChanges();
-
-                                bankingTransaction.IRAAccount = NewIraAccounts;
-                                bankingTransaction.Description = "Transfer from " + SaAct;
-                                db.BankingTransaction.Add(bankingTransaction);
+                                BankingTransaction IRA = new BankingTransaction();
+                                IRA.Amount = (5000 - SelectedIra.RunningTotal);
+                                IRA.IRAAccount = NewIraAccounts;
+                                IRA.Description = "Transfer from " + SaAct;
+                                IRA.TransactionDate = bankingTransaction.TransactionDate;
+                                IRA.BankingTransactionType = BankingTranactionType.Transfer;
+                                db.BankingTransaction.Add(IRA);
                                 db.SaveChanges();
 
                             }
 
                             else if (ErrorActionIRA.CheckingAccounts.CheckingID != 0)
                             {
-                                Checking SelectedChecking = db.CheckingAccount.Find(ErrorActionIRA.SavingAccounts.SavingID);
+                                Checking SelectedChecking = db.CheckingAccount.Find(ErrorActionIRA.CheckingAccounts.CheckingID);
 
                                 // Create a list of checking accounts and add the one seleceted 
                                 List<Checking> NewCheckingAccounts = new List<Checking> { SelectedChecking };
@@ -2492,54 +2495,60 @@ namespace LonghornBank.Controllers
 
                                 bankingTransaction.CheckingAccount = NewCheckingAccounts;
 
-                                if (bankingTransaction.Amount <= SelectedChecking.Balance + 50 && SelectedChecking.Balance >= 0)
+                                Decimal New = (5000 - SelectedIra.RunningTotal);
+                                if (SelectedChecking.Balance - bankingTransaction.Amount <= SelectedChecking.Balance)
                                 {
-                                    SelectedIra.RunningTotal = New_Balance;
-                                    SelectedIra.Balance = 0 + New_Balance;
-
-                                    if (SelectedChecking.Balance - bankingTransaction.Amount < 0 && SelectedChecking.Balance - bankingTransaction.Amount >= -50)
+                                    SelectedChecking.Balance -= New;
+                                    if (bankingTransaction.Amount <= SelectedChecking.Balance + 50 && SelectedChecking.Balance >= 0)
                                     {
-                                        // Create a new banking transaction 
-                                        BankingTransaction Fee = new BankingTransaction();
 
-                                        // Take out the fee
-                                        SelectedChecking.Balance -= 30;
+                                        if (SelectedChecking.Balance - bankingTransaction.Amount < 0 && SelectedChecking.Balance - bankingTransaction.Amount >= -50)
+                                        {
+                                            // Create a new banking transaction 
+                                            BankingTransaction Fee = new BankingTransaction();
 
-                                        // Create the bankings transaction 
-                                        Fee.Description = "OverDrawnFee";
-                                        Fee.BankingTransactionType = BankingTranactionType.Fee;
-                                        Fee.Amount = 30;
-                                        Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
-                                        Fee.TransactionDate = bankingTransaction.TransactionDate;
-                                        Fee.TransactionDispute = DisputeStatus.NotDisputed;
-                                        Fee.CheckingAccount = NewCheckingAccounts;
+                                            // Take out the fee
+                                            SelectedChecking.Balance -= 30;
 
-                                        // Add the fee to the database
-                                        db.BankingTransaction.Add(Fee);
-                                        db.SaveChanges();
+                                            // Create the bankings transaction 
+                                            Fee.Description = "OverDrawnFee";
+                                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                            Fee.Amount = 30;
+                                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                            Fee.CheckingAccount = NewCheckingAccounts;
 
-                                        // Send the email 
-                                        String Body = SelectedChecking.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedChecking.Balance.ToString();
-                                        LonghornBank.Utility.Email.PasswordEmail(ErrorActionIRA.CustomerProfile.Email, "Overdrawn Account", Body);
-                                    }
-                                    else
-                                    {
-                                        SelectedChecking.Balance -= New_Balance;
+                                            // Add the fee to the database
+                                            db.BankingTransaction.Add(Fee);
+                                            db.SaveChanges();
+
+                                            // Send the email 
+                                            String Body = SelectedChecking.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedChecking.Balance.ToString();
+                                            LonghornBank.Utility.Email.PasswordEmail(ErrorActionIRA.CustomerProfile.Email, "Overdrawn Account", Body);
+                                        }
                                     }
                                 }
                                 else
                                 {
                                     return View("WithDrawalError");
                                 }
-
+                                bankingTransaction.Amount = New;
+                                SelectedIra.RunningTotal = 5000;
+                                SelectedIra.Balance += New;
                                 bankingTransaction.Description = "Transfer to " + IRAact;
+                                bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
 
                                 db.BankingTransaction.Add(bankingTransaction);
                                 db.SaveChanges();
 
-                                bankingTransaction.IRAAccount = NewIraAccounts;
-                                bankingTransaction.Description = "Transfer from " + Cact;
-                                db.BankingTransaction.Add(bankingTransaction);
+                                BankingTransaction IRA = new BankingTransaction();
+                                IRA.Amount = New;
+                                IRA.IRAAccount = NewIraAccounts;
+                                IRA.Description = "Transfer from " + Cact;
+                                IRA.TransactionDate = bankingTransaction.TransactionDate;
+                                IRA.BankingTransactionType = BankingTranactionType.Transfer;
+                                db.BankingTransaction.Add(IRA);
                                 db.SaveChanges();
 
 
@@ -2552,54 +2561,57 @@ namespace LonghornBank.Controllers
                                 String STact = SelectedStockAccount.AccountNumber;
 
                                 bankingTransaction.StockAccount = SelectedStockAccount;
-                                if (bankingTransaction.Amount <= SelectedStockAccount.CashBalance + 50 && SelectedStockAccount.CashBalance >= 0)
+
+                                Decimal New = (5000 - SelectedIra.RunningTotal);
+                                if (SelectedStockAccount.CashBalance - bankingTransaction.Amount <= SelectedStockAccount.CashBalance)
                                 {
-                                    SelectedIra.RunningTotal = New_Balance;
-                                    SelectedIra.Balance = 0 + New_Balance;
-
-                                    if (SelectedStockAccount.CashBalance - bankingTransaction.Amount < 0 && SelectedStockAccount.CashBalance - bankingTransaction.Amount >= -50)
+                                    SelectedStockAccount.CashBalance -= New;
+                                    if (bankingTransaction.Amount <= SelectedStockAccount.CashBalance + 50 && SelectedStockAccount.CashBalance >= 0)
                                     {
-                                        // Create a new banking transaction 
-                                        BankingTransaction Fee = new BankingTransaction();
+                                        if (SelectedStockAccount.CashBalance - bankingTransaction.Amount < 0 && SelectedStockAccount.CashBalance - bankingTransaction.Amount >= -50)
+                                        {
+                                            // Create a new banking transaction 
+                                            BankingTransaction Fee = new BankingTransaction();
 
-                                        // Take out the fee
-                                        SelectedStockAccount.CashBalance -= 30;
+                                            // Take out the fee
+                                            SelectedStockAccount.CashBalance -= 30;
 
-                                        // Create the bankings transaction 
-                                        Fee.Description = "OverDrawnFee";
-                                        Fee.BankingTransactionType = BankingTranactionType.Fee;
-                                        Fee.Amount = 30;
-                                        Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
-                                        Fee.TransactionDate = bankingTransaction.TransactionDate;
-                                        Fee.TransactionDispute = DisputeStatus.NotDisputed;
-                                        Fee.StockAccount = SelectedStockAccount;
+                                            // Create the bankings transaction 
+                                            Fee.Description = "OverDrawnFee";
+                                            Fee.BankingTransactionType = BankingTranactionType.Fee;
+                                            Fee.Amount = 30;
+                                            Fee.ApprovalStatus = ApprovedorNeedsApproval.Approved;
+                                            Fee.TransactionDate = bankingTransaction.TransactionDate;
+                                            Fee.TransactionDispute = DisputeStatus.NotDisputed;
+                                            Fee.StockAccount = SelectedStockAccount;
 
-                                        // Add the fee to the database
-                                        db.BankingTransaction.Add(Fee);
-                                        db.SaveChanges();
+                                            // Add the fee to the database
+                                            db.BankingTransaction.Add(Fee);
+                                            db.SaveChanges();
 
-                                        // Send the email 
-                                        String Body = SelectedStockAccount.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedStockAccount.CashBalance.ToString();
-                                        LonghornBank.Utility.Email.PasswordEmail(ErrorActionIRA.CustomerProfile.Email, "Overdrawn Account", Body);
-                                    }
-                                    else
-                                    {
-                                        SelectedStockAccount.CashBalance -= New_Balance;
+                                            // Send the email 
+                                            String Body = SelectedStockAccount.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + SelectedStockAccount.CashBalance.ToString();
+                                            LonghornBank.Utility.Email.PasswordEmail(ErrorActionIRA.CustomerProfile.Email, "Overdrawn Account", Body);
+                                        }
                                     }
                                 }
                                 else
                                 {
                                     return View("WithDrawalError");
                                 }
-
-
+                                SelectedIra.RunningTotal = 5000;
+                                SelectedIra.Balance += New;
+                                bankingTransaction.Amount = New;
                                 bankingTransaction.Description = "Transfer to " + IRAact;
-                                db.BankingTransaction.Add(bankingTransaction);
-                                db.SaveChanges();
+                                bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
 
-                                bankingTransaction.IRAAccount = NewIraAccounts;
-                                bankingTransaction.Description = "Transfer from " + STact;
-                                db.BankingTransaction.Add(bankingTransaction);
+                                BankingTransaction IRA = new BankingTransaction();
+                                IRA.Amount = New;
+                                IRA.IRAAccount = NewIraAccounts;
+                                IRA.Description = "Transfer from " + STact;
+                                IRA.TransactionDate = bankingTransaction.TransactionDate;
+                                IRA.BankingTransactionType = BankingTranactionType.Transfer;
+                                db.BankingTransaction.Add(IRA);
                                 db.SaveChanges();
                             }
                             break;
@@ -2633,11 +2645,11 @@ namespace LonghornBank.Controllers
 
                                     if (bankingTransaction.Amount <= SelectedSaving.Balance + 50 && SelectedSaving.Balance >= 0)
                                     {
-                                        SelectedIra.RunningTotal = New_Balance2;
-                                        SelectedIra.Balance = 0 + New_Balance2;
 
                                         if (SelectedSaving.Balance - bankingTransaction.Amount < 0 && SelectedSaving.Balance - bankingTransaction.Amount >= -50)
                                         {
+                                            SelectedSaving.Balance -= New_Balance2;
+
                                             // Create a new banking transaction 
                                             BankingTransaction Fee = new BankingTransaction();
 
@@ -2672,12 +2684,12 @@ namespace LonghornBank.Controllers
                                     }
 
                                     bankingTransaction.Description = "Transfer to " + IRAact;
-     
+                                    bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
+                                    bankingTransaction.Amount = New_Balance2;
                                     db.BankingTransaction.Add(bankingTransaction);
                                     db.SaveChanges();
 
-                                    SelectedIra.RunningTotal += New_Balance2;
-                                    SelectedIra.Balance += New_Balance2;
+
                                     BankingTransaction IRA = new BankingTransaction();
                                     IRA.IRAAccount = NewIraAccounts;
                                     IRA.Description = "Transfer from " + SaAct;
@@ -2691,7 +2703,7 @@ namespace LonghornBank.Controllers
 
                                 else if (ErrorActionIRA.CheckingAccounts.CheckingID != 0)
                                 {
-                                    Checking SelectedChecking = db.CheckingAccount.Find(ErrorActionIRA.SavingAccounts.SavingID);
+                                    Checking SelectedChecking = db.CheckingAccount.Find(ErrorActionIRA.CheckingAccounts.CheckingID);
 
                                     // Create a list of checking accounts and add the one seleceted 
                                     List<Checking> NewCheckingAccounts = new List<Checking> { SelectedChecking };
@@ -2707,6 +2719,8 @@ namespace LonghornBank.Controllers
 
                                         if (SelectedChecking.Balance - bankingTransaction.Amount < 0 && SelectedChecking.Balance - bankingTransaction.Amount >= -50)
                                         {
+                                            SelectedChecking.Balance -= New_Balance2;
+
                                             // Create a new banking transaction 
                                             BankingTransaction Fee = new BankingTransaction();
 
@@ -2741,12 +2755,11 @@ namespace LonghornBank.Controllers
                                     }
 
                                     bankingTransaction.Description = "Transfer to " + IRAact;
-
+                                    bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
+                                    bankingTransaction.Amount = New_Balance2;
                                     db.BankingTransaction.Add(bankingTransaction);
                                     db.SaveChanges();
 
-                                    SelectedIra.RunningTotal += New_Balance2;
-                                    SelectedIra.Balance += New_Balance2;
                                     BankingTransaction IRA = new BankingTransaction();
                                     IRA.IRAAccount = NewIraAccounts;
                                     IRA.Description = "Transfer from " + Cact;
@@ -2774,6 +2787,7 @@ namespace LonghornBank.Controllers
 
                                         if (SelectedStockAccount.CashBalance - bankingTransaction.Amount < 0 && SelectedStockAccount.CashBalance - bankingTransaction.Amount >= -50)
                                         {
+                                            SelectedStockAccount.CashBalance -= New_Balance2;
                                             // Create a new banking transaction 
                                             BankingTransaction Fee = new BankingTransaction();
 
@@ -2807,14 +2821,13 @@ namespace LonghornBank.Controllers
                                         return View("WithDrawalError");
                                     }
 
-                                    SelectedStockAccount.CashBalance -= bankingTransaction.Amount;
                                     bankingTransaction.Description = "Transfer to " + IRAact;
-
+                                    bankingTransaction.BankingTransactionType = BankingTranactionType.Transfer;
+                                    bankingTransaction.Amount = New_Balance2;
                                     db.BankingTransaction.Add(bankingTransaction);
                                     db.SaveChanges();
 
-                                    SelectedIra.RunningTotal += New_Balance2;
-                                    SelectedIra.Balance += New_Balance2;
+
                                     BankingTransaction IRA = new BankingTransaction();
                                     IRA.IRAAccount = NewIraAccounts;
                                     IRA.Description = "Transfer from " + STact;
@@ -2982,18 +2995,20 @@ namespace LonghornBank.Controllers
                             List<Saving> NewSavingAccounts = new List<Saving> { SelectedSaving };
 
                             String SaAct = SelectedSaving.AccountNumber;
-
-                            if (SelectedIra.Balance - bankingTransaction.Amount < 0 && SelectedIra.Balance - bankingTransaction.Amount >= -50)
+                            if (SelectedIra.Balance - bankingTransaction.Amount <= SelectedIra.Balance)
                             {
-
                                 if (SelectedIra.Balance - bankingTransaction.Amount < 0 && SelectedIra.Balance - bankingTransaction.Amount >= -50)
                                 {
-                                    SelectedIra.Balance -= 30;
-                                    bankingTransaction.Description = "OverDrawnFee";
-                                    bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                    bankingTransaction.Amount = 30;
-                                    db.BankingTransaction.Add(bankingTransaction);
-                                    db.SaveChanges();
+
+                                    if (SelectedIra.Balance - bankingTransaction.Amount < 0 && SelectedIra.Balance - bankingTransaction.Amount >= -50)
+                                    {
+                                        SelectedIra.Balance -= 30;
+                                        bankingTransaction.Description = "OverDrawnFee";
+                                        bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
+                                        bankingTransaction.Amount = 30;
+                                        db.BankingTransaction.Add(bankingTransaction);
+                                        db.SaveChanges();
+                                    }
                                 }
                             }
                             else
@@ -3038,19 +3053,22 @@ namespace LonghornBank.Controllers
 
                             String Cact = SelectedChecking.AccountNumber;
 
-                            if (SelectedIra.Balance - bankingTransaction.Amount < 0 && SelectedIra.Balance - bankingTransaction.Amount >= -50)
+                            if (SelectedIra.Balance - bankingTransaction.Amount <= SelectedIra.Balance)
                             {
-                                Decimal New_Balance = SelectedIra.Balance - bankingTransaction.Amount;
-                                SelectedIra.Balance = New_Balance;
-
                                 if (SelectedIra.Balance - bankingTransaction.Amount < 0 && SelectedIra.Balance - bankingTransaction.Amount >= -50)
                                 {
-                                    SelectedIra.Balance -= 30;
-                                    bankingTransaction.Description = "OverDrawnFee";
-                                    bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                    bankingTransaction.Amount = 30;
-                                    db.BankingTransaction.Add(bankingTransaction);
-                                    db.SaveChanges();
+                                    Decimal New_Balance = SelectedIra.Balance - bankingTransaction.Amount;
+                                    SelectedIra.Balance = New_Balance;
+
+                                    if (SelectedIra.Balance - bankingTransaction.Amount < 0 && SelectedIra.Balance - bankingTransaction.Amount >= -50)
+                                    {
+                                        SelectedIra.Balance -= 30;
+                                        bankingTransaction.Description = "OverDrawnFee";
+                                        bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
+                                        bankingTransaction.Amount = 30;
+                                        db.BankingTransaction.Add(bankingTransaction);
+                                        db.SaveChanges();
+                                    }
                                 }
                             }
                             else
@@ -3092,17 +3110,20 @@ namespace LonghornBank.Controllers
 
                             String STact = SelectedStockAccount.AccountNumber;
 
-                            if (SelectedIra.Balance - bankingTransaction.Amount < 0 && SelectedIra.Balance - bankingTransaction.Amount >= -50)
+                            if (SelectedIra.Balance - bankingTransaction.Amount <= SelectedIra.Balance)
                             {
-
                                 if (SelectedIra.Balance - bankingTransaction.Amount < 0 && SelectedIra.Balance - bankingTransaction.Amount >= -50)
                                 {
-                                    SelectedIra.Balance -= 30;
-                                    bankingTransaction.Description = "OverDrawnFee";
-                                    bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
-                                    bankingTransaction.Amount = 30;
-                                    db.BankingTransaction.Add(bankingTransaction);
-                                    db.SaveChanges();
+
+                                    if (SelectedIra.Balance - bankingTransaction.Amount < 0 && SelectedIra.Balance - bankingTransaction.Amount >= -50)
+                                    {
+                                        SelectedIra.Balance -= 30;
+                                        bankingTransaction.Description = "OverDrawnFee";
+                                        bankingTransaction.BankingTransactionType = BankingTranactionType.Fee;
+                                        bankingTransaction.Amount = 30;
+                                        db.BankingTransaction.Add(bankingTransaction);
+                                        db.SaveChanges();
+                                    }
                                 }
                             }
                             else
@@ -3210,7 +3231,7 @@ namespace LonghornBank.Controllers
 
                             String Sact = SelectedSaving.AccountNumber;
 
-                            if (SelectedIra.Balance - bankingTransaction.Amount >= SelectedIra.Balance)
+                            if (SelectedIra.Balance - bankingTransaction.Amount <= SelectedIra.Balance)
                             {
                                 if (SelectedIra.Balance - bankingTransaction.Amount < 0 && SelectedIra.Balance - bankingTransaction.Amount >= -50)
                                 { 
@@ -3265,7 +3286,7 @@ namespace LonghornBank.Controllers
 
                             String STact = SelectedStockAccount.AccountNumber;
 
-                            if (SelectedIra.Balance - bankingTransaction.Amount >= SelectedIra.Balance)
+                            if (SelectedIra.Balance - bankingTransaction.Amount <= SelectedIra.Balance)
                             {
                                 if (SelectedIra.Balance - bankingTransaction.Amount < 0 && SelectedIra.Balance - bankingTransaction.Amount >= -50)
                                 {

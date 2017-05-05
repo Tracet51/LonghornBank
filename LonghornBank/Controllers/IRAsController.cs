@@ -139,7 +139,6 @@ namespace LonghornBank.Controllers
 
             if (ModelState.IsValid)
             {
-                ira.RunningTotal = 0 + ira.Balance;
                 ira.Customer = customer;
 
                 ira.AccountNumber = Utility.AccountNumber.AutoNumber(db);
@@ -158,21 +157,27 @@ namespace LonghornBank.Controllers
                 var IRAQuery = from ia in db.IRAAccount
                                where ia.AccountNumber == ira.AccountNumber
                                select ia;
-
                 IRA CustomerIRAAccount = IRAQuery.FirstOrDefault();
                 List<IRA> CustomerIRAList = new List<IRA>();
                 CustomerIRAList.Add(CustomerIRAAccount);
-
                 if (ira.Balance > 5000m)
                 {
-                    return RedirectToAction("IRAError", "bankingTransactions", new { Description = "Initial Deposit to Cash Balance", Date = DateTime.Today, Amount = 0, IRAID = CustomerIRAAccount.IRAID, CID = 0, SID = 0, StAID = 0, btID = 0, type = BankingTranactionType.Deposit});
-                }
-                else
-                {
-                    FirstDeposit = ApprovedorNeedsApproval.Approved;
+                    IRA SelectedIra = db.IRAAccount.Find(CustomerIRAAccount.IRAID);
+                    SelectedIra.Balance = 0;
+                    db.Entry(SelectedIra).State = EntityState.Modified;
+                    db.SaveChanges();
+                    ira.Balance = 0;
+                    ira.RunningTotal = 0;
+                    return RedirectToAction("IRAError", "bankingTransactions", new { Description = "Initial Deposit to Cash Balance", Date = DateTime.Today, Amount = 0, IRAID = SelectedIra.IRAID, CID = 0, SID = 0, StAID = 0, btID = 0, type = BankingTranactionType.Deposit});
                 }
 
-                // Create a new transaction 
+                else
+                { 
+                    FirstDeposit = ApprovedorNeedsApproval.Approved;
+                    // Create a new transaction 
+                }
+                ira.RunningTotal = ira.Balance;
+
                 BankingTransaction InitialDeposit = new BankingTransaction
                 {
                     Amount = ira.Balance,
