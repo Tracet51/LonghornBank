@@ -592,10 +592,10 @@ namespace LonghornBank.Controllers
                 StockMarketID = CustomerTrade.StockMarket.StockMarketID,
                 PurchasePrice = CustomerTrade.PricePerShare,
                 CurrentPrice = CustomerTrade.StockMarket.StockPrice,
-                PriceChange = (CustomerTrade.PricePerShare - CustomerTrade.StockMarket.StockPrice),
+                PriceChange = (CustomerTrade.StockMarket.StockPrice - CustomerTrade.PricePerShare),
                 Quantity = CustomerTrade.Quantity,
                 TradeID = CustomerTrade.TradeID,
-                Gains = ((CustomerTrade.Quantity * CustomerTrade.PricePerShare) - (CustomerTrade.Quantity * CustomerTrade.StockMarket.StockPrice)),
+                Gains = ((CustomerTrade.Quantity * CustomerTrade.StockMarket.StockPrice) - (CustomerTrade.Quantity * CustomerTrade.PricePerShare)),
                 Type = CustomerTrade.TradeType
             };
 
@@ -651,7 +651,7 @@ namespace LonghornBank.Controllers
         // POST: StockTrades/SellStocks 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SellStocks([Bind] SellStocksTrade Sale)
+        public ActionResult SellStocks(SellStocksTrade Sale)
         {
             // Get the Customer 
             // Query the Database for the logged in user 
@@ -679,6 +679,18 @@ namespace LonghornBank.Controllers
             // create a new transaction list for the trade 
             List<BankingTransaction> TradeTrans = new List<BankingTransaction>();
 
+            // Check the dates
+            if (Sale.SaleDate < OriginalTrade.TransactionDate)
+            {
+                ViewBag.Error = "Cannot sell before purchase";
+                return View("SaleError");
+            }
+
+            if (Sale.QuantitySold == 0)
+            {
+                ViewBag.Error = "Cannot sell with zero quantity";
+                return View("SaleError");
+            }
 
             // String for the description
             String Description = ($"Sale of {StockSale.CompanyName}, for {Sale.QuantitySold} shares, with initial price of {OriginalTrade.PricePerShare}, current price of {StockSale.StockPrice}, and a gain/loss of {Sale.Profit}");
