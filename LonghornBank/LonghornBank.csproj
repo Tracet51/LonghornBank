@@ -228,13 +228,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201705041804040_PayeeTests.cs" />
-    <Compile Include="Migrations\201705041804040_PayeeTests.Designer.cs">
-      <DependentUpon>201705041804040_PayeeTests.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705050547199_BTT.cs" />
-    <Compile Include="Migrations\201705050547199_BTT.Designer.cs">
-      <DependentUpon>201705050547199_BTT.cs</DependentUpon>
+    <Compile Include="Migrations\201705051055227_Init.cs" />
+    <Compile Include="Migrations\201705051055227_Init.Designer.cs">
+      <DependentUpon>201705051055227_Init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
@@ -409,11 +405,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201705041804040_PayeeTests.resx">
-      <DependentUpon>201705041804040_PayeeTests.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705050547199_BTT.resx">
-      <DependentUpon>201705050547199_BTT.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201705051055227_Init.resx">
+      <DependentUpon>201705051055227_Init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

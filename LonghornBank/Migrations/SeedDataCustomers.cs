@@ -476,14 +476,14 @@ namespace LonghornBank.Migrations
                 }
             }
 
-            AppUser a34 = new AppUser() { UserName = "stjean@home.com", Email = "stjean@home.com", FName = "Olivier", LName = "Saint-Jean", MiddleInitial = Convert.ToChar("M"), StreetAddress = "255 Toncray Dr.", City = "San Antonio", State = "TX", Zip = "78292", PhoneNumber = "2104145678", DOB = Convert.ToDateTime("1950-07-08 00:00:00"), ActiveStatus = true };
+            AppUser a34 = new AppUser() { UserName = "st.jean@home.com", Email = "st.jean@home.com", FName = "Olivier", LName = "Saint-Jean", MiddleInitial = Convert.ToChar("M"), StreetAddress = "255 Toncray Dr.", City = "San Antonio", State = "TX", Zip = "78292", PhoneNumber = "2104145678", DOB = Convert.ToDateTime("1950-07-08 00:00:00"), ActiveStatus = true };
 
 
-            AppUser userToAdda34 = userManager.FindByName("stjean@home.com");
+            AppUser userToAdda34 = userManager.FindByName("st.jean@home.com");
             if (userToAdda34 == null)
             {
                 userManager.Create(a34, "historical");
-                userToAdda34 = userManager.FindByName("stjean@home.com");
+                userToAdda34 = userManager.FindByName("st.jean@home.com");
                 if (userManager.IsInRole(userToAdda34.Id, "Customer") == false)
                 {
                     userManager.AddToRole(userToAdda34.Id, "Customer");
@@ -714,7 +714,7 @@ namespace LonghornBank.Migrations
                 }
             }
 
-            db.SaveChanges();
+
 
 
         }

@@ -27,6 +27,8 @@ namespace LonghornBank.Migrations
                 new Payee { Name = "Vanguard Title", PayeeType = PayeeType.Mortgage, StreetAddress = "10976 Interstate 35 South", City = "Austin", State = "TX", Zip = "78745", PhoneNumber = "5128654951" },
 
                 new Payee { Name = "Lawn Care of Texas", PayeeType = PayeeType.Other, StreetAddress = "4473 W. 3rd Street", City = "Austin", State = "TX", Zip = "78712", PhoneNumber = "5123365247" }
+
+
             );
 
             db.SaveChanges();
