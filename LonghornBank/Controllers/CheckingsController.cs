@@ -212,6 +212,7 @@ namespace LonghornBank.Controllers
 
             if (id == null)
             {
+
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Checking checking = db.CheckingAccount.Find(id);
