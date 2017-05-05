@@ -159,7 +159,7 @@ namespace LonghornBank.Controllers
             }
 
             // check to make the customer has created an account 
-            if (CustomerCheckings == null && CustomerIRA == null && CustomerSavings == null && CustomerSA == null)
+            if (CustomerCheckings.Count == 0 && CustomerIRA.Count == 0 && CustomerSavings.Count == 00 && CustomerSA == null)
             {
                 // redirect the user to the create an account page
                 return RedirectToAction("Create", "Home");

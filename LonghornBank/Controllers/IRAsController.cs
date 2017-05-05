@@ -154,24 +154,23 @@ namespace LonghornBank.Controllers
 
                 // check to see if the deposit amount is over $5000
                 ApprovedorNeedsApproval FirstDeposit;
+
+                var IRAQuery = from ia in db.IRAAccount
+                               where ia.AccountNumber == ira.AccountNumber
+                               select ia;
+
+                IRA CustomerIRAAccount = IRAQuery.FirstOrDefault();
+                List<IRA> CustomerIRAList = new List<IRA>();
+                CustomerIRAList.Add(CustomerIRAAccount);
+
                 if (ira.Balance > 5000m)
                 {
-                    FirstDeposit = ApprovedorNeedsApproval.NeedsApproval;
-                    //Added by Carson 5/2
-                    ira.PendingBalance = ira.Balance;
-                    ira.Balance = 0;
+                    return RedirectToAction("IRAError", "bankingTransactions", new { Description = "Initial Deposit to Cash Balance", Date = DateTime.Today, Amount = 0, IRAID = CustomerIRAAccount.IRAID, CID = 0, SID = 0, StAID = 0, btID = 0, type = BankingTranactionType.Deposit});
                 }
                 else
                 {
                     FirstDeposit = ApprovedorNeedsApproval.Approved;
                 }
-                var IRAQuery = from ia in db.IRAAccount
-                                  where ia.AccountNumber == ira.AccountNumber
-                                  select ia;
-
-                IRA CustomerIRAAccount = IRAQuery.FirstOrDefault();
-                List<IRA> CustomerIRAList = new List<IRA>();
-                CustomerIRAList.Add(CustomerIRAAccount);
 
                 // Create a new transaction 
                 BankingTransaction InitialDeposit = new BankingTransaction
@@ -245,7 +244,12 @@ namespace LonghornBank.Controllers
 
                 String IntCustomerID = CustomerID[0];
 
-                db.Entry(ira).State = EntityState.Modified;
+                IRA CustomerIRA = db.IRAAccount.Find(ira.IRAID);
+
+                // updated the checking account 
+                CustomerIRA.Name = ira.Name;
+
+                db.Entry(CustomerIRA).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Portal", "Home", new { id = IntCustomerID });
             }

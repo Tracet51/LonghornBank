@@ -389,6 +389,9 @@
     <Content Include="Views\BankingTransactions\UnqualifiedMax.cshtml" />
     <Content Include="Views\BankingTransactions\TransactionConfirmation.cshtml" />
     <Content Include="Views\BankingTransactions\DisputeConfirmation.cshtml" />
+    <Content Include="Views\Profile\ChangePassword.cshtml" />
+    <Content Include="Views\Profile\Error.cshtml" />
+    <Content Include="Views\Profile\Confirm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

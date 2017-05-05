@@ -256,6 +256,8 @@ namespace LonghornBank.Controllers
 
         // POST: Employees/ChangePassword
         // Post method to change the password 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(EmployeeChangePassword NewPassword)
         {
             // Check to make sure the passwords are the same
@@ -265,11 +267,14 @@ namespace LonghornBank.Controllers
             }
 
             // Get the user 
-            var QueryEmployee = from e in db.Users
-                               where e.UserName == User.Identity.Name
-                               select e;
+            var Employee = await UserManager.FindAsync(User.Identity.Name, NewPassword.OldPassword);
 
-            AppUser Employee = QueryEmployee.FirstOrDefault();
+
+            // If the employee password does not match
+            if (Employee == null)
+            {
+                return View();
+            }
 
             if (!ModelState.IsValid)
             {

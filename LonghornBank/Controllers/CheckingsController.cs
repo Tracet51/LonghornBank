@@ -243,7 +243,12 @@ namespace LonghornBank.Controllers
 
                 String IntCustomerID = CustomerID[0];
 
-                db.Entry(checking).State = EntityState.Modified;
+                Checking CustomerChecking = db.CheckingAccount.Find(checking.CheckingID);
+
+                // updated the checking account 
+                CustomerChecking.Name = checking.Name;
+
+                db.Entry(CustomerChecking).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Portal", "Home");
             }

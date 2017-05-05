@@ -255,7 +255,8 @@ namespace LonghornBank.Controllers
                                 TransactionDate = Pay.PayeeTransaction.TransactionDate,
                                 CheckingAccount = CheckingList,
                                 ApprovalStatus = ApprovedorNeedsApproval.Approved,
-                                TransactionDispute = DisputeStatus.NotDisputed
+                                TransactionDispute = DisputeStatus.NotDisputed,
+                                Description = "Over draw"
                             };
 
                             CustomerChecking.Overdrawn = true;
@@ -278,7 +279,7 @@ namespace LonghornBank.Controllers
                             BankingTransactionType = BankingTranactionType.BillPayment,
                             TransactionDate = Pay.PayeeTransaction.TransactionDate,
                             CheckingAccount = CheckingList,
-                            Description = "Payment of bill",
+                            Description = Pay.PayeeTransaction.Description,
                             ApprovalStatus = ApprovedorNeedsApproval.Approved,
                             TransactionDispute = DisputeStatus.NotDisputed
                         };
