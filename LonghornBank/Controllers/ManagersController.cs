@@ -154,9 +154,9 @@ namespace LonghornBank.Controllers
                 // Update the Database
                 //var update = UserManager.Update(employee);
 
-                var roleRemove = UserManager.RemoveFromRole(employee.Id, "Employee");
+                //var roleRemove = UserManager.RemoveFromRole(employee.Id, "Employee");
 
-                var roleAdd = UserManager.AddToRole(employee.Id, "Fired");
+                //var roleAdd = UserManager.AddToRole(employee.Id, "Fired");
 
                 // Save the databse and set the view
                 db.SaveChanges();
@@ -170,9 +170,9 @@ namespace LonghornBank.Controllers
                 // Update the database 
                 //var update = UserManager.Update(employee);
 
-                var roleRemove = UserManager.RemoveFromRole(employee.Id, "Fired");
+                //var roleRemove = UserManager.RemoveFromRole(employee.Id, "Fired");
 
-                var roleAdd = UserManager.AddToRole(employee.Id, "Employee");
+                //var roleAdd = UserManager.AddToRole(employee.Id, "Employee");
 
                 // Save the changes and update the database
                 db.SaveChanges();

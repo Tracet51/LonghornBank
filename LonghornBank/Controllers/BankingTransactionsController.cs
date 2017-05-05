@@ -22,86 +22,13 @@ namespace LonghornBank.Controllers
         // Might Consider a Name Change 
         public ActionResult Index()
         {
-            var CustomerQuery = from c in db.Users
-                                where c.UserName == User.Identity.Name
-                                select c;
-
-
-            // Get the Customer 
-            AppUser customer = CustomerQuery.FirstOrDefault();
-
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-
-            // Get a List of checking accounts associated with Customer ID
-            List<Checking> CustomerChecking = customer.CheckingAccounts;
-
-            // Create Empty List of Transactions 
-            List<BankingTransaction> CustomerTransactions = new List<BankingTransaction>();
-
-            foreach (Checking c in CustomerChecking)
-            {
-                // Get the Checking Accounts ID
-                Int32 inttemp = c.CheckingID;
-
-                // Select the transactions where the checking Id matches the customers checking Id
-                var query = from a in db.BankingTransaction
-                            from b in a.CheckingAccount
-                            where b.CheckingID == inttemp
-                            select a;
-
-                // Create a holding list and add to main list
-                List<BankingTransaction> TempTransaction = query.ToList();
-                CustomerTransactions.AddRange(TempTransaction);
-            }
-            /*
-
-            // Get a List of Savings accounts associated with Customer ID
-            List<Saving> CustomerSavings = customer.SavingAccounts;
-
-            foreach (Saving s in CustomerSavings)
-            {
-                // Get the Savings Accounts ID
-                Int32 inttemp = s.SavingID;
-
-                // Select the transactions where the checking Id matches the customers checking Id
-                var query = from a in db.BankingTransaction
-                            from b in a.SavingsAccount
-                            where b.SavingID == inttemp
-                            select a;
-
-                // Create a holding list and add to main list
-                List<BankingTransaction> TempTransaction = query.ToList();
-                CustomerTransactions.AddRange(TempTransaction);
-            }
-
-            // Get the IRA account associated with Customer ID
-            IRA CustomerIRA = customer.IRAAccounts.FirstOrDefault();
-
-            // Check to see if null
-            if (CustomerIRA != null)
-            {
-                // Select the transactions where the checking Id matches the customers checking Id
-                var IraQuery = from a in db.BankingTransaction
-                               from b in a.IRAAccount
-                               where b.IRAID == CustomerIRA.IRAID
-                               select a;
-
-                // Create a holding list and add to main list
-                List<BankingTransaction> IRATransactions = IraQuery.ToList();
-                CustomerTransactions.AddRange(IRATransactions);
-            }
-            */
-
-
+            List<BankingTransaction> CustomerTransactions = db.BankingTransaction.ToList();
+            
             // Add the customer to the view bag
-            ViewBag.Customer = customer;
-            ViewBag.Ranges = AmountRange();
-            ViewBag.Dates = DateRanges();
-            ViewBag.DisplayedTransactionCount = CustomerTransactions.ToList().Count;
-            ViewBag.TotalTransactionCount = db.BankingTransaction.ToList().Count;
+            
+            ViewBag.Ranges = SearchTransactions.AmountRange();
+            ViewBag.Dates = SearchTransactions.DateRanges();
+            ViewBag.ResultsCount = CustomerTransactions.Count;
 
             return View("Index", CustomerTransactions);
         }
@@ -594,6 +521,14 @@ namespace LonghornBank.Controllers
                                 select c;
 
             AppUser Customer = CustomerQuery.FirstOrDefault();
+
+            // Check to see if negative or zero 
+            if (bankingTransaction.Amount <= 0)
+            {
+                // Add the Error 
+                ViewBag.Error = "Cannot enter 0 or negative for a number";
+                return View("Error");
+            }
 
             if (CheckingID != 0)
             {
@@ -3326,26 +3261,17 @@ namespace LonghornBank.Controllers
         {
             return View();
         }
-
-
-        public static DateTime Today { get;}
+        
 
         //Detailed Search function
-        public ActionResult SearchResults(String SearchDescription, BankingTranactionType SelectedType, String SearchAmountBegin, String SearchAmountEnd, Int32 SearchAmountRange, String SearchTransactionNumber, String BeginSearchDate, String EndSearchDate, Int32 DateRange, SortingOption SortType)
+        public ActionResult SearchResults(SearchViewModel TheSearch)
         {
+            List<BankingTransaction> Transactions = SearchTransactions.Search(db, TheSearch, 0, 0);
 
-            var query = from c in db.BankingTransaction
-                        select c;
-
-            
-
-
-            ViewBag.DisplayedTransactionCount = query.ToList().Count;
-            ViewBag.TotalTransactionCount = db.BankingTransaction.ToList().Count;
-            ViewBag.Ranges = AmountRange();
-            ViewBag.Dates = DateRanges();
-            List<BankingTransaction> SelectedTransactions = query.ToList();
-            return View("Index", SelectedTransactions);
+            ViewBag.ResultsCount = Transactions.Count;
+            ViewBag.Ranges = SearchTransactions.AmountRange();
+            ViewBag.Dates = SearchTransactions.DateRanges();
+            return View("Index", Transactions);
         }
         
 

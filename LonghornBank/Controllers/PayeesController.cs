@@ -17,6 +17,8 @@ namespace LonghornBank.Controllers
         // GET: Payees
         public ActionResult Index()
         {
+            
+
             return View(db.Payees.ToList());
         }
 

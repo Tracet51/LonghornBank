@@ -40,10 +40,10 @@ namespace LonghornBank.Controllers
                                     where s.Customer.Id == customer.Id
                                     select s;
 
-            StockAccount CustomerStockAccount = StockAccountQuery.FirstOrDefault();
+            List<StockAccount> CustomerStockAccount = StockAccountQuery.ToList();
 
             // Check to see if the stock account is active 
-            if (CustomerStockAccount.ApprovalStatus == ApprovedorNeedsApproval.NeedsApproval)
+            if (CustomerStockAccount.FirstOrDefault().ApprovalStatus == ApprovedorNeedsApproval.NeedsApproval)
             {
                 RedirectToAction("Portal", "Home");
             }
