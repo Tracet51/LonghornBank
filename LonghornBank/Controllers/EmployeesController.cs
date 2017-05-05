@@ -58,6 +58,17 @@ namespace LonghornBank.Controllers
         private AppDbContext db = new AppDbContext();
         public ActionResult Portal()
         {
+            var Query = from e in db.Users
+                        where e.UserName == User.Identity.Name
+                        select e;
+
+            AppUser Employee = Query.FirstOrDefault();
+
+            if (Employee.FiredStatus == true)
+            {
+                return View("Fired");
+            }
+
             return View();
         }
         public ActionResult ViewCustomers()

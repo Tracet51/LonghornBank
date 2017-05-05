@@ -9,7 +9,7 @@ namespace LonghornBank.Models
 {
     public enum DisputeStatus { Submitted, Accepted, Rejected, Adjusted, NotDisputed }
 
-    public enum BankingTranactionType { Deposit, Withdrawl, Transfer, Fee, Bonus, None, BillPayment}
+    public enum BankingTranactionType { BillPayment, Bonus, Deposit, Fee, None, Transfer, Withdrawl}
 
     public enum ApprovedorNeedsApproval { Approved, NeedsApproval}
 

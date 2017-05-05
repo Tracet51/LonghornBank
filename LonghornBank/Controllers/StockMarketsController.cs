@@ -36,7 +36,7 @@ namespace LonghornBank.Controllers
             return View(stockMarket);
         }
 
-        [Authorize(Roles ="Manager")]
+        //[Authorize(Roles ="Manager")]
         // GET: StockMarkets/Create
         public ActionResult Create()
         {
@@ -62,7 +62,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: StockMarkets/Edit/5
-        [Authorize(Roles ="Manager")]
+        //[Authorize(Roles ="Manager")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -80,7 +80,7 @@ namespace LonghornBank.Controllers
         // POST: StockMarkets/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles ="Manager")]
+        //[Authorize(Roles ="Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "StockMarketID,CompanyName,Ticker,StockType,Fee,StockPrice")] StockMarket stockMarket)
@@ -95,7 +95,7 @@ namespace LonghornBank.Controllers
         }
 
         // GET: StockMarkets/Delete/5
-        [Authorize(Roles ="Manager")]
+        //[Authorize(Roles ="Manager")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

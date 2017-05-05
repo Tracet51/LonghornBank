@@ -35,9 +35,21 @@ namespace LonghornBank.Controllers
                 return HttpNotFound();
             }
 
+            // Get the Stock Account 
+            var StockAccountQuery = from s in db.StockAccount
+                                    where s.Customer.Id == customer.Id
+                                    select s;
+
+            List<StockAccount> CustomerStockAccount = StockAccountQuery.ToList();
+
+            // Check to see if the stock account is active 
+            if (CustomerStockAccount.FirstOrDefault().ApprovalStatus == ApprovedorNeedsApproval.NeedsApproval)
+            {
+                RedirectToAction("Portal", "Home");
+            }
 
             // Return the Stock Account Associated with the customer
-            return View(db.StockAccount.Where(i => i.Customer.Id == customer.Id));
+            return View(CustomerStockAccount);
 
         }
 
@@ -59,6 +71,12 @@ namespace LonghornBank.Controllers
                                select s;
 
             StockAccount CustomerStockAccount = StockAccountQuery.FirstOrDefault();
+
+            // Check to see if the stock account is active 
+            if (CustomerStockAccount.ApprovalStatus == ApprovedorNeedsApproval.NeedsApproval)
+            {
+                RedirectToAction("Portal", "Home");
+            }
 
 
             // Get all of the trades for the customer 
@@ -255,6 +273,13 @@ namespace LonghornBank.Controllers
             // Find the stock account associated with the customer 
             // Return the Stock Account Associated with the customer
             StockAccount CustomerStockAccount = db.StockAccount.Where(i => i.Customer.Id == customer.Id).FirstOrDefault();
+
+            // Check to see if the stock account is active 
+            if (CustomerStockAccount.ApprovalStatus == ApprovedorNeedsApproval.NeedsApproval)
+            {
+                RedirectToAction("Portal", "Home");
+            }
+
             return View(CustomerStockAccount);
         }
 

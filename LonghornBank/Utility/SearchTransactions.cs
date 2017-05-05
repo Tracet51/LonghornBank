@@ -58,6 +58,13 @@ namespace LonghornBank.Utility
                 Transactions.AddRange(AccountQuery.ToList());
             }
 
+            else
+            {
+                List<BankingTransaction> All = db.BankingTransaction.ToList();
+
+                Transactions.AddRange(All);
+            }
+
             
             if (TheSearch.SearchDescription != null)
             {
