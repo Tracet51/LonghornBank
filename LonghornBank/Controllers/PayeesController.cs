@@ -253,7 +253,10 @@ namespace LonghornBank.Controllers
                                 Amount = 30,
                                 BankingTransactionType = BankingTranactionType.Fee,
                                 TransactionDate = Pay.PayeeTransaction.TransactionDate,
-                                CheckingAccount = CheckingList
+                                CheckingAccount = CheckingList,
+                                ApprovalStatus = ApprovedorNeedsApproval.Approved,
+                                TransactionDispute = DisputeStatus.NotDisputed,
+                                Description = "Over draw"
                             };
 
                             CustomerChecking.Overdrawn = true;
@@ -261,7 +264,12 @@ namespace LonghornBank.Controllers
                             PayeeTrans.Add(OverDrawn);
 
                             db.Entry(OverDrawn).State = EntityState.Modified;
+                            
                             db.SaveChanges();
+
+                            // Send the email 
+                            String Body = CustomerChecking.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + CustomerChecking.Balance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
 
                         }
 
@@ -271,7 +279,9 @@ namespace LonghornBank.Controllers
                             BankingTransactionType = BankingTranactionType.BillPayment,
                             TransactionDate = Pay.PayeeTransaction.TransactionDate,
                             CheckingAccount = CheckingList,
-                            Description = "Payment of bill"
+                            Description = Pay.PayeeTransaction.Description,
+                            ApprovalStatus = ApprovedorNeedsApproval.Approved,
+                            TransactionDispute = DisputeStatus.NotDisputed
                         };
 
                         db.CheckingAccount.Find(CustomerChecking.CheckingID).Balance -= Pay.PayeeTransaction.Amount;
@@ -309,7 +319,9 @@ namespace LonghornBank.Controllers
                                 Amount = 30,
                                 BankingTransactionType = BankingTranactionType.Fee,
                                 TransactionDate = Pay.PayeeTransaction.TransactionDate,
-                                SavingsAccount = SavingList
+                                SavingsAccount = SavingList,
+                                TransactionDispute = DisputeStatus.NotDisputed,
+                                ApprovalStatus = ApprovedorNeedsApproval.Approved
                             };
 
                             CustomerSaving.Overdrawn = true;
@@ -319,6 +331,10 @@ namespace LonghornBank.Controllers
                             db.Entry(OverDrawn).State = EntityState.Modified;
                             db.SaveChanges();
 
+                            // Send the email 
+                            String Body = CustomerChecking.Name.ToString() + " : has been overdrawn and you have been charged a $30 fee. Your current account balance is $" + CustomerChecking.Balance.ToString();
+                            LonghornBank.Utility.Email.PasswordEmail(Customer.Email, "Overdrawn Account", Body);
+
                         }
 
                         BankingTransaction CheckingWithdrawl = new BankingTransaction
@@ -327,10 +343,13 @@ namespace LonghornBank.Controllers
                             BankingTransactionType = BankingTranactionType.BillPayment,
                             TransactionDate = Pay.PayeeTransaction.TransactionDate,
                             SavingsAccount = SavingList,
-                            Description = "Payment of bill"
+                            Description = "Payment of bill",
+                            ApprovalStatus = ApprovedorNeedsApproval.Approved,
+                            TransactionDispute = DisputeStatus.NotDisputed
+                            
                         };
 
-                        db.CheckingAccount.Find(CustomerSaving.SavingID).Balance -= Pay.PayeeTransaction.Amount;
+                        db.SavingsAccount.Find(CustomerSaving.SavingID).Balance -= Pay.PayeeTransaction.Amount;
 
                         db.BankingTransaction.Add(CheckingWithdrawl);
                         db.SaveChanges();

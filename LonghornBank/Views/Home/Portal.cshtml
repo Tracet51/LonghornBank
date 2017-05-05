@@ -56,6 +56,8 @@
     @Html.ActionLink("Add New Savings Account", "Create", "Savings", null, new { @class = "btn btn-info" })
     @Html.ActionLink("Add New IRA", "Create", "IRAs", null, new { @class = "btn btn-info" })
     @Html.ActionLink("Add New Stock Account", "Create", "StockAccounts", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("Payees", "Index", "Payees", null, new { @class = "btn btn-info" })
+    @Html.ActionLink("Pay Bills", "PayBillsPage", "Payees", null, new { @class = "btn btn-info" })
 
 </p>
 
@@ -90,7 +92,7 @@
                 <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
                 <td>
                     @Html.ActionLink("Change Account Name", "Edit", "Checkings", new { id = item.CheckingID }, null) |
-                    @Html.ActionLink("Transaction Search", "Details", "Checkings", new { id = item.CheckingID }, null) 
+                    @Html.ActionLink("Transaction Search/Details", "Details", "Checkings", new { id = item.CheckingID }, null) 
                 </td>
             </tr>
 
@@ -129,7 +131,7 @@
             <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
             <td>
                 @Html.ActionLink("Change Account Name", "Edit", "Savings", new { id = item.SavingID }, null) |
-                @Html.ActionLink("Transaction Search", "Details", "Savings", new { id = item.SavingID }, null)
+                @Html.ActionLink("Transaction Search/Details", "Details", "Savings", new { id = item.SavingID }, null)
                 
             </td>
         </tr>
@@ -168,7 +170,7 @@
                 <td>@Html.DisplayFor(modelItem => item.PendingBalance)</td>
                 <td>
                     @Html.ActionLink("Change Account Name", "Edit", "IRAs", new { id = item.IRAID }, null) |
-                    @Html.ActionLink("Transaction Search", "Details", "IRAs", new { id = item.IRAID }, null)
+                    @Html.ActionLink("Transaction Search/Details", "Details", "IRAs", new { id = item.IRAID }, null)
                     
                 </td>
             </tr>
@@ -212,7 +214,7 @@
                     <td>@Html.DisplayFor(modelItem => item.Gains)</td>
                     <td>
                         @Html.ActionLink("Change Account Settings", "Edit", "StockAccounts") |
-                        @Html.ActionLink("Transaction Search", "Details", "StockAccounts")
+                        @Html.ActionLink("Transaction Search/Details", "Details", "StockAccounts")
                     </td>
                 </tr>
             }

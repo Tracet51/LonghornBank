@@ -29,6 +29,8 @@ namespace LonghornBank.Models
 
         //The transaction Details
         public BankingTransaction PayeeTransaction { get; set; }
+
+        public String Description { get; set; }
     }
 
     public class PayPayee

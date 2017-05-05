@@ -49,13 +49,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="LumenWorks.Framework.IO, Version=3.9.1.0, Culture=neutral, PublicKeyToken=5ad3ea2f85776344, processorArchitecture=MSIL">
@@ -230,17 +228,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201705032231553_Test4.cs" />
-    <Compile Include="Migrations\201705032231553_Test4.Designer.cs">
-      <DependentUpon>201705032231553_Test4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705040051534_transfer.cs" />
-    <Compile Include="Migrations\201705040051534_transfer.Designer.cs">
-      <DependentUpon>201705040051534_transfer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705040505341_multi_list.cs" />
-    <Compile Include="Migrations\201705040505341_multi_list.Designer.cs">
-      <DependentUpon>201705040505341_multi_list.cs</DependentUpon>
+    <Compile Include="Migrations\201705041804040_PayeeTests.cs" />
+    <Compile Include="Migrations\201705041804040_PayeeTests.Designer.cs">
+      <DependentUpon>201705041804040_PayeeTests.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\SeedAccounts.cs" />
@@ -272,6 +262,7 @@
     <Compile Include="Models\StockMarket.cs" />
     <Compile Include="Models\StockTradeViewModel.cs" />
     <Compile Include="Models\Trade.cs" />
+    <Compile Include="Models\TransactionViewModel.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
@@ -397,6 +388,10 @@
     <Content Include="Views\BankingTransactions\Transfer.cshtml" />
     <Content Include="Views\BankingTransactions\UnqualifiedMax.cshtml" />
     <Content Include="Views\BankingTransactions\TransactionConfirmation.cshtml" />
+    <Content Include="Views\BankingTransactions\DisputeConfirmation.cshtml" />
+    <Content Include="Views\Profile\ChangePassword.cshtml" />
+    <Content Include="Views\Profile\Error.cshtml" />
+    <Content Include="Views\Profile\Confirm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -408,14 +403,8 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201705032231553_Test4.resx">
-      <DependentUpon>201705032231553_Test4.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705040051534_transfer.resx">
-      <DependentUpon>201705040051534_transfer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705040505341_multi_list.resx">
-      <DependentUpon>201705040505341_multi_list.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201705041804040_PayeeTests.resx">
+      <DependentUpon>201705041804040_PayeeTests.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

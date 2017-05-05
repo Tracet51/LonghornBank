@@ -231,11 +231,16 @@ namespace LonghornBank.Controllers
 
                 String IntCustomerID = CustomerID[0];
 
-                db.Entry(saving).State = EntityState.Modified;
+                Saving CustomerSaving = db.SavingsAccount.Find(saving.SavingID);
+
+                // updated the checking account 
+                CustomerSaving.Name = saving.Name;
+
+                db.Entry(CustomerSaving).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Portal", "Home", new { id = IntCustomerID });
             }
-            return RedirectToAction("Index", "Checkings", new { id = saving.SavingID });
+            return RedirectToAction("Index", "Savings", new { id = saving.SavingID });
         }
 
         // GET: Savings/Delete/5

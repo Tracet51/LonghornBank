@@ -315,7 +315,7 @@ namespace LonghornBank.Controllers
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                return RedirectToAction("ResetPasswordConfirmation", "Profile");
             }
             // remove the password
             var PasswordRemove = await UserManager.RemovePasswordAsync(user.Id);
@@ -346,6 +346,51 @@ namespace LonghornBank.Controllers
         {
             AuthenticationManager.SignOut();
             return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePassword(ChangePassword Changes)
+        {
+            // check to see if the user is real 
+            var user = await UserManager.FindAsync(User.Identity.Name, Changes.OldPassword);
+
+            // Check to see if user is real 
+            if (user == null)
+            {
+                ViewBag.Error = "Old password not correct";
+                return View("Error");
+            }
+
+            // check to see if passwords are the same
+            if (Changes.Password != Changes.ConfirmPassword)
+            {
+
+                ViewBag.Error = "Passwords not match";
+                return View("Error");
+            }
+
+            // Remove the old password
+            var PasswordRemove = await UserManager.RemovePasswordAsync(user.Id);
+
+            // update the new password
+            var PasswordUpdate = await UserManager.AddPasswordAsync(user.Id, Changes.Password);
+
+            // Check to see if successful 
+            if (PasswordUpdate.Succeeded)
+            {
+                ViewBag.Confirm = "Your Password Changed!";
+                return View("Confirm");
+            }
+
+            // If the password failed
+            return View();
+           
         }
 
         //
