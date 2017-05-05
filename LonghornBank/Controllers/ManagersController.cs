@@ -154,9 +154,9 @@ namespace LonghornBank.Controllers
                 // Update the Database
                 //var update = UserManager.Update(employee);
 
-                var roleRemove = UserManager.RemoveFromRole(employee.Id, "Employee");
+                //var roleRemove = UserManager.RemoveFromRole(employee.Id, "Employee");
 
-                var roleAdd = UserManager.AddToRole(employee.Id, "Fired");
+                //var roleAdd = UserManager.AddToRole(employee.Id, "Fired");
 
                 // Save the databse and set the view
                 db.SaveChanges();
@@ -170,9 +170,9 @@ namespace LonghornBank.Controllers
                 // Update the database 
                 //var update = UserManager.Update(employee);
 
-                var roleRemove = UserManager.RemoveFromRole(employee.Id, "Fired");
+                //var roleRemove = UserManager.RemoveFromRole(employee.Id, "Fired");
 
-                var roleAdd = UserManager.AddToRole(employee.Id, "Employee");
+                //var roleAdd = UserManager.AddToRole(employee.Id, "Employee");
 
                 // Save the changes and update the database
                 db.SaveChanges();
@@ -296,16 +296,100 @@ namespace LonghornBank.Controllers
         {
             BankingTransaction transaction = db.BankingTransaction.Find(bankingTransaction.DisputedTransaction.BankingTransactionID);
             transaction.ManagerDisputeMessage = bankingTransaction.DisputedTransaction.ManagerDisputeMessage;
+
+
             if (bankingTransaction.DisputedTransaction.CorrectedAmount == bankingTransaction.DisputedTransaction.CustomerOpinion)
             {
                 ViewBag.ConfirmationMessage = "You have accepted a customer's dispute for transaction ID #" + bankingTransaction.DisputedTransaction.BankingTransactionID + " and the amount is now $" + bankingTransaction.DisputedTransaction.CorrectedAmount;
                 transaction.CorrectedAmount = bankingTransaction.DisputedTransaction.CustomerOpinion;
                 transaction.TransactionDispute = DisputeStatus.Accepted;
+
+                // Get the account
+                if (transaction.CheckingAccount.Count > 0)
+                {
+                    Checking CustomerChecking = db.CheckingAccount.Find(transaction.CheckingAccount.FirstOrDefault().CheckingID);
+                    if (transaction.BankingTransactionType == BankingTranactionType.Withdrawl || transaction.BankingTransactionType == BankingTranactionType.BillPayment || transaction.BankingTransactionType == BankingTranactionType.Fee)
+                    {
+                        CustomerChecking.Balance += (transaction.Amount - bankingTransaction.DisputedTransaction.CorrectedAmount);
+                        db.Entry(CustomerChecking).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
+                    {
+                        CustomerChecking.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        db.Entry(CustomerChecking).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+
+                else if (transaction.SavingsAccount.Count > 0)
+                {
+                    Saving CustomerSaving = db.SavingsAccount.Find(transaction.SavingsAccount.FirstOrDefault().SavingID);
+                    if (transaction.BankingTransactionType == BankingTranactionType.Withdrawl || transaction.BankingTransactionType == BankingTranactionType.BillPayment || transaction.BankingTransactionType == BankingTranactionType.Fee)
+                    {
+                        CustomerSaving.Balance += (transaction.Amount - bankingTransaction.DisputedTransaction.CorrectedAmount);
+                        db.Entry(CustomerSaving).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
+                    {
+                        CustomerSaving.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        db.Entry(CustomerSaving).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                }
+
+                else if (transaction.IRAAccount.Count > 0)
+                {
+                    IRA CustomerIra = db.IRAAccount.Find(transaction.IRAAccount.FirstOrDefault().IRAID);
+                    if (transaction.BankingTransactionType == BankingTranactionType.Withdrawl || transaction.BankingTransactionType == BankingTranactionType.BillPayment || transaction.BankingTransactionType == BankingTranactionType.Fee)
+                    {
+                        CustomerIra.Balance += (transaction.Amount - bankingTransaction.DisputedTransaction.CorrectedAmount);
+                        db.Entry(CustomerIra).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
+                    {
+                        CustomerIra.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        db.Entry(CustomerIra).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                else if (transaction.StockAccount != null)
+                {
+                    StockAccount CustomerStock = db.StockAccount.Find(transaction.StockAccount.StockAccountID);
+                    if (transaction.BankingTransactionType == BankingTranactionType.Withdrawl || transaction.BankingTransactionType == BankingTranactionType.BillPayment || transaction.BankingTransactionType == BankingTranactionType.Fee)
+                    {
+                        CustomerStock.CashBalance += (transaction.Amount - bankingTransaction.DisputedTransaction.CorrectedAmount);
+                        db.Entry(CustomerStock).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
+                    {
+                        CustomerStock.CashBalance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        db.Entry(CustomerStock).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    return View();
+                }
+
+
                 //SendEmail()
                 String emailsubject = "A message from Longhorn Bank";
                 String emailbody = "Your dispute on transaction #" + bankingTransaction.DisputedTransaction.BankingTransactionID + " has been reviewed by a manager. \n This dispute has been accepted and has been revised to the amount you requested.\n We apologize for the inconvenience.\n Sincerely,\n Longhorn Bank Management";
                 String emailstring = bankingTransaction.Customer.Email;
                 SendEmail(emailstring, emailsubject, emailbody);
+
+                // update the database
+                db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
             }
             if (bankingTransaction.DisputedTransaction.CorrectedAmount != bankingTransaction.DisputedTransaction.CustomerOpinion && bankingTransaction.DisputedTransaction.CorrectedAmount!= bankingTransaction.DisputedTransaction.Amount)
@@ -313,23 +397,183 @@ namespace LonghornBank.Controllers
                 ViewBag.ConfirmationMessage = "You have adjusted transaction ID #" + bankingTransaction.DisputedTransaction.BankingTransactionID + " and the amount is now $" + bankingTransaction.DisputedTransaction.CorrectedAmount;
                 transaction.CorrectedAmount = bankingTransaction.DisputedTransaction.CorrectedAmount;
                 transaction.TransactionDispute = DisputeStatus.Adjusted;
+
+                // Get the account
+                if (transaction.CheckingAccount.Count > 0)
+                {
+                    Checking CustomerChecking = db.CheckingAccount.Find(transaction.CheckingAccount.FirstOrDefault().CheckingID);
+                    if (transaction.BankingTransactionType == BankingTranactionType.Withdrawl || transaction.BankingTransactionType == BankingTranactionType.BillPayment || transaction.BankingTransactionType == BankingTranactionType.Fee)
+                    {
+                        CustomerChecking.Balance += (transaction.Amount - bankingTransaction.DisputedTransaction.CorrectedAmount);
+                        db.Entry(CustomerChecking).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
+                    {
+                        CustomerChecking.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        db.Entry(CustomerChecking).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+
+                else if (transaction.SavingsAccount.Count > 0)
+                {
+                    Saving CustomerSaving = db.SavingsAccount.Find(transaction.SavingsAccount.FirstOrDefault().SavingID);
+                    if (transaction.BankingTransactionType == BankingTranactionType.Withdrawl || transaction.BankingTransactionType == BankingTranactionType.BillPayment || transaction.BankingTransactionType == BankingTranactionType.Fee)
+                    {
+                        CustomerSaving.Balance += (transaction.Amount - bankingTransaction.DisputedTransaction.CorrectedAmount);
+                        db.Entry(CustomerSaving).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
+                    {
+                        CustomerSaving.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        db.Entry(CustomerSaving).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                }
+
+                else if (transaction.IRAAccount.Count > 0)
+                {
+                    IRA CustomerIra = db.IRAAccount.Find(transaction.IRAAccount.FirstOrDefault().IRAID);
+                    if (transaction.BankingTransactionType == BankingTranactionType.Withdrawl || transaction.BankingTransactionType == BankingTranactionType.BillPayment || transaction.BankingTransactionType == BankingTranactionType.Fee)
+                    {
+                        CustomerIra.Balance += (transaction.Amount - bankingTransaction.DisputedTransaction.CorrectedAmount);
+                        db.Entry(CustomerIra).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
+                    {
+                        CustomerIra.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        db.Entry(CustomerIra).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                else if (transaction.StockAccount != null)
+                {
+                    StockAccount CustomerStock = db.StockAccount.Find(transaction.StockAccount.StockAccountID);
+                    if (transaction.BankingTransactionType == BankingTranactionType.Withdrawl || transaction.BankingTransactionType == BankingTranactionType.BillPayment || transaction.BankingTransactionType == BankingTranactionType.Fee)
+                    {
+                        CustomerStock.CashBalance += (transaction.Amount - bankingTransaction.DisputedTransaction.CorrectedAmount);
+                        db.Entry(CustomerStock).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
+                    {
+                        CustomerStock.CashBalance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        db.Entry(CustomerStock).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    return View();
+                }
+
                 //SendEmail()
                 String emailsubject = "A message from Longhorn Bank";
                 String emailbody = "Your dispute on transaction #" + bankingTransaction.DisputedTransaction.BankingTransactionID + " has been reviewed by a manager. \n This dispute has been adjusted and has been revised to the amount of $" + bankingTransaction.DisputedTransaction.CorrectedAmount + "\n We apologize for the inconvenience.\n Sincerely,\n Longhorn Bank Management";
                 String emailstring = bankingTransaction.Customer.Email;
                 SendEmail(emailstring, emailsubject, emailbody);
+
+                db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
             }
             if (bankingTransaction.DisputedTransaction.CorrectedAmount == bankingTransaction.DisputedTransaction.Amount)
             {
                 ViewBag.ConfirmationMessage = "You have rejected the dispute for ID #" + bankingTransaction.DisputedTransaction.BankingTransactionID + " and the amount is unchanged";
                 transaction.CorrectedAmount = bankingTransaction.DisputedTransaction.CorrectedAmount;
-                bankingTransaction.DisputedTransaction.TransactionDispute = DisputeStatus.Adjusted;
+                transaction.TransactionDispute = DisputeStatus.Rejected;
+
+                // Get the account
+                if (transaction.CheckingAccount.Count > 0)
+                {
+                    Checking CustomerChecking = db.CheckingAccount.Find(transaction.CheckingAccount.FirstOrDefault().CheckingID);
+                    if (transaction.BankingTransactionType == BankingTranactionType.Withdrawl || transaction.BankingTransactionType == BankingTranactionType.BillPayment || transaction.BankingTransactionType == BankingTranactionType.Fee)
+                    {
+                        CustomerChecking.Balance += (transaction.Amount - bankingTransaction.DisputedTransaction.CorrectedAmount);
+                        db.Entry(CustomerChecking).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
+                    {
+                        CustomerChecking.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        db.Entry(CustomerChecking).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+
+                else if (transaction.SavingsAccount.Count > 0)
+                {
+                    Saving CustomerSaving = db.SavingsAccount.Find(transaction.SavingsAccount.FirstOrDefault().SavingID);
+                    if (transaction.BankingTransactionType == BankingTranactionType.Withdrawl || transaction.BankingTransactionType == BankingTranactionType.BillPayment || transaction.BankingTransactionType == BankingTranactionType.Fee)
+                    {
+                        CustomerSaving.Balance += (transaction.Amount - bankingTransaction.DisputedTransaction.CorrectedAmount);
+                        db.Entry(CustomerSaving).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
+                    {
+                        CustomerSaving.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        db.Entry(CustomerSaving).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                }
+
+                else if (transaction.IRAAccount.Count > 0)
+                {
+                    IRA CustomerIra = db.IRAAccount.Find(transaction.IRAAccount.FirstOrDefault().IRAID);
+                    if (transaction.BankingTransactionType == BankingTranactionType.Withdrawl || transaction.BankingTransactionType == BankingTranactionType.BillPayment || transaction.BankingTransactionType == BankingTranactionType.Fee)
+                    {
+                        CustomerIra.Balance += (transaction.Amount - bankingTransaction.DisputedTransaction.CorrectedAmount);
+                        db.Entry(CustomerIra).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
+                    {
+                        CustomerIra.Balance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        db.Entry(CustomerIra).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                else if (transaction.StockAccount != null)
+                {
+                    StockAccount CustomerStock = db.StockAccount.Find(transaction.StockAccount.StockAccountID);
+                    if (transaction.BankingTransactionType == BankingTranactionType.Withdrawl || transaction.BankingTransactionType == BankingTranactionType.BillPayment || transaction.BankingTransactionType == BankingTranactionType.Fee)
+                    {
+                        CustomerStock.CashBalance += (transaction.Amount - bankingTransaction.DisputedTransaction.CorrectedAmount);
+                        db.Entry(CustomerStock).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    else if (transaction.BankingTransactionType == BankingTranactionType.Deposit || transaction.BankingTransactionType == BankingTranactionType.Bonus || transaction.BankingTransactionType == BankingTranactionType.Transfer)
+                    {
+                        CustomerStock.CashBalance += (bankingTransaction.DisputedTransaction.Amount - transaction.Amount);
+                        db.Entry(CustomerStock).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    return View();
+                }
+
+
                 //SendEmail()
                 String emailsubject = "A message from Longhorn Bank";
                 String emailbody = "Your dispute on transaction #" + bankingTransaction.DisputedTransaction.BankingTransactionID + " has been reviewed by a manager. \n This dispute has been rejected and will remain at the original amount of $" + bankingTransaction.DisputedTransaction.CorrectedAmount + "\n We apologize for the inconvenience.\n Sincerely,\n Longhorn Bank Management";
                 String emailstring = bankingTransaction.Customer.Email;
                 SendEmail(emailstring, emailsubject, emailbody);
+                db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
             }
             db.SaveChanges();
@@ -686,8 +930,8 @@ namespace LonghornBank.Controllers
             FreezingCustomer.ActiveStatus = Freeze;
             db.Entry(FreezingCustomer).State = EntityState.Modified;
             db.SaveChanges();
-            if (FreezingCustomer.ActiveStatus == false) { ViewBag.ConfirmationMessage = FreezingCustomer.FName + " " + FreezingCustomer.LName + "'s account is now unfrozen. "; }
-            if (FreezingCustomer.ActiveStatus) { ViewBag.ConfirmationMessage = FreezingCustomer.FName + " " + FreezingCustomer.LName + "'s account is now frozen"; }
+            if (FreezingCustomer.ActiveStatus == false) { ViewBag.ConfirmationMessage = FreezingCustomer.FName + " " + FreezingCustomer.LName + "'s account is now frozen. "; }
+            if (FreezingCustomer.ActiveStatus) { ViewBag.ConfirmationMessage = FreezingCustomer.FName + " " + FreezingCustomer.LName + "'s account is now unfrozen"; }
             List<AppUser> CustomerList = db.Users.ToList();
             //foreach (AppUser Customer in CustomerList.ToList())
             //{

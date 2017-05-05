@@ -13,7 +13,6 @@
 
 <div>
     <h4> @Html.DisplayFor(model => model.Name) -  Saving Account</h4>
-    @Html.ActionLink("View All Account Transactions", "Index", "BankingTransactions", new { id = Model.Customer.Id}, null)
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -162,14 +161,14 @@
 
         <p class="form-check">
             <div class="col-md-4">
-                Start Date @Html.TextBox("BeginSearchDate", null, new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                Start Date @Html.TextBox("BeginSearchDate", null, new { @class = "form-control", @placeholder = "mm/dd/yyyy" })
                 <br />
             </div>
         </p>
 
         <p class="form-check">
             <div class="col-md-4">
-                End Date @Html.TextBox("EndSearchDate", null, new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                End Date @Html.TextBox("EndSearchDate", null, new { @class = "form-control", @placeholder = "mm/dd/yyyy" })
                 <br />
             </div>
         </p>
@@ -278,6 +277,10 @@
         <th>
             Amount
         </th>
+        <th>
+            Description
+        </th>
+        <th></th>
     </tr>
 
     @foreach (var item in IraTransactions)
@@ -287,6 +290,7 @@
             <td>@Html.DisplayFor(modelItem => item.BankingTransactionType)</td>
             <td>@Html.DisplayFor(modelItem => item.TransactionDate)</td>
             <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+            <td>@Html.DisplayFor(modelItem => item.Description)</td>
             <td>
                 @Html.ActionLink("Edit", "Edit", "BankingTransactions", new { id = item.BankingTransactionID }, null) |
                 @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = item.BankingTransactionID, choice = 3, AccountId = Model.IRAID }, null)

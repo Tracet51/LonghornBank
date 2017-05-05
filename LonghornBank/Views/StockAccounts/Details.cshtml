@@ -187,14 +187,14 @@
 
         <p class="form-check">
             <div class="col-md-4">
-                Start Date @Html.TextBox("BeginSearchDate", null, new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                Start Date @Html.TextBox("BeginSearchDate", null, new { @class = "form-control", @placeholder = "mm/dd/yyyy" })
                 <br />
             </div>
         </p>
 
         <p class="form-check">
             <div class="col-md-4">
-                End Date @Html.TextBox("EndSearchDate", null, new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                End Date @Html.TextBox("EndSearchDate", null, new { @class = "form-control", @placeholder = "mm/dd/yyyy" })
                 <br />
             </div>
         </p>
@@ -381,6 +381,9 @@
         <th>
             Amount
         </th>
+        <th>
+            Description
+        </th>
         <th></th>
     </tr>
 
@@ -401,6 +404,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => t.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => t.Description)
             </td>
             <td>
                 @Html.ActionLink("Details", "Details", "BankingTransactions", new { id = t.BankingTransactionID, choice = 4, AccountId = Model.StockAccountID }, null)
