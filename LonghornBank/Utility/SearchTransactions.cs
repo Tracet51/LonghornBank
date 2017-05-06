@@ -172,18 +172,18 @@ namespace LonghornBank.Utility
                 //Last 15 days
                 if (TheSearch.DateRange == 1)
                 {
-                    Transactions = Transactions.Where(c => c.TransactionDate <= DateTime.Today.AddDays(-15)).ToList();
+                    Transactions = Transactions.Where(c => c.TransactionDate >= DateTime.Today.AddDays(-15)).ToList();
                 }
 
                 //Last 30 days
                 if (TheSearch.DateRange == 2)
                 {
-                    Transactions = Transactions.Where(c => c.TransactionDate <= DateTime.Today.AddDays(-30)).ToList();
+                    Transactions = Transactions.Where(c => c.TransactionDate >= DateTime.Today.AddDays(-30)).ToList();
                 }
                 //Last 60 days
                 if (TheSearch.DateRange == 3)
                 {
-                    Transactions = Transactions.Where(c => c.TransactionDate <= DateTime.Today.AddDays(-60)).ToList();
+                    Transactions = Transactions.Where(c => c.TransactionDate >= DateTime.Today.AddDays(-60)).ToList();
                 }
 
             }

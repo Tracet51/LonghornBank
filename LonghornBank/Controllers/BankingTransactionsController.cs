@@ -20,8 +20,7 @@ namespace LonghornBank.Controllers
         // GET: BankingTransactions
         // Index Only Displays Checking 
         // Might Consider a Name Change 
-        [Authorize (Roles ="Employee")]
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles ="Employee,Manager")]
         public ActionResult Index()
         {
             List<BankingTransaction> CustomerTransactions = db.BankingTransaction.ToList();
